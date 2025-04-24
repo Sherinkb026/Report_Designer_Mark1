@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="20.1.3.0" Ref="0" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v20.1, Version=20.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Report1" SnappingMode="None" Margins="90, 90, 100, 100" PageWidth="850" PageHeight="1100" Version="20.1" Font="Arial, 9.75pt" ForeColor="Black">
+  <Bands>
+    <Item1 Ref="1" ControlType="DetailBand" Name="Detail" HeightF="30" KeepTogether="true" TextAlignment="TopLeft" StyleName="baseControlStyle" Padding="0,0,0,0,100">
+      <Controls>
+        <Item1 Ref="2" ControlType="XRTable" Name="detailTable" AnchorHorizontal="Right" SizeF="450,30" LocationFloat="200,0" BorderColor="255,198,198,198" Borders="Bottom">
+          <Rows>
+            <Item1 Ref="3" ControlType="XRTableRow" Name="detailTableRow" Weight="10.58">
+              <Cells>
+                <Item1 Ref="4" ControlType="XRTableCell" Name="quantity" Weight="0.20453308109553722" Text="1" TextAlignment="TopLeft" Padding="2,2,5,0,100">
+                  <StylePriority Ref="5" UsePadding="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="6" ControlType="XRTableCell" Name="productName" Weight="1.158990034935852" Text="ProductName" Padding="10,2,5,0,100">
+                  <StylePriority Ref="7" UsePadding="false" />
+                </Item2>
+                <Item3 Ref="8" ControlType="XRTableCell" Name="unitPrice" Weight="0.39204113901926829" TextFormatString="{0:$0.00}" Text="₹ 0.00" TextAlignment="TopRight" Padding="2,2,5,0,100">
+                  <StylePriority Ref="9" UsePadding="false" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="10" ControlType="XRTableCell" Name="lineTotal" Weight="0.61188167999911147" TextFormatString="{0:$0.00}" Text="₹ 0.00" TextAlignment="TopRight" Font="Segoe UI, 9.75pt, style=Bold" Padding="2,2,5,0,100">
+                  <StylePriority Ref="11" UseFont="false" UseForeColor="false" UsePadding="false" UseTextAlignment="false" />
+                </Item4>
+              </Cells>
+            </Item1>
+          </Rows>
+          <StylePriority Ref="12" UseFont="false" UseBorderColor="false" UseBorders="false" />
+        </Item1>
+      </Controls>
+    </Item1>
+    <Item2 Ref="13" ControlType="TopMarginBand" Name="TopMargin" TextAlignment="TopLeft" Padding="0,0,0,0,100">
+      <StylePriority Ref="14" UseBackColor="false" />
+    </Item2>
+    <Item3 Ref="15" ControlType="BottomMarginBand" Name="BottomMargin" TextAlignment="TopLeft" Padding="0,0,0,0,100">
+      <Controls>
+        <Item1 Ref="16" ControlType="XRTable" Name="vendorContactsTable" AnchorHorizontal="Both" SizeF="630.0003,25" LocationFloat="19.99999,18.00005" Font="Segoe UI, 8.25pt" Padding="2,2,0,0,100" BorderColor="Gray">
+          <Rows>
+            <Item1 Ref="17" ControlType="XRTableRow" Name="vendorContactsRow" Weight="1">
+              <Cells>
+                <Item1 Ref="18" ControlType="XRTableCell" Name="vendorWebsite" Weight="1" CanShrink="true" Text="VendorWebsite" TextAlignment="MiddleLeft">
+                  <StylePriority Ref="19" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="20" ControlType="XRTableCell" Name="vendorEmail" Weight="1" CanShrink="true" Text="VendorEmail" TextAlignment="MiddleCenter">
+                  <StylePriority Ref="21" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="22" ControlType="XRTableCell" Name="vendorPhone" Weight="1" CanShrink="true" Text="VendorPhone" TextAlignment="MiddleRight">
+                  <StylePriority Ref="23" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item1>
+          </Rows>
+          <StylePriority Ref="24" UseFont="false" UsePadding="false" UseBorderColor="false" />
+        </Item1>
+        <Item2 Ref="25" ControlType="XRLine" Name="xrLine1" LineWidth="2" AnchorHorizontal="Both" SizeF="669.6851,10" LocationFloat="0,0" ForeColor="255,198,198,198">
+          <StylePriority Ref="26" UseForeColor="false" />
+        </Item2>
+      </Controls>
+    </Item3>
+    <Item4 Ref="27" ControlType="GroupHeaderBand" Name="GroupHeader1" GroupUnion="WithFirstDetail" HeightF="218" StyleName="baseControlStyle">
+      <SubBands>
+        <Item1 Ref="28" ControlType="SubBand" Name="SubBand1" HeightF="150" KeepTogether="true">
+          <Controls>
+            <Item1 Ref="29" ControlType="XRChart" Name="chart1" SizeF="200,150" LocationFloat="170.833328,0" BorderColor="Black" Borders="None">
+              <Chart Ref="30">
+                <DataContainer Ref="31" ValidateDataMembers="true">
+                  <SeriesSerializable>
+                    <Item1 Ref="32" Name="Series 1" />
+                  </SeriesSerializable>
+                </DataContainer>
+                <OptionsPrint Ref="33" ImageFormat="Metafile" />
+                <Diagram Ref="34" TypeNameSerializable="XYDiagram">
+                  <AxisX Ref="35" VisibleInPanesSerializable="-1" />
+                  <AxisY Ref="36" VisibleInPanesSerializable="-1" />
+                </Diagram>
+              </Chart>
+            </Item1>
+            <Item2 Ref="37" ControlType="XRBarCode" Name="barCode1" SizeF="114.930557,15.9722223" LocationFloat="255.902786,0" Padding="10,10,0,0,100">
+              <Symbology Ref="38" Name="Code128" />
+            </Item2>
+            <Item3 Ref="39" ControlType="XRTable" Name="headerTable" AnchorHorizontal="Right" SizeF="450,35.00002" LocationFloat="200,60" Font="Segoe UI, 9.75pt, style=Bold" Padding="0,0,5,0,100" BorderColor="255,121,121,121" Borders="Bottom" BorderWidth="3">
+              <Rows>
+                <Item1 Ref="40" ControlType="XRTableRow" Name="headerTableRow" Weight="11.5">
+                  <Cells>
+                    <Item1 Ref="41" ControlType="XRTableCell" Name="quantityCaption" Weight="0.19686837340925539" Text="Qty" TextAlignment="TopLeft">
+                      <StylePriority Ref="42" UseTextAlignment="false" />
+                    </Item1>
+                    <Item2 Ref="43" ControlType="XRTableCell" Name="productNameCaption" Weight="1.1155549107515446" Text="Description" Padding="10,0,5,0,100">
+                      <StylePriority Ref="44" UsePadding="false" />
+                    </Item2>
+                    <Item3 Ref="45" ControlType="XRTableCell" Name="unitPriceCaption" Weight="0.37734758903012311" Text="Price" TextAlignment="TopRight">
+                      <StylePriority Ref="46" UseTextAlignment="false" />
+                    </Item3>
+                    <Item4 Ref="47" ControlType="XRTableCell" Name="lineTotalCaption" Weight="0.58896456652396112" Text="LineTotal " TextAlignment="TopRight">
+                      <StylePriority Ref="48" UseTextAlignment="false" />
+                    </Item4>
+                  </Cells>
+                </Item1>
+              </Rows>
+              <StylePriority Ref="49" UseFont="false" UsePadding="false" UseBorderColor="false" UseBorders="false" UseBorderWidth="false" />
+            </Item3>
+            <Item4 Ref="50" ControlType="XRTable" Name="invoiceNumberTable" SizeF="160.4584,40" LocationFloat="20,55">
+              <Rows>
+                <Item1 Ref="51" ControlType="XRTableRow" Name="invoiceNumberCaptionRow" Weight="0.26666666666666672" Font="Segoe UI, 9.75pt, style=Bold">
+                  <Cells>
+                    <Item1 Ref="52" ControlType="XRTableCell" Name="invoiceNumberCaption" Weight="1.0235326443596697" CanShrink="true" Text="Invoice No." TextAlignment="TopLeft">
+                      <StylePriority Ref="53" UseTextAlignment="false" />
+                    </Item1>
+                  </Cells>
+                  <StylePriority Ref="54" UseFont="false" />
+                </Item1>
+                <Item2 Ref="55" ControlType="XRTableRow" Name="invoiceNumberRow" Weight="0.26666666666666666">
+                  <Cells>
+                    <Item1 Ref="56" ControlType="XRTableCell" Name="invoiceNumber" Weight="1.0235326443596697" Text="000001" TextAlignment="TopLeft">
+                      <StylePriority Ref="57" UseFont="false" UseTextAlignment="false" />
+                    </Item1>
+                  </Cells>
+                </Item2>
+              </Rows>
+            </Item4>
+            <Item5 Ref="58" ControlType="XRLabel" Name="invoiceLabel" Text="Invoice" TextAlignment="BottomLeft" SizeF="157.29,45" LocationFloat="20,0" Font="Segoe UI, 24pt, style=Bold">
+              <StylePriority Ref="59" UseFont="false" UsePadding="false" UseTextAlignment="false" />
+            </Item5>
+          </Controls>
+        </Item1>
+      </SubBands>
+      <Controls>
+        <Item1 Ref="60" ControlType="XRPictureBox" Name="pictureBox3" SizeF="100,23" LocationFloat="238.194443,10.0972223" />
+        <Item2 Ref="61" ControlType="XRPageInfo" Name="pageInfo1" SizeF="100,23" LocationFloat="321.527771,150.722229" Padding="2,2,0,0,100" />
+        <Item3 Ref="62" ControlType="XRSubreport" Name="subreport1" SizeF="100,23" LocationFloat="474.305542,140.305557" />
+        <Item4 Ref="63" ControlType="XRSparkline" Name="sparkline1" SizeF="150,80" LocationFloat="294.791656,73.6111145">
+          <View Type="Line" />
+          <ValueRange Ref="65" />
+        </Item4>
+        <Item5 Ref="66" ControlType="XRPictureBox" Name="pictureBox2" SizeF="100,23" LocationFloat="503.749939,141" />
+        <Item6 Ref="67" ControlType="XRPictureBox" Name="pictureBox1" SizeF="100,23" LocationFloat="0,0" />
+        <Item7 Ref="68" ControlType="XRLabel" Name="invoiceDate" TextFormatString="{0:d MMMM yyyy}" Text="InvoiceDate" AnchorHorizontal="Right" TextAlignment="TopRight" SizeF="250,22.99998" LocationFloat="399.9951,195" Padding="2,2,0,0,100">
+          <StylePriority Ref="69" UseTextAlignment="false" />
+        </Item7>
+        <Item8 Ref="70" ControlType="XRPictureBox" Name="vendorLogo" ImageSource="img,iVBORw0KGgoAAAANSUhEUgAAAP0AAAB4CAMAAAAOlgSlAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAwUExURcPDw/v7+8vLy8/Pz9PT09fX19/f3+Pj4+fn5+vr6/Pz8/f398fHx+/v79vb2////8dqqSkAAAAJcEhZcwAADr8AAA6/ATgFUyQAAAT6SURBVHhe7ZrteoMgDIXrN1pt7/9uhxDJgaqDPc26tXl/TcSUs4QQ0IuiKIqiKIqiKIqiKIqiKIqiKIqiKMr/pbntQ7ffnOG+z0z335vPVt9eSW5ENdDtt6dbKtJMVEtHtz6DZiLhlltNjZ/DSNItnyde1W+o+g9D1ROq/ldoW/rj5fy++na53/+K/HL19W0Yl+k6LWY4rY/qtuvNuHYcDXesXXl1pSsi1+TTKVRfm3h3cDUHbrxBEblSmWZtbqm2hoo626QAReob6B1YnKyIekg2EI6pvtzoz/tIPbNNylCivqeOKWOyKT7qd+cf20I/16QQ+epnm602rsbg/tB6FWCTlem7rh93AsHvo7NNSpGtfg4Tubp5x9x4vlbwLJ+abAoa7jgNHmch26QY2eq5Y5iUPn87JmqyeY1a7PhD9M7BqdxmyTUpR6569mhPLZaaQ9VQ04WDGU6JDDVFjdkm5chUX1Mf6z1qcYQcHtw306UFEndDTfh4tklBMtXvOi/SSmtYR5cWCHLoF34l26QgeerZT0mRCjUN5S26SjzK8bw9n29SkDz1cPodjwjWaz95uWdUzXIu3+Z4vklB8tQfZmKe0PfFNbDvD9RvYZ5vUpAs9TAX0wFRs8VHOix47prgyKc3ZQUmBclSD6ksXYZYln8eVO1nPZrkBSYFyVIPUzHKzxYOadL1mN8sHBE7Bf63JuXIUs+L00Miggztd6088cGn/Cub1BKTcmSph07pUGGfQjM6DJ4rdU5k1206FJkUI0v9yXjgeXIr1HXbHA+zYWspNCnGqfraGOeYvKFuPmSx92kchhH2bTyPy0xKcareViRu0TkZD9wKKmrIW8gEhXuhSSFO1a8q1lZIUWksgg85Rc17J1vXSEqpSRnO1Lt1ag1WqErTxRmGGi1PLRi2VGN090cmBThT7+6tHoPSJN13wfIUPe9OKwczjqMZ+u4xrH5gUoAT9b5AW2cl7MfSspRDPKrrnWvPMna5SQlO1Pu6xUmAtO1uBaCEhQCmtHcat4UmZThR7yPQjQByVNyLS1hMehS7p6t1mUkhjtVTbLq4hF1nvAhxuQ4eDBnNpP9QoMykEMfqSYPffXMejnfjnKFg1YblfhraowOaIpNCHKsnDX5okKLxrBGqWhAJSXtlMjs5v9CkEIfqt+lHeZf7hY2KhVtxisJavrH3arLEpBCH6rcbNPlmDucljJV3s3GCg3qFqdJ/QJFJAebOQEm62NKEocaQehpYhr1XZs5PyZI9Q0JHqngml5h8Orsvjx+h3viS6V4txsDl47rcDJD6gGvk/yKTzwXOlk6h7tYxB/+t6nGCzp17cQuBFYiWtwKTT2YnN+1C3VfWT25SquEhoVNQ2d18OyT53xKv7pkmn84P1NvBJp+ZTP5dNFJv/vRBPt+S9/fpQpZh8g8Bnxh1O+MMhSpkuDaKgMdk/o3J/wO/gY6itwf/J+9u3ghew5MiHd7Ly5fvr4I3aOmZBZcx8q9mXwUvo+mCzdv29/X90cbNQu3vPO85uace5qMs+Y3rq4DaLa5qeN7/wsb1VcCmvYo+OuKc/76uj042aN/m4A8WxU8qXwms6za/dc0a5jW82nhr8ehlT4XX8nu3V3N0tGG1/+n9y7Ood482pv4TtDuafpygsl8MfYT9Qcx13bRNU3+ccEVRFEVRFEVRFEVRFEVRFEVR9rlcvgDH0smruDLyzAAAAABJRU5ErkJggg==" Sizing="Squeeze" ImageAlignment="TopRight" AnchorHorizontal="Right" SizeF="250,75" LocationFloat="400.0003,115">
+          <StylePriority Ref="71" UsePadding="false" UseBorderColor="false" UseBorders="false" />
+        </Item8>
+        <Item9 Ref="72" ControlType="XRTable" Name="vendorTable" AnchorHorizontal="Right" TextAlignment="TopRight" SizeF="250,80" LocationFloat="399.9951,19.99999" Font="Segoe UI, 8.25pt">
+          <Rows>
+            <Item1 Ref="73" ControlType="XRTableRow" Name="vendorNameRow" Weight="0.8">
+              <Cells>
+                <Item1 Ref="74" ControlType="XRTableCell" Name="vendorName" Weight="1" CanShrink="true" Text="Adith V Mohanan">
+                  <StylePriority Ref="75" UseFont="false" UsePadding="false" />
+                </Item1>
+              </Cells>
+            </Item1>
+            <Item2 Ref="76" ControlType="XRTableRow" Name="vendorAddressRow" Weight="0.8">
+              <Cells>
+                <Item1 Ref="77" ControlType="XRTableCell" Name="vendorAddress" Weight="1" CanShrink="true" Text="Maradu">
+                  <StylePriority Ref="78" UseFont="false" />
+                </Item1>
+              </Cells>
+            </Item2>
+            <Item3 Ref="79" ControlType="XRTableRow" Name="vendorCityRow" Weight="0.8">
+              <Cells>
+                <Item1 Ref="80" ControlType="XRTableCell" Name="vendorCity" Weight="1" CanShrink="true" Text="Vytilla">
+                  <StylePriority Ref="81" UseFont="false" />
+                </Item1>
+              </Cells>
+            </Item3>
+            <Item4 Ref="82" ControlType="XRTableRow" Name="vendorCountryRow" Weight="0.8">
+              <Cells>
+                <Item1 Ref="83" ControlType="XRTableCell" Name="vendorCountry" Weight="1" CanShrink="true" Text="India">
+                  <StylePriority Ref="84" UseFont="false" />
+                </Item1>
+              </Cells>
+            </Item4>
+          </Rows>
+          <StylePriority Ref="85" UseFont="false" UseTextAlignment="false" />
+        </Item9>
+        <Item10 Ref="86" ControlType="XRTable" Name="customerTable" SizeF="250,100" LocationFloat="20,40">
+          <Rows>
+            <Item1 Ref="87" ControlType="XRTableRow" Name="customerNameRow" Weight="1">
+              <Cells>
+                <Item1 Ref="88" ControlType="XRTableCell" Name="customerName" Weight="1.1915477284685581" CanShrink="true" Text="CustomerName" Font="Segoe UI, 12pt, style=Bold">
+                  <StylePriority Ref="89" UseFont="false" UsePadding="false" />
+                </Item1>
+              </Cells>
+            </Item1>
+            <Item2 Ref="90" ControlType="XRTableRow" Name="customerAddressRow" Weight="1">
+              <Cells>
+                <Item1 Ref="91" ControlType="XRTableCell" Name="customerAddress" Weight="1.1915477284685581" CanShrink="true" Text="CustomerAddress" />
+              </Cells>
+            </Item2>
+            <Item3 Ref="92" ControlType="XRTableRow" Name="customerCityRow" Weight="1">
+              <Cells>
+                <Item1 Ref="93" ControlType="XRTableCell" Name="customerCity" Weight="1.1915477284685581" CanShrink="true" Text="CustomerCity" />
+              </Cells>
+            </Item3>
+            <Item4 Ref="94" ControlType="XRTableRow" Name="customerCountryRow" Weight="1">
+              <Cells>
+                <Item1 Ref="95" ControlType="XRTableCell" Name="customerCountry" Weight="1.1915477284685581" CanShrink="true" Text="CustomerCountry" />
+              </Cells>
+            </Item4>
+          </Rows>
+        </Item10>
+      </Controls>
+      <StylePriority Ref="96" UseBackColor="false" />
+    </Item4>
+    <Item5 Ref="97" ControlType="GroupFooterBand" Name="GroupFooter1" GroupUnion="WithLastDetail" PageBreak="AfterBandExceptLastEntry" HeightF="87" KeepTogether="true" StyleName="baseControlStyle">
+      <Controls>
+        <Item1 Ref="98" ControlType="XRTable" Name="totalTable" AnchorHorizontal="Right" SizeF="449.9999,35" LocationFloat="200,28" Font="Segoe UI, 9.75pt, style=Bold" ForeColor="Black" Padding="2,2,5,0,100" BorderColor="255,198,198,198" Borders="Top">
+          <Rows>
+            <Item1 Ref="99" ControlType="XRTableRow" Name="totalRow" Weight="1.5217391304347823" Font="Segoe UI, 14.25pt, style=Bold" BorderColor="255,121,121,121" BorderWidth="3">
+              <Cells>
+                <Item1 Ref="100" ControlType="XRTableCell" Name="totalCaption" Weight="5.0703609369432883" Text="Total" TextAlignment="BottomLeft">
+                  <StylePriority Ref="101" UseFont="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="102" ControlType="XRTableCell" Name="total" Weight="3.7904626522673168" TextFormatString="{0:$0.00}" Text="₹ 0.00" TextAlignment="BottomRight">
+                  <StylePriority Ref="103" UseFont="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+              <StylePriority Ref="104" UseFont="false" UseBorderColor="false" UseBorderWidth="false" />
+            </Item1>
+          </Rows>
+          <StylePriority Ref="105" UseFont="false" UseForeColor="false" UsePadding="false" UseBorderColor="false" UseBorders="false" />
+        </Item1>
+      </Controls>
+    </Item5>
+  </Bands>
+  <StyleSheet>
+    <Item1 Ref="106" Name="baseControlStyle" BorderStyle="Inset" Padding="2,2,0,0,100" Font="Segoe UI, 9.75pt" StringFormat="Near;Near;0;None;Character;Default" />
+  </StyleSheet>
+</XtraReportsLayoutSerializer>

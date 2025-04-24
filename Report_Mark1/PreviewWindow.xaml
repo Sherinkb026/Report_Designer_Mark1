@@ -1,0 +1,9 @@
+﻿<Window x:Class="Report_Mark1.PreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dxp="clr-namespace:DevExpress.Xpf.Printing;assembly=DevExpress.Xpf.Printing.v20.1"
+        Title="Report Preview" Height="600" Width="800">
+    <Grid>
+        <dxp:DocumentPreviewControl x:Name="previewControl"/>
+    </Grid>
+</Window>

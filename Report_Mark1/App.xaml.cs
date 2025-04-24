@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
+using DevExpress.Xpf.Core; // ✅ Add this
 
 namespace Report_Mark1
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-    }
+    //public partial class App : Application
+    //{
+    //    public App()
+    //    {
+    //        // ✅ Set the theme here
+    //        ApplicationThemeHelper.ApplicationThemeName = Theme.Office2019ColorfulName;
+    //    }
+    //}
 }
