@@ -1,92 +1,31 @@
-﻿<!--<Window x:Class="Report_Mark1.MainWindow"
+﻿<Window x:Class="Report_Mark1.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="KR BAKERS" Height="720" Width="1366" Background="#f5f5f5">
-    <Grid>
-        --><!-- Define layout: Top row for ribbon, then 3 columns --><!--
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            --><!-- Ribbon --><!--
-            <RowDefinition Height="*"/>
-            --><!-- Main content --><!--
-        </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            --><!-- Toolbox --><!--
-            <ColumnDefinition Width="*"/>
-            --><!-- Designer Canvas --><!--
-            <ColumnDefinition Width="300"/>
-            --><!-- Data Panel --><!--
-        </Grid.ColumnDefinitions>
+    <!-- 🎨 Resources -->
+    <Window.Resources>
+        <Style x:Key="RibbonButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#EAEAEA"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
-        --><!-- 🟢 Ribbon Bar --><!--
-        <ToolBar Grid.Row="0" Grid.ColumnSpan="3" Background="LightGray">
-            <Button Content="Bold" FontWeight="Bold" />
-            <Button Content="Italic" FontStyle="Italic" />
-            <ComboBox Width="100">
-                <ComboBoxItem Content="Calibri" />
-                <ComboBoxItem Content="Arial" />
-            </ComboBox>
-            <ComboBox Width="60">
-                <ComboBoxItem Content="11" />
-                <ComboBoxItem Content="12" />
-                <ComboBoxItem Content="14" />
-            </ComboBox>
-        </ToolBar>
-
-        --><!-- 🟣 Toolbox --><!--
-        <StackPanel Grid.Row="1" Grid.Column="0" Background="#eee">
-            <Button Content="Label" Margin="5" Click="AddLabel_Click"/>
-            <Button Content="Textbox" Margin="5" Click="AddTextbox_Click"/>
-            <Button Content="Table" Margin="5" Click="AddTable_Click"/>
-            <Button Content="Chart" Margin="5" Click="AddChart_Click"/>
-            <Button Content="Barcode" Margin="5" Click="AddBarcode_Click"/>
-            <Button Content="Image" Margin="5" Click="AddImage_Click"/>
-            <Button Content="Preview" Margin="5" Background="LightBlue" Click="ShowPreview_Click"/>
-            <Button Content="Export PDF" Margin="5" Background="LightGreen" Click="ExportPDF_Click"/>
-        </StackPanel>
-
-        --><!-- 🟡 Canvas --><!--
-        <Border Grid.Row="1" Grid.Column="1" Background="#ddd" Margin="10" CornerRadius="6" BorderBrush="Gray" BorderThickness="1">
-            <Canvas x:Name="designSurface" Background="#ddd">
-                --><!-- Elements will be added here dynamically --><!--
-            </Canvas>
-        </Border>
-
-        --><!-- 🔵 Data Source Panel -->
-        <!-- 🔵 Data Source Panel --><!--
-        <Border Grid.Row="1" Grid.Column="2" Background="White" Margin="10" Padding="10">
-            <StackPanel>
-                <TextBlock Text="Data Source" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
-
-                <ComboBox x:Name="dataTypeComboBox" Margin="0,0,0,10">
-                    <ComboBoxItem Content="Sales"/>
-                    <ComboBoxItem Content="Product"/>
-                    <ComboBoxItem Content="Invoice"/>
-                    <ComboBoxItem Content="Quotation"/>
-                </ComboBox>
-
-                <TextBlock Text="From:" />
-                <DatePicker x:Name="fromDatePicker" Margin="0,0,0,5"/>
-
-                <TextBlock Text="To:" />
-                <DatePicker x:Name="toDatePicker" Margin="0,0,0,10"/>
-
-                <Button Content="Generate Report" Click="GenerateReport_Click"
-                Background="Green" Foreground="White" FontWeight="Bold" Height="30" Margin="0,0,0,10"/>
-
-                <DataGrid x:Name="dataPreviewGrid" AutoGenerateColumns="True" Height="200"/>
-            </StackPanel>
-        </Border>
-
-
-    </Grid>
-</Window>-->
-<Window x:Class="Report_Mark1.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="KR BAKERS" Height="720" Width="1366" Background="#f5f5f5">
     <Grid>
         <!-- 🧱 Layout Definitions -->
         <Grid.RowDefinitions>
@@ -105,20 +44,32 @@
             <!-- Data Panel -->
         </Grid.ColumnDefinitions>
 
-        <!-- 🟢 Ribbon Bar -->
-        <ToolBar Grid.Row="0" Grid.ColumnSpan="3" Background="#dddddd" Padding="5">
-            <Button Content="Bold" FontWeight="Bold" Margin="2"/>
-            <Button Content="Italic" FontStyle="Italic" Margin="2"/>
-            <ComboBox Width="100" Margin="2">
-                <ComboBoxItem Content="Calibri" />
-                <ComboBoxItem Content="Arial" />
-            </ComboBox>
-            <ComboBox Width="60" Margin="2">
-                <ComboBoxItem Content="11" />
-                <ComboBoxItem Content="12" />
-                <ComboBoxItem Content="14" />
-            </ComboBox>
-        </ToolBar>
+        <!-- 🟢 Custom Ribbon Bar -->
+        <DockPanel Grid.Row="0" Grid.ColumnSpan="3">
+            <TabControl DockPanel.Dock="Top" Height="130" Background="#F7F7F7" BorderBrush="#D0D0D0" BorderThickness="0,0,0,1">
+                <TabItem Header="Home">
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <!-- Text Formatting -->
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Text" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource RibbonButtonStyle}" Content="Bold" Width="60" Click="Bold_Click"/>
+                                <Button Style="{StaticResource RibbonButtonStyle}" Content="Italic" Width="60" Click="Italic_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Table Operations -->
+                        <StackPanel Margin="20,5,5,5">
+                            <TextBlock Text="Table" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource RibbonButtonStyle}" Content="Add Row" Width="80" Click="AddRow_Click"/>
+                                <Button Style="{StaticResource RibbonButtonStyle}" Content="Add Column" Width="90" Click="AddColumn_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
 
         <!-- 🟣 Toolbox -->
         <StackPanel Grid.Row="1" Grid.Column="0" Background="#eeeeee" Margin="5">
@@ -134,16 +85,14 @@
             <Button Content="Export PDF" Margin="5" Background="LightGreen" Click="ExportPDF_Click"/>
         </StackPanel>
 
-        <!-- 🟡 Report Canvas -->
+        <!-- 🟡 Designer Canvas -->
         <Border Grid.Row="1" Grid.Column="1" Background="#dddddd" Margin="10" CornerRadius="6" BorderBrush="#aaa" BorderThickness="1">
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <Canvas x:Name="designSurface" Background="White" Width="900" Height="1000">
-                    <!-- Design elements go here -->
-                </Canvas>
+                <Canvas x:Name="designSurface" Background="White" Width="900" Height="1000"/>
             </ScrollViewer>
         </Border>
 
-        <!-- 🔵 Data Source Panel -->
+        <!-- 🔵 Data Panel -->
         <Border Grid.Row="1" Grid.Column="2" Background="White" Margin="10" Padding="10">
             <StackPanel>
                 <TextBlock Text="Data Source" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
@@ -172,6 +121,7 @@
         </Border>
     </Grid>
 </Window>
+
 
 
 

@@ -99,10 +99,12 @@ C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\System.Xml.XPath.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\System.Xml.XPath.XDocument.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\CairoSharp.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Data.v20.1.dll
+C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Mvvm.v20.1.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Printing.v20.1.Core.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.Core.v20.1.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.DocumentViewer.v20.1.Core.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.Printing.v20.1.dll
+C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.Ribbon.v20.1.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.XtraPrinting.v20.1.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.XtraReports.v20.1.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.XtraReports.v20.1.Extensions.dll
@@ -111,9 +113,7 @@ C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\PangoSharp.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\System.Drawing.Common.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Pdf.v20.1.Core.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Pdf.v20.1.Drawing.dll
-C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Mvvm.v20.1.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Data.Desktop.v20.1.dll
-C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.Ribbon.v20.1.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.Grid.v20.1.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.Grid.v20.1.Core.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.Docking.v20.1.dll
@@ -148,9 +148,7 @@ C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Diagram.v20.1.
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Images.v20.1.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Pdf.v20.1.Core.xml
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Pdf.v20.1.Drawing.xml
-C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Mvvm.v20.1.xml
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Data.Desktop.v20.1.xml
-C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.Ribbon.v20.1.xml
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.Grid.v20.1.xml
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.Grid.v20.1.Core.xml
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\DevExpress.Xpf.Docking.v20.1.xml
@@ -183,10 +181,6 @@ C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\de\DevExpress.Pdf.v20.1.C
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\es\DevExpress.Pdf.v20.1.Core.resources.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\ja\DevExpress.Pdf.v20.1.Core.resources.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\ru\DevExpress.Pdf.v20.1.Core.resources.dll
-C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\de\DevExpress.Xpf.Ribbon.v20.1.resources.dll
-C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\es\DevExpress.Xpf.Ribbon.v20.1.resources.dll
-C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\ja\DevExpress.Xpf.Ribbon.v20.1.resources.dll
-C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\ru\DevExpress.Xpf.Ribbon.v20.1.resources.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\de\DevExpress.Xpf.Grid.v20.1.Core.resources.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\es\DevExpress.Xpf.Grid.v20.1.Core.resources.dll
 C:\Report_Designer\Report_Mark1\Report_Mark1\bin\Debug\ja\DevExpress.Xpf.Grid.v20.1.Core.resources.dll
@@ -303,3 +297,6 @@ C:\Report_Designer\Report_Mark1\Report_Mark1\obj\Debug\Report_Mark1.csproj.CoreC
 C:\Report_Designer\Report_Mark1\Report_Mark1\obj\Debug\Report_M.7B1EF63B.Up2Date
 C:\Report_Designer\Report_Mark1\Report_Mark1\obj\Debug\Report_Mark1.exe
 C:\Report_Designer\Report_Mark1\Report_Mark1\obj\Debug\Report_Mark1.pdb
+C:\Report_Designer\Report_Mark1\Report_Mark1\obj\Debug\ReportTemplate.g.cs
+C:\Report_Designer\Report_Mark1\Report_Mark1\obj\Debug\Report_Mark1_MarkupCompile.lref
+C:\Report_Designer\Report_Mark1\Report_Mark1\obj\Debug\ReportTemplate.baml
