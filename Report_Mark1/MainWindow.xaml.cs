@@ -10,6 +10,7 @@ using System.Reflection.Emit;
 using System.Collections.Generic;
 using System.Windows.Input;
 using System.Drawing;
+using System.Windows.Media.Imaging;
 
 namespace Report_Mark1
 {
@@ -45,14 +46,17 @@ namespace Report_Mark1
 
         #endregion
 
-        private void SelectElement(UIElement element)
-        {
-            selectedElement = element;
-            // Optional: add highlight or border to show it's selected
-        }
 
 
         #region Dataside
+
+        private void SelectElement(UIElement element)
+        {
+            selectedElement = element;
+
+        }
+
+
         private void GenerateReport_Click(object sender, RoutedEventArgs e)
         {
             string selectedType = (dataTypeComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
@@ -61,7 +65,9 @@ namespace Report_Mark1
 
             if (string.IsNullOrEmpty(selectedType) || fromDate == null || toDate == null)
             {
-                MessageBox.Show("Please select data type and date range.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Please select data type and date range.", 
+                    "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+
                 return;
             }
 
@@ -109,8 +115,10 @@ namespace Report_Mark1
 
             dataPreviewGrid.ItemsSource = currentData.DefaultView;
 
-            MessageBox.Show($"Demo {selectedType} data generated.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show($"Demo {selectedType} data generated.", 
+                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
 
         private void SelectReport_Click(object sender, RoutedEventArgs e)
         {
@@ -194,25 +202,29 @@ namespace Report_Mark1
                     Child = tableGrid
                 };
 
-                // Make it draggable
-                wrapper.MouseLeftButtonDown += Element_MouseLeftButtonDown;
-                wrapper.MouseMove += Element_MouseMove;
-                wrapper.MouseLeftButtonUp += Element_MouseLeftButtonUp;
+                // Drag events for wrapper (Border)
+                wrapper.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
+                wrapper.PreviewMouseMove += Element_MouseMove;
+                wrapper.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
 
-                // Optional: select the element on click
-                wrapper.MouseLeftButtonDown += (s, args) => SelectElement(wrapper);
+                // Selection
+                wrapper.PreviewMouseLeftButtonDown += (s, args) => SelectElement(wrapper);
+
 
                 Canvas.SetLeft(wrapper, 10);
                 Canvas.SetTop(wrapper, 10);
                 designSurface.Children.Add(wrapper);
 
-                MessageBox.Show("Table loaded into canvas.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Table loaded into canvas.", 
+                    "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
 
 
         #endregion
+
+
 
         #region Canvas
         private void CanvasElement_Click(object sender, MouseButtonEventArgs e)
@@ -247,6 +259,7 @@ namespace Report_Mark1
         #endregion
 
 
+
         #region Left side
         private void AddLabel_Click(object sender, RoutedEventArgs e)
         {
@@ -268,8 +281,6 @@ namespace Report_Mark1
 
             SelectElement(label);
         }
-
-
 
 
         private void AddTextbox_Click(object sender, RoutedEventArgs e)
@@ -301,7 +312,6 @@ namespace Report_Mark1
 
             SelectElement(textbox);
         }
-
 
 
         private void AddTable_Click(object sender, RoutedEventArgs e)
@@ -341,28 +351,105 @@ namespace Report_Mark1
                 Child = tableGrid
             };
 
-            wrapper.MouseLeftButtonDown += CanvasElement_Click;
+            // Attach drag handlers to the wrapper instead of tableGrid
+            wrapper.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
+            wrapper.PreviewMouseMove += Element_MouseMove;
+            wrapper.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+
+            // Also enable selection on click
+            wrapper.PreviewMouseLeftButtonDown += (s, args) => SelectElement(wrapper);
 
             Canvas.SetLeft(wrapper, 50);
             Canvas.SetTop(wrapper, 50);
             designSurface.Children.Add(wrapper);
+
+            SelectElement(wrapper);
         }
 
 
 
         private void AddChart_Click(object sender, RoutedEventArgs e)
         {
+            Border chartBorder = new Border
+            {
+                Width = 400,
+                Height = 300,
+                BorderBrush = System.Windows.Media.Brushes.Black,
+                BorderThickness = new Thickness(1),
+                Background = System.Windows.Media.Brushes.LightYellow,
+                Child = new TextBlock
+                {
+                    Text = "Chart Placeholder",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    FontSize = 18,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = System.Windows.Media.Brushes.DarkSlateGray
+                }
+            };
+
+            // Make draggable
+            chartBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
+            chartBorder.PreviewMouseMove += Element_MouseMove;
+            chartBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+
+            // Select on click
+            chartBorder.PreviewMouseLeftButtonDown += (s, args) => SelectElement(chartBorder);
+
+            Canvas.SetLeft(chartBorder, 100);
+            Canvas.SetTop(chartBorder, 100);
+            designSurface.Children.Add(chartBorder);
+
+            SelectElement(chartBorder);
+
+            // Optionally: Add actual chart to report backend (invisible for now)
             XRChart chart = new XRChart
             {
                 WidthF = 400,
                 HeightF = 300
             };
-
             report.Bands[BandKind.Detail].Controls.Add(chart);
         }
 
+
+
         private void AddBarcode_Click(object sender, RoutedEventArgs e)
         {
+            // Create a visible placeholder for WPF design surface
+            Border barcodeBorder = new Border
+            {
+                Width = 200,
+                Height = 50,
+                BorderBrush = System.Windows.Media.Brushes.Black,
+                BorderThickness = new Thickness(1),
+                Background = System.Windows.Media.Brushes.LightGray,
+                Child = new TextBlock
+                {
+                    Text = "Barcode: 123456789",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    FontSize = 14,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = System.Windows.Media.Brushes.DarkBlue
+                }
+            };
+
+            // Make it draggable
+            barcodeBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
+            barcodeBorder.PreviewMouseMove += Element_MouseMove;
+            barcodeBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+
+            // Make it selectable
+            barcodeBorder.PreviewMouseLeftButtonDown += (s, args) => SelectElement(barcodeBorder);
+
+            // Add to canvas
+            Canvas.SetLeft(barcodeBorder, 100);
+            Canvas.SetTop(barcodeBorder, 150);
+            designSurface.Children.Add(barcodeBorder);
+
+            SelectElement(barcodeBorder);
+
+            // Add the actual XRBarcode to the report backend
             XRBarCode barcode = new XRBarCode
             {
                 Text = "123456789",
@@ -374,8 +461,51 @@ namespace Report_Mark1
             report.Bands[BandKind.Detail].Controls.Add(barcode);
         }
 
+
+
+
         private void AddImage_Click(object sender, RoutedEventArgs e)
         {
+            // Create a visible Image control for the design surface
+            System.Windows.Controls.Image imageControl = new System.Windows.Controls.Image
+            {
+                Width = 150,
+                Height = 150,
+                Stretch = Stretch.Fill,
+                Source = new BitmapImage(new Uri("https://via.placeholder.com/150"))
+            };
+
+            Border imageBorder = new Border
+            {
+                Width = 150,
+                Height = 150,
+                BorderBrush = System.Windows.Media.Brushes.Gray,
+                BorderThickness = new Thickness(1),
+                Child = imageControl
+            };
+
+            // Make draggable
+            imageBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
+            imageBorder.PreviewMouseMove += Element_MouseMove;
+            imageBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+
+
+            //Make it selectable
+
+            imageBorder.PreviewMouseLeftButtonDown += (s, args) => SelectElement(imageBorder);
+
+
+            // Make selectable
+            imageBorder.PreviewMouseLeftButtonDown += (s, args) => SelectElement(imageBorder);
+
+            // Add to canvas
+            Canvas.SetLeft(imageBorder, 120);
+            Canvas.SetTop(imageBorder, 120);
+            designSurface.Children.Add(imageBorder);
+
+            SelectElement(imageBorder);
+
+            // Add the actual XRPictureBox to the report backend
             XRPictureBox image = new XRPictureBox
             {
                 ImageUrl = "https://via.placeholder.com/150",
@@ -388,13 +518,12 @@ namespace Report_Mark1
         }
 
 
-
-
         private void ShowPreview_Click(object sender, RoutedEventArgs e)
         {
             PreviewWindow preview = new PreviewWindow(report);
             preview.ShowDialog();
         }
+
 
         private void ExportPDF_Click(object sender, RoutedEventArgs e)
         {
@@ -405,11 +534,8 @@ namespace Report_Mark1
         #endregion
 
 
+
         #region Ribbon
-
-
-
-
 
 
 
@@ -421,6 +547,7 @@ namespace Report_Mark1
                 tb.FontWeight = tb.FontWeight == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold;
             }
         }
+
 
         private void Italic_Click(object sender, RoutedEventArgs e)
         {
@@ -454,6 +581,7 @@ namespace Report_Mark1
                 }
             }
         }
+
 
         private void AddColumn_Click(object sender, RoutedEventArgs e)
         {
@@ -498,6 +626,7 @@ namespace Report_Mark1
             draggedElement.CaptureMouse();
         }
 
+
         private void Element_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDragging && draggedElement != null)
@@ -507,6 +636,7 @@ namespace Report_Mark1
                 Canvas.SetTop(draggedElement, position.Y - mouseOffset.Y);
             }
         }
+
 
         private void Element_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
