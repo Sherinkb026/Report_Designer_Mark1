@@ -1,6 +1,6 @@
 ﻿<Window x:Class="Report_Mark1.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:Report_Mark1"
         Title="KR BAKERS" Height="720" Width="1366" Background="#f5f5f5">
 
     <!-- 🎨 Resources -->
@@ -88,7 +88,11 @@
         <!-- 🟡 Designer Canvas -->
         <Border Grid.Row="1" Grid.Column="1" Background="#dddddd" Margin="10" CornerRadius="6" BorderBrush="#aaa" BorderThickness="1">
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <Canvas x:Name="designSurface" Background="White" Width="900" Height="1000"/>
+                <Canvas x:Name="designSurface" Background="LightGray">
+                    <!-- Embed the ReportTemplate here -->
+                    <local:ReportTemplate x:Name="reportTemplate" Width="793" Height="1122" Canvas.Left="10" Canvas.Top="10"/>
+                </Canvas>
+             
             </ScrollViewer>
         </Border>
 

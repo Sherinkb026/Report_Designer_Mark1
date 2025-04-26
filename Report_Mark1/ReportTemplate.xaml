@@ -16,7 +16,7 @@
                 <TextBlock Text="{Binding CurrentDate}" FontWeight="Bold" FontSize="16" />
                 <!-- Dynamic Table -->
                 <DataGrid ItemsSource="{Binding ReportItems}" AutoGenerateColumns="True" Margin="10" />
-                
+
 
                 <!-- Footer -->
                 <StackPanel Orientation="Horizontal" Margin="520,250,0,0">
