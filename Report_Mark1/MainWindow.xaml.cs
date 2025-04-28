@@ -28,7 +28,8 @@ namespace Report_Mark1
         private Border imageBorder;
         private System.Windows.Controls.Image imageControl;
         private bool isResizing = false;
-     
+        
+
 
 
         #endregion
