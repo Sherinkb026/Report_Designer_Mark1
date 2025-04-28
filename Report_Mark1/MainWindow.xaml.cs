@@ -24,7 +24,11 @@ namespace Report_Mark1
         private UIElement selectedElement = null;
         private UIElement draggedElement = null;        
         private bool isDragging = false;
-        private System.Windows.Point mouseOffset; 
+        private System.Windows.Point mouseOffset;
+        private Border imageBorder;
+        private System.Windows.Controls.Image imageControl;
+        private bool isResizing = false;
+     
 
 
         #endregion
@@ -128,95 +132,31 @@ namespace Report_Mark1
             // Check if there is any data
             if (currentData != null)
             {
-                // Create the table grid as before
-                Grid tableGrid = new Grid
+                // Create a new instance of ReportTemplate
+                ReportTemplate reportTemplate = new ReportTemplate
                 {
-                    ShowGridLines = true,
-                    Margin = new Thickness(10),
-                    Background = System.Windows.Media.Brushes.White
+                    Width = 793,
+                    Height = 1122
                 };
 
-                // Define columns
-                for (int col = 0; col < currentData.Columns.Count; col++)
-                {
-                    tableGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120) });
-                }
+                // Load the data into the ReportTemplate
+                reportTemplate.LoadReportData(currentData.AsEnumerable());
 
-                // Add header row
-                tableGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                for (int col = 0; col < currentData.Columns.Count; col++)
-                {
-                    TextBox header = new TextBox
-                    {
-                        Text = currentData.Columns[col].ColumnName,
-                        FontWeight = FontWeights.Bold,
-                        Padding = new Thickness(5),
-                        Background = System.Windows.Media.Brushes.LightGray,
-                        BorderBrush = System.Windows.Media.Brushes.Black,
-                        BorderThickness = new Thickness(1),
-                        IsReadOnly = true // Make header readonly
-                    };
+                // Add the ReportTemplate to the canvas
+                Canvas.SetLeft(reportTemplate, 10);
+                Canvas.SetTop(reportTemplate, 10);
+                designSurface.Children.Add(reportTemplate);
 
-                    Grid.SetRow(header, 0);
-                    Grid.SetColumn(header, col);
-                    tableGrid.Children.Add(header);
-                }
+                // Selection (still allow selecting the entire report for other purposes)
+                reportTemplate.PreviewMouseLeftButtonDown += (s, args) => SelectElement(reportTemplate);
 
-                // Add data rows with editable cells
-                for (int row = 0; row < currentData.Rows.Count; row++)
-                {
-                    tableGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-
-                    for (int col = 0; col < currentData.Columns.Count; col++)
-                    {
-                        TextBox cell = new TextBox
-                        {
-                            Text = currentData.Rows[row][col].ToString(),
-                            Padding = new Thickness(5),
-                            BorderBrush = System.Windows.Media.Brushes.Gray,
-                            BorderThickness = new Thickness(0.5),
-                            Background = System.Windows.Media.Brushes.White
-                        };
-
-                        // Make the cell editable
-                        cell.TextChanged += (s, args) =>
-                        {
-                            // Update the data when the user edits the cell
-                            currentData.Rows[row][col] = cell.Text;
-                        };
-
-                        Grid.SetRow(cell, row + 1);
-                        Grid.SetColumn(cell, col);
-                        tableGrid.Children.Add(cell);
-                    }
-                }
-
-                // Add to canvas
-                Canvas.SetLeft(tableGrid, 10);
-                Canvas.SetTop(tableGrid, 10);
-
-                Border wrapper = new Border
-                {
-                    BorderBrush = System.Windows.Media.Brushes.Black,
-                    BorderThickness = new Thickness(1),
-                    Child = tableGrid
-                };
-
-                // Drag events for wrapper (Border)
-                wrapper.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
-                wrapper.PreviewMouseMove += Element_MouseMove;
-                wrapper.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
-
-                // Selection
-                wrapper.PreviewMouseLeftButtonDown += (s, args) => SelectElement(wrapper);
-
-
-                Canvas.SetLeft(wrapper, 10);
-                Canvas.SetTop(wrapper, 10);
-                designSurface.Children.Add(wrapper);
-
-                MessageBox.Show("Table loaded into canvas.", 
+                MessageBox.Show("Report loaded into canvas.",
                     "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Please generate data before selecting a report.",
+                    "No Data", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -467,56 +407,105 @@ namespace Report_Mark1
 
         private void AddImage_Click(object sender, RoutedEventArgs e)
         {
-            // Create a visible Image control for the design surface
-            System.Windows.Controls.Image imageControl = new System.Windows.Controls.Image
+            // Create a file dialog to select an image
+            var filePicker = new Microsoft.Win32.OpenFileDialog();
+            filePicker.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
+
+            bool? result = filePicker.ShowDialog();
+            if (result == true)
             {
-                Width = 150,
-                Height = 150,
-                Stretch = Stretch.Fill,
-                Source = new BitmapImage(new Uri("https://via.placeholder.com/150"))
-            };
+                // Get the selected image path
+                string filePath = filePicker.FileName;
 
-            Border imageBorder = new Border
-            {
-                Width = 150,
-                Height = 150,
-                BorderBrush = System.Windows.Media.Brushes.Gray,
-                BorderThickness = new Thickness(1),
-                Child = imageControl
-            };
+                // Create a visible Image control for the design surface
+                System.Windows.Controls.Image imageControl = new System.Windows.Controls.Image
+                {
+                    Width = 150,
+                    Height = 150,
+                    Stretch = Stretch.Fill,
+                    Source = new BitmapImage(new Uri(filePath)) // Use the selected file path
+                };
 
-            // Make draggable
-            imageBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
-            imageBorder.PreviewMouseMove += Element_MouseMove;
-            imageBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+                // Create a Border to wrap the image
+                Border imageBorder = new Border
+                {
+                    Width = 150,
+                    Height = 150,
+                    BorderBrush = System.Windows.Media.Brushes.Gray,
+                    BorderThickness = new Thickness(1),
+                    Child = imageControl
+                };
 
+                // Make the image border draggable
+                imageBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
+                imageBorder.PreviewMouseMove += Element_MouseMove;
+                imageBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
 
-            //Make it selectable
+                // Enable resizing by dragging the image border's corner
+                imageBorder.MouseLeftButtonDown += (s, args) =>
+                {
+                    if (IsMouseOverResizeHandle(args))
+                    {
+                        // Start resizing when mouse is over a corner
+                        imageBorder.CaptureMouse();
+                        imageBorder.Cursor = Cursors.SizeNWSE;  // Change cursor to resizing
+                    }
+                };
 
-            imageBorder.PreviewMouseLeftButtonDown += (s, args) => SelectElement(imageBorder);
+                imageBorder.MouseMove += (s, args) =>
+                {
+                    if (imageBorder.IsMouseCaptured)
+                    {
+                        // Get the mouse position relative to the image border
+                        double newWidth = args.GetPosition(imageBorder).X;
+                        double newHeight = args.GetPosition(imageBorder).Y;
 
+                        // Ensure width and height are reasonable
+                        if (newWidth > 50) imageBorder.Width = newWidth;  // Minimum width
+                        if (newHeight > 50) imageBorder.Height = newHeight; // Minimum height
 
-            // Make selectable
-            imageBorder.PreviewMouseLeftButtonDown += (s, args) => SelectElement(imageBorder);
+                        imageControl.Width = imageBorder.Width;
+                        imageControl.Height = imageBorder.Height;
+                    }
+                };
 
-            // Add to canvas
-            Canvas.SetLeft(imageBorder, 120);
-            Canvas.SetTop(imageBorder, 120);
-            designSurface.Children.Add(imageBorder);
+                imageBorder.MouseLeftButtonUp += (s, args) =>
+                {
+                    imageBorder.ReleaseMouseCapture();  // Release the mouse when resizing is done
+                    imageBorder.Cursor = Cursors.Arrow; // Reset cursor back to normal
+                };
 
-            SelectElement(imageBorder);
+                // Add to the canvas
+                Canvas.SetLeft(imageBorder, 120);  // Adjust position as needed
+                Canvas.SetTop(imageBorder, 120);   // Adjust position as needed
+                designSurface.Children.Add(imageBorder);
 
-            // Add the actual XRPictureBox to the report backend
-            XRPictureBox image = new XRPictureBox
-            {
-                ImageUrl = "https://via.placeholder.com/150",
-                Sizing = DevExpress.XtraPrinting.ImageSizeMode.StretchImage,
-                WidthF = 150,
-                HeightF = 150
-            };
+                // Optionally, select the element
+                SelectElement(imageBorder);
 
-            report.Bands[BandKind.Detail].Controls.Add(image);
+                // Add the actual XRPictureBox to the report backend (for the backend report designer)
+                XRPictureBox image = new XRPictureBox
+                {
+                    ImageUrl = filePath,  // Use the selected image path
+                    Sizing = DevExpress.XtraPrinting.ImageSizeMode.StretchImage,
+                    WidthF = 150,
+                    HeightF = 150
+                };
+
+                // Add the image to the report's detail band
+                report.Bands[BandKind.Detail].Controls.Add(image);
+            }
         }
+
+        private bool IsMouseOverResizeHandle(MouseEventArgs args)
+        {
+            // Check if the mouse is over the bottom-right corner (resize handle)
+            System.Windows.Point position = args.GetPosition(null);  // Specify System.Windows.Point explicitly
+            return position.X >= designSurface.ActualWidth - 20 && position.Y >= designSurface.ActualHeight - 20;
+        }
+
+
+
 
 
         private void ShowPreview_Click(object sender, RoutedEventArgs e)

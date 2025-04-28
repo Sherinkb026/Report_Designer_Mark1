@@ -591,11 +591,10 @@ C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\MainWindow.g.cs
 C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\PreviewWindow.g.cs
 C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\ReportTemplate.g.cs
 C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\App.g.cs
-C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\Report_Mark1_MarkupCompile.cache
 C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\Report_Mark1_MarkupCompile.lref
-C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\ReportTemplate.baml
 C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\MainWindow.baml
+C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\ReportTemplate.baml
 C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\Report_Mark1.g.resources
 C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\Report_Mark1.Properties.Resources.resources
 C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\obj\Debug\Report_Mark1.csproj.GenerateResource.cache

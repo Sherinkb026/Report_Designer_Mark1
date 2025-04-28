@@ -90,7 +90,7 @@
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <Canvas x:Name="designSurface" Background="LightGray">
                     <!-- Embed the ReportTemplate here -->
-                    <local:ReportTemplate x:Name="reportTemplate" Width="793" Height="1122" Canvas.Left="10" Canvas.Top="10"/>
+                    <!--<local:ReportTemplate x:Name="reportTemplate" Width="793" Height="1122" Canvas.Left="10" Canvas.Top="10"/>-->
                 </Canvas>
              
             </ScrollViewer>
