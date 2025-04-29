@@ -80,8 +80,8 @@ namespace Report_Mark1
                 // Select the element
                 if (selectedElement != null)
                 {
-                    selectedElement.BorderBrush = Brushes.Black;
-                    selectedElement.BorderThickness = new Thickness(1);
+                    selectedElement.BorderBrush = Brushes.Transparent; // Reset to transparent
+                    selectedElement.BorderThickness = new Thickness(0); // Reset to 0 thickness
                 }
                 selectedElement = border;
                 selectedElement.BorderBrush = Brushes.Blue;
@@ -137,6 +137,15 @@ namespace Report_Mark1
                 draggedElement = null;
                 isDragging = false;
             }
+
+            // Reset the selected element's border to invisible when mouse is released
+            if (selectedElement != null)
+            {
+                selectedElement.BorderBrush = Brushes.Transparent;
+                selectedElement.BorderThickness = new Thickness(0);
+                selectedElement = null; // Clear the selection
+            }
+
             // Allow mouse up events to pass through
             e.Handled = false;
         }

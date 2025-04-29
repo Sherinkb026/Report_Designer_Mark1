@@ -3,11 +3,11 @@
   "WorkspaceRootPath": "C:\\Report_Designer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Report_Designer\\report_mark1\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|c:\\report_designer\\report_mark1\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|solutionrelative:report_mark1\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|c:\\report_designer\\report_mark1\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Report_Designer\\report_mark1\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|solutionrelative:report_mark1\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -72,9 +72,8 @@
               "ToolTip": "C:\\Report_Designer\\Report_Mark1\\MainWindow.xaml.cs",
               "RelativeToolTip": "Report_Mark1\\MainWindow.xaml.cs",
               "ViewState": "AgIAANAAAAAAAAAAAAAIwB4CAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T18:48:27.27Z",
-              "EditorCaption": ""
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADnSURBVDhPY0AGrdtu/99x6fl/KJcowASlwcBcjpchdulthm0XnxFtCCNDzj4MxZqinAybo0UZysvLoSIMDBwcHAxFRUUMxsbGjFAhTLD7yvP/ouWH/oNc8P79\u002B/9Pnz6F4\u002BDg4P\u002BRkZH/z5w5g2IhihdOPfrCsDhalcFSjpPh27dvUFEE\u002BPXrF0Nvby8DsiEoBoQo/2Mwl\u002BXAqhkGQIb09/dDeaAwQAKxsbH/Ozo6oDzcIC8vj2Ht2rVgvSguwGczLoBiADlg1AAqGICSDtLT0/\u002B/efMGysMNREREGGbOnIk7TxAPGBgApqZb3l1ZIBYAAAAASUVORK5CYII=",
+              "WhenOpened": "2025-04-11T18:48:27.27Z"
             },
             {
               "$type": "Document",
@@ -85,9 +84,8 @@
               "ToolTip": "C:\\Report_Designer\\Report_Mark1\\ReportTemplate.xaml.cs",
               "RelativeToolTip": "Report_Mark1\\ReportTemplate.xaml.cs",
               "ViewState": "AgIAADYAAAAAAAAAAAAAwJcAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-25T20:22:14.243Z",
-              "EditorCaption": ""
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADnSURBVDhPY0AGrdtu/99x6fl/KJcowASlwcBcjpchdulthm0XnxFtCCNDzj4MxZqinAybo0UZysvLoSIMDBwcHAxFRUUMxsbGjFAhTLD7yvP/ouWH/oNc8P79\u002B/9Pnz6F4\u002BDg4P\u002BRkZH/z5w5g2IhihdOPfrCsDhalcFSjpPh27dvUFEE\u002BPXrF0Nvby8DsiEoBoQo/2Mwl\u002BXAqhkGQIb09/dDeaAwQAKxsbH/Ozo6oDzcIC8vj2Ht2rVgvSguwGczLoBiADlg1AAqGICSDtLT0/\u002B/efMGysMNREREGGbOnIk7TxAPGBgApqZb3l1ZIBYAAAAASUVORK5CYII=",
+              "WhenOpened": "2025-04-25T20:22:14.243Z"
             },
             {
               "$type": "Document",

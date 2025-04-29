@@ -29,6 +29,10 @@ namespace Report_Mark1
         private Border imageBorder;
         private System.Windows.Controls.Image imageControl;
         private bool isResizing = false;
+<<<<<<< HEAD
+=======
+        
+>>>>>>> c34f89935f5e697896993842f2f10f2cacf99d08
 
 
 
@@ -49,13 +53,60 @@ namespace Report_Mark1
             report = new XtraReport();
             DetailBand detail = new DetailBand();
             report.Bands.Add(detail);
+<<<<<<< HEAD
            
+=======
+
+            this.KeyDown += MainWindow_KeyDown;
+>>>>>>> c34f89935f5e697896993842f2f10f2cacf99d08
         }
 
 
         #endregion
 
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete && selectedElement != null)
+            {
+                DeleteElement(); // Reuse the deletion logic
+                e.Handled = true; // Mark the event as handled to prevent further processing
+            }
+        }
 
+        #region Deletion section
+        private void DeleteElement()
+        {
+            if (selectedElement == null)
+            {
+                MessageBox.Show("Please select an element to delete.",
+                    "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Remove the element from the design surface
+            if (designSurface.Children.Contains(selectedElement))
+            {
+                designSurface.Children.Remove(selectedElement);
+            }
+
+            // Remove the corresponding XRControl from the report backend (if it exists)
+            if (elementMapping.ContainsKey(selectedElement))
+            {
+                XRControl control = elementMapping[selectedElement];
+                if (report.Bands[BandKind.Detail].Controls.Contains(control))
+                {
+                    report.Bands[BandKind.Detail].Controls.Remove(control);
+                }
+                elementMapping.Remove(selectedElement);
+            }
+
+            // Clear the selection
+            selectedElement = null;
+
+            MessageBox.Show("Element deleted successfully.",
+                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        #endregion
 
         #region Dataside
 
@@ -441,34 +492,66 @@ namespace Report_Mark1
                     Child = imageControl
                 };
 
+                // Variables to track initial mouse position and size for resizing
+                System.Windows.Point resizeStartPosition = new System.Windows.Point();
+                double originalWidth = imageBorder.Width;
+                double originalHeight = imageBorder.Height;
+                bool isResizing = false; // Flag to track if we're in resizing mode
+
                 // Make the image border draggable
                 imageBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
                 imageBorder.PreviewMouseMove += Element_MouseMove;
                 imageBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
 
+                // Dynamically update the cursor when hovering over the resize handle
+                imageBorder.MouseMove += (s, args) =>
+                {
+                    if (!imageBorder.IsMouseCaptured) // Only change cursor if not currently resizing or dragging
+                    {
+                        if (IsMouseOverResizeHandle(args, imageBorder))
+                        {
+                            imageBorder.Cursor = Cursors.SizeNWSE; // Resize cursor over bottom-right corner
+                        }
+                        else
+                        {
+                            imageBorder.Cursor = Cursors.Arrow; // Default cursor elsewhere
+                        }
+                    }
+                };
+
+                // Ensure cursor resets when leaving the image
+                imageBorder.MouseLeave += (s, args) =>
+                {
+                    imageBorder.Cursor = Cursors.Arrow; // Reset cursor when leaving the image
+                };
+
                 // Enable resizing by dragging the image border's corner
                 imageBorder.MouseLeftButtonDown += (s, args) =>
                 {
-                    if (IsMouseOverResizeHandle(args))
+                    if (IsMouseOverResizeHandle(args, imageBorder))
                     {
-                        // Start resizing when mouse is over a corner
+                        // Start resizing when mouse is over the corner
                         imageBorder.CaptureMouse();
-                        imageBorder.Cursor = Cursors.SizeNWSE;  // Change cursor to resizing
+                        resizeStartPosition = args.GetPosition(designSurface); // Store starting mouse position
+                        originalWidth = imageBorder.Width; // Store initial width
+                        originalHeight = imageBorder.Height; // Store initial height
+                        isResizing = true; // Set resizing mode
+                        args.Handled = true; // Prevent drag interference
                     }
                 };
 
                 imageBorder.MouseMove += (s, args) =>
                 {
-                    if (imageBorder.IsMouseCaptured)
+                    if (imageBorder.IsMouseCaptured && isResizing) // Only resize if in resizing mode
                     {
-                        // Get the mouse position relative to the image border
-                        double newWidth = args.GetPosition(imageBorder).X;
-                        double newHeight = args.GetPosition(imageBorder).Y;
-
-                        // Ensure width and height are reasonable
-                        if (newWidth > 50) imageBorder.Width = newWidth;  // Minimum width
-                        if (newHeight > 50) imageBorder.Height = newHeight; // Minimum height
-
+                        System.Diagnostics.Debug.WriteLine("Resizing...");
+                        System.Windows.Point currentPos = args.GetPosition(designSurface);
+                        double deltaX = currentPos.X - resizeStartPosition.X;
+                        double deltaY = currentPos.Y - resizeStartPosition.Y;
+                        double newWidth = originalWidth + deltaX;
+                        double newHeight = originalHeight + deltaY;
+                        if (newWidth > 50) imageBorder.Width = newWidth;
+                        if (newHeight > 50) imageBorder.Height = newHeight;
                         imageControl.Width = imageBorder.Width;
                         imageControl.Height = imageBorder.Height;
                     }
@@ -476,39 +559,53 @@ namespace Report_Mark1
 
                 imageBorder.MouseLeftButtonUp += (s, args) =>
                 {
-                    imageBorder.ReleaseMouseCapture();  // Release the mouse when resizing is done
-                    imageBorder.Cursor = Cursors.Arrow; // Reset cursor back to normal
+                    if (imageBorder.IsMouseCaptured)
+                    {
+                        imageBorder.ReleaseMouseCapture();
+                        imageBorder.Cursor = Cursors.Arrow; // Reset cursor after resizing
+                        isResizing = false; // Reset resizing mode
+                    }
                 };
 
                 // Add to the canvas
-                Canvas.SetLeft(imageBorder, 120);  // Adjust position as needed
-                Canvas.SetTop(imageBorder, 120);   // Adjust position as needed
+                Canvas.SetLeft(imageBorder, 120);
+                Canvas.SetTop(imageBorder, 120);
                 designSurface.Children.Add(imageBorder);
 
                 // Optionally, select the element
                 SelectElement(imageBorder);
 
-                // Add the actual XRPictureBox to the report backend (for the backend report designer)
+                // Add the actual XRPictureBox to the report backend
                 XRPictureBox image = new XRPictureBox
                 {
-                    ImageUrl = filePath,  // Use the selected image path
+                    ImageUrl = filePath,
                     Sizing = DevExpress.XtraPrinting.ImageSizeMode.StretchImage,
-                    WidthF = 150,
-                    HeightF = 150
+                    WidthF = (float)imageBorder.Width,
+                    HeightF = (float)imageBorder.Height
                 };
 
-                // Add the image to the report's detail band
                 report.Bands[BandKind.Detail].Controls.Add(image);
             }
         }
 
-        private bool IsMouseOverResizeHandle(MouseEventArgs args)
+      
+   
+
+
+        private bool IsMouseOverResizeHandle(MouseEventArgs args, Border border)
         {
-            // Check if the mouse is over the bottom-right corner (resize handle)
-            System.Windows.Point position = args.GetPosition(null);  // Specify System.Windows.Point explicitly
-            return position.X >= designSurface.ActualWidth - 20 && position.Y >= designSurface.ActualHeight - 20;
+            // Get the mouse position relative to the border
+            System.Windows.Point position = args.GetPosition(border);
+            double borderWidth = border.ActualWidth;
+            double borderHeight = border.ActualHeight;
+
+            // Check if the mouse is within 20 pixels of the bottom-right corner of the border
+            return position.X >= borderWidth - 5 && position.X <= borderWidth &&
+                   position.Y >= borderHeight - 5 && position.Y <= borderHeight;
         }
 
+
+       
 
 
 
