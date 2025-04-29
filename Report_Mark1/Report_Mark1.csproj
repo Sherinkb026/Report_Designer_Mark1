@@ -163,9 +163,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-<<<<<<< HEAD
-  <ItemGroup />
-=======
+
+
   <ItemGroup>
     <Resource Include="Images\align-left.png" />
     <Resource Include="Images\align-right.png" />
@@ -195,6 +194,6 @@
   <ItemGroup>
     <Resource Include="Images\align-center.png" />
   </ItemGroup>
->>>>>>> 2b76ea28d28bd231fc073e4be25b2299dca68cbd
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

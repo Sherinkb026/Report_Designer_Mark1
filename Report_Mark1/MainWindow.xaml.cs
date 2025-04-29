@@ -29,10 +29,7 @@ namespace Report_Mark1
         private Border imageBorder;
         private System.Windows.Controls.Image imageControl;
         private bool isResizing = false;
-<<<<<<< HEAD
-=======
-        
->>>>>>> c34f89935f5e697896993842f2f10f2cacf99d08
+
 
 
 
@@ -53,12 +50,10 @@ namespace Report_Mark1
             report = new XtraReport();
             DetailBand detail = new DetailBand();
             report.Bands.Add(detail);
-<<<<<<< HEAD
-           
-=======
+
 
             this.KeyDown += MainWindow_KeyDown;
->>>>>>> c34f89935f5e697896993842f2f10f2cacf99d08
+
         }
 
 
