@@ -25,23 +25,18 @@ namespace Report_Mark1
         private DataTable currentData;
         private Dictionary<UIElement, XRControl> elementMapping = new Dictionary<UIElement, XRControl>();
         private UIElement selectedElement = null;
-        private UIElement draggedElement = null;        
+        private UIElement draggedElement = null;
         private bool isDragging = false;
         private System.Windows.Point mouseOffset;
         private Border imageBorder;
         private System.Windows.Controls.Image imageControl;
         private bool isResizing = false;
 
-
-
-
         #endregion
-
 
         public string SelectedFont { get; set; } = "Calibri";
 
         #region Constructor
-
 
         public MainWindow()
         {
@@ -53,11 +48,8 @@ namespace Report_Mark1
             DetailBand detail = new DetailBand();
             report.Bands.Add(detail);
 
-
             this.KeyDown += MainWindow_KeyDown;
-
         }
-
 
         #endregion
 
@@ -110,9 +102,7 @@ namespace Report_Mark1
         private void SelectElement(UIElement element)
         {
             selectedElement = element;
-
         }
-
 
         private void GenerateReport_Click(object sender, RoutedEventArgs e)
         {
@@ -122,9 +112,8 @@ namespace Report_Mark1
 
             if (string.IsNullOrEmpty(selectedType) || fromDate == null || toDate == null)
             {
-                MessageBox.Show("Please select data type and date range.", 
+                MessageBox.Show("Please select data type and date range.",
                     "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
-
                 return;
             }
 
@@ -172,10 +161,9 @@ namespace Report_Mark1
 
             dataPreviewGrid.ItemsSource = currentData.DefaultView;
 
-            MessageBox.Show($"Demo {selectedType} data generated.", 
+            MessageBox.Show($"Demo {selectedType} data generated.",
                 "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
 
         private void SelectReport_Click(object sender, RoutedEventArgs e)
         {
@@ -213,11 +201,7 @@ namespace Report_Mark1
             }
         }
 
-
-
         #endregion
-
-
 
         #region Canvas
         private void CanvasElement_Click(object sender, MouseButtonEventArgs e)
@@ -249,10 +233,7 @@ namespace Report_Mark1
             }
         }
 
-
         #endregion
-
-
 
         #region Left side
         private void AddLabel_Click(object sender, RoutedEventArgs e)
@@ -277,8 +258,6 @@ namespace Report_Mark1
 
             SelectElement(label);
         }
-
-
 
         private void AddTextbox_Click(object sender, RoutedEventArgs e)
         {
@@ -309,7 +288,6 @@ namespace Report_Mark1
 
             SelectElement(textbox);
         }
-
 
         private void AddTable_Click(object sender, RoutedEventArgs e)
         {
@@ -363,8 +341,6 @@ namespace Report_Mark1
             SelectElement(wrapper);
         }
 
-
-
         private void AddChart_Click(object sender, RoutedEventArgs e)
         {
             Border chartBorder = new Border
@@ -407,8 +383,6 @@ namespace Report_Mark1
             };
             report.Bands[BandKind.Detail].Controls.Add(chart);
         }
-
-
 
         private void AddBarcode_Click(object sender, RoutedEventArgs e)
         {
@@ -457,9 +431,6 @@ namespace Report_Mark1
 
             report.Bands[BandKind.Detail].Controls.Add(barcode);
         }
-
-
-
 
         private void AddImage_Click(object sender, RoutedEventArgs e)
         {
@@ -588,10 +559,6 @@ namespace Report_Mark1
             }
         }
 
-      
-   
-
-
         private bool IsMouseOverResizeHandle(MouseEventArgs args, Border border)
         {
             // Get the mouse position relative to the border
@@ -604,18 +571,11 @@ namespace Report_Mark1
                    position.Y >= borderHeight - 5 && position.Y <= borderHeight;
         }
 
-
-       
-
-
-
-
         private void ShowPreview_Click(object sender, RoutedEventArgs e)
         {
             PreviewWindow preview = new PreviewWindow(report);
             preview.ShowDialog();
         }
-
 
         private void ExportPDF_Click(object sender, RoutedEventArgs e)
         {
@@ -624,8 +584,6 @@ namespace Report_Mark1
             MessageBox.Show($"Exported to {path}");
         }
         #endregion
-
-
 
         #region Ribbon
 
@@ -649,19 +607,9 @@ namespace Report_Mark1
             }
         }
 
-
-
-
-
-
-
         #endregion
 
-
-
         #region Mouse Events
-
-
 
         private void Element_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -675,25 +623,28 @@ namespace Report_Mark1
             }
 
             // Set the new selected element
-            selectedElement = sender as UIElement;
+            draggedElement = sender as UIElement;
+            mouseOffset = e.GetPosition(designSurface); // Use designSurface for scroll-aware positioning
+            isDragging = true;
+            draggedElement.CaptureMouse();
 
+            // Update selection
+            selectedElement = draggedElement;
             if (selectedElement is Control selectedCtrl)
             {
                 selectedCtrl.BorderBrush = WpfBrushes.Blue;
             }
         }
 
-
         private void Element_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDragging && draggedElement != null)
             {
-                System.Windows.Point position = e.GetPosition(designSurface);
+                System.Windows.Point position = e.GetPosition(designSurface); // Use designSurface for scroll-aware positioning
                 Canvas.SetLeft(draggedElement, position.X - mouseOffset.X);
                 Canvas.SetTop(draggedElement, position.Y - mouseOffset.Y);
             }
         }
-
 
         private void Element_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -705,26 +656,6 @@ namespace Report_Mark1
             }
         }
 
-
-
         #endregion
-
-
-
-
-
-
-
-
-
-
     }
 }
-
-
-
-
-
-
-
-
