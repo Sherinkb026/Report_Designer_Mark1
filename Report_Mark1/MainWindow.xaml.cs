@@ -12,6 +12,8 @@ using System.Windows.Input;
 using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls.Ribbon;
+using WpfLabel = System.Windows.Controls.Label;
+using WpfBrushes = System.Windows.Media.Brushes;
 
 namespace Report_Mark1
 {
@@ -29,10 +31,9 @@ namespace Report_Mark1
         private Border imageBorder;
         private System.Windows.Controls.Image imageControl;
         private bool isResizing = false;
-<<<<<<< HEAD
-=======
-        
->>>>>>> c34f89935f5e697896993842f2f10f2cacf99d08
+
+
+
 
 
 
@@ -53,12 +54,10 @@ namespace Report_Mark1
             report = new XtraReport();
             DetailBand detail = new DetailBand();
             report.Bands.Add(detail);
-<<<<<<< HEAD
-           
-=======
+
 
             this.KeyDown += MainWindow_KeyDown;
->>>>>>> c34f89935f5e697896993842f2f10f2cacf99d08
+
         }
 
 
@@ -260,12 +259,14 @@ namespace Report_Mark1
         #region Left side
         private void AddLabel_Click(object sender, RoutedEventArgs e)
         {
-            TextBlock label = new TextBlock
+            WpfLabel label = new WpfLabel
             {
-                Text = "New Label",
+                Content = "New Label",
                 FontSize = 16,
                 Margin = new Thickness(10),
-                Background = System.Windows.Media.Brushes.Transparent
+                Background = WpfBrushes.Transparent,
+                BorderBrush = WpfBrushes.Transparent,
+                BorderThickness = new Thickness(1)
             };
 
             label.MouseLeftButtonDown += Element_MouseLeftButtonDown;
@@ -278,6 +279,7 @@ namespace Report_Mark1
 
             SelectElement(label);
         }
+
 
 
         private void AddTextbox_Click(object sender, RoutedEventArgs e)
@@ -629,14 +631,27 @@ namespace Report_Mark1
 
         #region Ribbon
 
-        private void FontGallery_SelectionChanged(object sender, RoutedEventArgs e)
+        private void BtnBold_Click(object sender, RoutedEventArgs e)
         {
-            var galleryItem = (sender as RibbonGallery)?.SelectedItem as RibbonGalleryItem;
-            if (galleryItem != null)
+            if (selectedElement is Control ctrl)
             {
-                SelectedFont = galleryItem.Content.ToString();
+                // Toggle font weight
+                ctrl.FontWeight = (ctrl.FontWeight == FontWeights.Bold) ? FontWeights.Normal : FontWeights.Bold;
             }
         }
+
+        private void FontGallery_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            // Your logic for handling selection change in the RibbonGallery
+            var selectedItem = e.NewValue; // e.NewValue is the selected item
+            if (selectedItem != null)
+            {
+                // Example logic: Do something with the selected item
+                MessageBox.Show($"You selected: {selectedItem}");
+            }
+        }
+
+
 
 
 
@@ -652,10 +667,22 @@ namespace Report_Mark1
 
         private void Element_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            draggedElement = sender as UIElement;
-            mouseOffset = e.GetPosition(draggedElement);
-            isDragging = true;
-            draggedElement.CaptureMouse();
+            // Clear previous selection visual
+            foreach (UIElement child in designSurface.Children)
+            {
+                if (child is Control ctrl)
+                {
+                    ctrl.BorderBrush = WpfBrushes.Transparent;
+                }
+            }
+
+            // Set the new selected element
+            selectedElement = sender as UIElement;
+
+            if (selectedElement is Control selectedCtrl)
+            {
+                selectedCtrl.BorderBrush = WpfBrushes.Blue;
+            }
         }
 
 
