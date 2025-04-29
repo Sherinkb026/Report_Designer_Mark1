@@ -41,10 +41,10 @@ namespace Report_Mark1
             Canvas.SetTop(headerCanvas, 0);
 
             Canvas.SetLeft(tableCanvas, 0);
-            Canvas.SetTop(tableCanvas, 100); // Position the table below the header
+            Canvas.SetTop(tableCanvas, 120); // Adjusted to give more space below header
 
-            Canvas.SetLeft(footerCanvas, 520);
-            Canvas.SetTop(footerCanvas, 350); // Position the footer further down
+            Canvas.SetLeft(footerCanvas, 0); // Full width, aligned left
+            Canvas.SetTop(footerCanvas, 650); // Positioned further down to fit content
         }
 
         public void LoadReportData(IEnumerable<DataRow> fetchedData)
