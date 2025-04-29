@@ -163,6 +163,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+
+
   <ItemGroup>
     <Resource Include="Images\align-left.png" />
     <Resource Include="Images\align-right.png" />
@@ -192,5 +194,6 @@
   <ItemGroup>
     <Resource Include="Images\align-center.png" />
   </ItemGroup>
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

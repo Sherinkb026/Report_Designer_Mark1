@@ -1,96 +1,117 @@
-﻿<UserControl
-    x:Class="Report_Mark1.ReportTemplate"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Report_Mark1"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d">
-    <Border
-        Padding="20"
-        Background="White"
-        BorderBrush="Black"
-        BorderThickness="1">
-        <Grid Margin="-11,-11,-11,-11">
-            <!--  Use a Canvas as the main container to allow dragging of child elements  -->
+﻿<UserControl x:Class="Report_Mark1.ReportTemplate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Report_Mark1"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="1122" d:DesignWidth="793" mc:Ignorable="d">
+    <Border Padding="20" Background="White" BorderBrush="#333333" BorderThickness="2">
+        <Grid Margin="0">
+            <!-- Use a Canvas as the main container to allow dragging of child elements -->
             <Canvas x:Name="mainCanvas">
-                <!--  Header Section  -->
+                <!-- Header Section -->
                 <Canvas x:Name="headerCanvas">
-                    <Border x:Name="headerBorder" BorderBrush="Transparent">
-                        <StackPanel>
-                            <TextBlock
-                                HorizontalAlignment="Left"
-                                FontSize="24"
-                                FontWeight="Bold"
-                                Text="KR BAKERS" />
-                            <TextBlock
-                                Margin="0,5,0,0"
-                                HorizontalAlignment="Left"
-                                FontSize="16"
-                                Text="Sales Report" />
-                            <TextBlock
-                                Margin="0,5,0,0"
-                                HorizontalAlignment="Left"
-                                FontSize="12"
-                                Text="Kochi" />
-                            <TextBlock
-                                Margin="0,0,0,20"
-                                FontSize="12"
-                                Text="{Binding CurrentDate}" />
-                        </StackPanel>
+                    <Border x:Name="headerBorder" BorderBrush="#CCCCCC" BorderThickness="0,0,0,1" Background="#F5F5F5">
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <!-- Logo -->
+                                <ColumnDefinition Width="*"/>
+                                <!-- Title -->
+                                <ColumnDefinition Width="Auto"/>
+                                <!-- Date -->
+                            </Grid.ColumnDefinitions>
+                            <!-- Logo Placeholder -->
+                            <Rectangle Width="100" Height="50" Fill="#D3D3D3" Margin="0,0,15,0"/>
+                            <!-- Title Section -->
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                <TextBlock Text="KR BAKERS" FontSize="28" FontWeight="Bold" Foreground="#1E90FF"/>
+                                <TextBlock Margin="0,5,0,0" FontSize="18" FontStyle="Italic" Text="Sales Report"/>
+                                <TextBlock Margin="0,5,0,0" FontSize="12" Foreground="#555555" Text="Kochi"/>
+                            </StackPanel>
+                            <!-- Date -->
+                            <TextBlock Grid.Column="2" Margin="15,0,0,0" VerticalAlignment="Center" 
+                                       FontSize="12" Foreground="#555555" Text="{Binding CurrentDate}"/>
+                        </Grid>
                     </Border>
                 </Canvas>
 
-                <!--  Table Section  -->
+                <!-- Table Section -->
                 <Canvas x:Name="tableCanvas">
-                    <Border
-                        x:Name="tableBorder"
-                        BorderBrush="Transparent">
-                        <DataGrid
-                            x:Name="reportDataGrid"
-                            AutoGenerateColumns="True"
-                            Background="White"
-                            CanUserAddRows="False"
-                            CanUserDeleteRows="False"
-                            GridLinesVisibility="All"
-                            IsReadOnly="False"
-                            ItemsSource="{Binding ReportItems}">
-                            <DataGrid.Resources>
-                                <!--  Style for DataGrid Column Headers  -->
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#F0F0F0" />
-                                    <Setter Property="BorderBrush" Value="Black" />
-                                    <Setter Property="BorderThickness" Value="1" />
-                                    <Setter Property="Padding" Value="5" />
-                                    <Setter Property="FontWeight" Value="Bold" />
-                                </Style>
-                                <!--  Style for DataGrid Cells  -->
-                                <Style TargetType="DataGridCell">
-                                    <Setter Property="BorderBrush" Value="Gray" />
-                                    <Setter Property="BorderThickness" Value="0.5" />
-                                    <Setter Property="Padding" Value="5" />
-                                    <Setter Property="TextBlock.TextAlignment" Value="Center" />
-                                </Style>
-                                <!--  Style for DataGrid Rows  -->
-                                <Style TargetType="DataGridRow">
-                                    <Setter Property="BorderBrush" Value="Gray" />
-                                    <Setter Property="BorderThickness" Value="0.5" />
-                                    <Setter Property="MinHeight" Value="30" />
-                                </Style>
-                            </DataGrid.Resources>
-                        </DataGrid>
+                    <Border x:Name="tableBorder" BorderBrush="#CCCCCC" BorderThickness="0,0,0,1">
+                        <Grid Margin="0,10,0,10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <!-- Table Title -->
+                                <RowDefinition Height="*"/>
+                                <!-- DataGrid -->
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Product Sales Data" FontSize="16" FontWeight="Bold" 
+                                       Foreground="#2E2E2E" Margin="0,0,0,10"/>
+                            <DataGrid x:Name="reportDataGrid" Grid.Row="1"
+                                      AutoGenerateColumns="True"
+                                      Background="White"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      GridLinesVisibility="All"
+                                      IsReadOnly="False"
+                                      ItemsSource="{Binding ReportItems}">
+                                <DataGrid.Resources>
+                                    <!-- Style for DataGrid Column Headers -->
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="#E0E0E0"/>
+                                        <Setter Property="BorderBrush" Value="#333333"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Setter Property="Padding" Value="5"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="Foreground" Value="#1E90FF"/>
+                                    </Style>
+                                    <!-- Style for DataGrid Cells -->
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                                        <Setter Property="BorderThickness" Value="0.5"/>
+                                        <Setter Property="Padding" Value="5"/>
+                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="#D3D3D3"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                    <!-- Style for DataGrid Rows -->
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                                        <Setter Property="BorderThickness" Value="0.5"/>
+                                        <Setter Property="MinHeight" Value="30"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="AlternationIndex" Value="1">
+                                                <Setter Property="Background" Value="#F9F9F9"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                            </DataGrid>
+                        </Grid>
                     </Border>
                 </Canvas>
 
-                <!--  Footer Section  -->
+                <!-- Footer Section -->
                 <Canvas x:Name="footerCanvas">
-                    <Border x:Name="footerBorder"
-                            BorderBrush="Transparent">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontStyle="Italic" Text="Authorized By: ___________________" />
-                        </StackPanel>
+                    <Border x:Name="footerBorder" BorderBrush="#CCCCCC" BorderThickness="1,0,0,0" Background="#F5F5F5">
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                                <TextBlock FontStyle="Italic" Text="Authorized By: ___________________" 
+                                           FontSize="12" Foreground="#555555"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="{Binding CurrentDate}" FontSize="10" Foreground="#555555" Margin="0,0,10,0"/>
+                                <TextBlock Text="Page 1 of 1" FontSize="10" Foreground="#555555"/>
+                            </StackPanel>
+                        </Grid>
                     </Border>
                 </Canvas>
             </Canvas>
