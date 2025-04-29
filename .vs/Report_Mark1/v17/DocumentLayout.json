@@ -1,33 +1,33 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\",
+  "WorkspaceRootPath": "C:\\Report_Designer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|c:\\users\\user\\desktop\\zoul\\new folder\\report_mark1\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|solutionrelative:report_mark1\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Users\\User\\Desktop\\ZOUL\\New folder\\report_mark1\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Report_Designer\\report_mark1\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|solutionrelative:report_mark1\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Users\\User\\Desktop\\ZOUL\\New folder\\report_mark1\\reporttemplate.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|c:\\report_designer\\report_mark1\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|solutionrelative:report_mark1\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Report_Designer\\report_mark1\\reporttemplate.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|solutionrelative:report_mark1\\reporttemplate.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Users\\User\\Desktop\\ZOUL\\New folder\\report_mark1\\reporttemplate.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Report_Designer\\report_mark1\\reporttemplate.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|solutionrelative:report_mark1\\reporttemplate.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Users\\User\\Desktop\\ZOUL\\New folder\\report_mark1\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Report_Designer\\report_mark1\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|solutionrelative:report_mark1\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Users\\User\\Desktop\\ZOUL\\New folder\\report_mark1\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Report_Designer\\report_mark1\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
       "RelativeMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|solutionrelative:report_mark1\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Users\\User\\Desktop\\ZOUL\\New folder\\report_mark1\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|C:\\Report_Designer\\report_mark1\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{31544937-631E-410C-BCE5-190A67372FDD}|Report_Mark1\\Report_Mark1.csproj|solutionrelative:report_mark1\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -38,27 +38,26 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "ReportTemplate.xaml",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\ReportTemplate.xaml",
+              "DocumentMoniker": "C:\\Report_Designer\\Report_Mark1\\ReportTemplate.xaml",
               "RelativeDocumentMoniker": "Report_Mark1\\ReportTemplate.xaml",
-              "ToolTip": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\ReportTemplate.xaml",
+              "ToolTip": "C:\\Report_Designer\\Report_Mark1\\ReportTemplate.xaml",
               "RelativeToolTip": "Report_Mark1\\ReportTemplate.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-04-25T20:16:26.812Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-25T20:16:26.812Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\MainWindow.xaml",
+              "DocumentMoniker": "C:\\Report_Designer\\Report_Mark1\\MainWindow.xaml",
               "RelativeDocumentMoniker": "Report_Mark1\\MainWindow.xaml",
-              "ToolTip": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\MainWindow.xaml",
+              "ToolTip": "C:\\Report_Designer\\Report_Mark1\\MainWindow.xaml",
               "RelativeToolTip": "Report_Mark1\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-04-11T18:48:30.133Z",
@@ -66,13 +65,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Report_Designer\\Report_Mark1\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "Report_Mark1\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Report_Designer\\Report_Mark1\\MainWindow.xaml.cs",
               "RelativeToolTip": "Report_Mark1\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAUwB4AAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAANAAAAAAAAAAAAAIwB4CAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-11T18:48:27.27Z",
               "EditorCaption": ""
@@ -81,11 +80,11 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "ReportTemplate.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\ReportTemplate.xaml.cs",
+              "DocumentMoniker": "C:\\Report_Designer\\Report_Mark1\\ReportTemplate.xaml.cs",
               "RelativeDocumentMoniker": "Report_Mark1\\ReportTemplate.xaml.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\ReportTemplate.xaml.cs",
+              "ToolTip": "C:\\Report_Designer\\Report_Mark1\\ReportTemplate.xaml.cs",
               "RelativeToolTip": "Report_Mark1\\ReportTemplate.xaml.cs",
-              "ViewState": "AgIAAG0AAAAAAAAAAADwv5cAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAwJcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-25T20:22:14.243Z",
               "EditorCaption": ""
@@ -94,9 +93,9 @@
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "App.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\App.xaml.cs",
+              "DocumentMoniker": "C:\\Report_Designer\\Report_Mark1\\App.xaml.cs",
               "RelativeDocumentMoniker": "Report_Mark1\\App.xaml.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\App.xaml.cs",
+              "ToolTip": "C:\\Report_Designer\\Report_Mark1\\App.xaml.cs",
               "RelativeToolTip": "Report_Mark1\\App.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -106,9 +105,9 @@
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "App.xaml",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\App.xaml",
+              "DocumentMoniker": "C:\\Report_Designer\\Report_Mark1\\App.xaml",
               "RelativeDocumentMoniker": "Report_Mark1\\App.xaml",
-              "ToolTip": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\App.xaml",
+              "ToolTip": "C:\\Report_Designer\\Report_Mark1\\App.xaml",
               "RelativeToolTip": "Report_Mark1\\App.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-04-17T19:08:12.173Z",
@@ -118,9 +117,9 @@
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "App.config",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\App.config",
+              "DocumentMoniker": "C:\\Report_Designer\\Report_Mark1\\App.config",
               "RelativeDocumentMoniker": "Report_Mark1\\App.config",
-              "ToolTip": "C:\\Users\\User\\Desktop\\ZOUL\\New folder\\Report_Mark1\\App.config",
+              "ToolTip": "C:\\Report_Designer\\Report_Mark1\\App.config",
               "RelativeToolTip": "Report_Mark1\\App.config",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",

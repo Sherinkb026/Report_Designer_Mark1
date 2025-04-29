@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using System.Drawing;
 using System.Windows.Media.Imaging;
+using System.Windows.Controls.Ribbon;
 
 namespace Report_Mark1
 {
@@ -28,11 +29,13 @@ namespace Report_Mark1
         private Border imageBorder;
         private System.Windows.Controls.Image imageControl;
         private bool isResizing = false;
-     
+
 
 
         #endregion
 
+
+        public string SelectedFont { get; set; } = "Calibri";
 
         #region Constructor
 
@@ -40,11 +43,13 @@ namespace Report_Mark1
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
 
             // Initialize an empty report with a detail band
             report = new XtraReport();
             DetailBand detail = new DetailBand();
             report.Bands.Add(detail);
+           
         }
 
 
@@ -527,72 +532,12 @@ namespace Report_Mark1
 
         #region Ribbon
 
-
-
-        // BOLD
-        private void Bold_Click(object sender, RoutedEventArgs e)
+        private void FontGallery_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            if (selectedElement is TextBlock tb)
+            var galleryItem = (sender as RibbonGallery)?.SelectedItem as RibbonGalleryItem;
+            if (galleryItem != null)
             {
-                tb.FontWeight = tb.FontWeight == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold;
-            }
-        }
-
-
-        private void Italic_Click(object sender, RoutedEventArgs e)
-        {
-            if (selectedElement is TextBlock tb)
-            {
-                tb.FontStyle = tb.FontStyle == FontStyles.Italic ? FontStyles.Normal : FontStyles.Italic;
-            }
-        }
-
-
-        // ADD ROW to selected table
-        private void AddRow_Click(object sender, RoutedEventArgs e)
-        {
-            if (selectedElement is Grid table)
-            {
-                int rowIndex = table.RowDefinitions.Count;
-                table.RowDefinitions.Add(new RowDefinition());
-
-                for (int col = 0; col < table.ColumnDefinitions.Count; col++)
-                {
-                    var cell = new TextBlock
-                    {
-                        Text = $"R{rowIndex + 1}C{col + 1}",
-                        Margin = new Thickness(5),
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        VerticalAlignment = VerticalAlignment.Center
-                    };
-                    Grid.SetRow(cell, rowIndex);
-                    Grid.SetColumn(cell, col);
-                    table.Children.Add(cell);
-                }
-            }
-        }
-
-
-        private void AddColumn_Click(object sender, RoutedEventArgs e)
-        {
-            if (selectedElement is Grid table)
-            {
-                int colIndex = table.ColumnDefinitions.Count;
-                table.ColumnDefinitions.Add(new ColumnDefinition());
-
-                for (int row = 0; row < table.RowDefinitions.Count; row++)
-                {
-                    var cell = new TextBlock
-                    {
-                        Text = $"R{row + 1}C{colIndex + 1}",
-                        Margin = new Thickness(5),
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        VerticalAlignment = VerticalAlignment.Center
-                    };
-                    Grid.SetRow(cell, row);
-                    Grid.SetColumn(cell, colIndex);
-                    table.Children.Add(cell);
-                }
+                SelectedFont = galleryItem.Content.ToString();
             }
         }
 
