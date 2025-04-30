@@ -36,7 +36,7 @@
 
                 <!-- Font Group -->
                 <ribbon:RibbonGroup Header="Font">
-                    <ribbon:RibbonButton Label="Bold" SmallImageSource="/Images/bold.png" Name="btnBold" Click="BtnBold_Click"/>
+                    <ribbon:RibbonButton Label="Bold" SmallImageSource="/Images/bold.png" Name="btnBold" Click="BoldButton_Click"/>
                     <ribbon:RibbonButton Label="Italic" SmallImageSource="/Images/italic.png"/>
                     <ribbon:RibbonButton Label="Underline" SmallImageSource="/Images/underline.png"/>
 

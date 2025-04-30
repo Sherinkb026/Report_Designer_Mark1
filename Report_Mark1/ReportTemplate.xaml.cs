@@ -18,6 +18,8 @@ namespace Report_Mark1
         private Point mouseOffset;
         private UIElement draggedElement = null;
         private Border selectedElement = null;
+        private Border selectedCellBorder;
+
 
         public ReportTemplate()
         {
@@ -151,11 +153,40 @@ namespace Report_Mark1
         }
 
         #endregion
-    }
 
-    public class ReportViewModel
-    {
-        public DataTable ReportItems { get; set; }
-        public string CurrentDate { get; set; }
+
+        public class ReportViewModel
+        {
+            public DataTable ReportItems { get; set; }
+            public string CurrentDate { get; set; }
+        }
+
+
+        private void ReportCell_Click(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+
+            if (sender is TextBlock textBlock && textBlock.Parent is Border border)
+            {
+                // Remove previous selection style
+                if (selectedCellBorder != null)
+                {
+                    selectedCellBorder.BorderBrush = Brushes.Transparent;
+                    selectedCellBorder.BorderThickness = new Thickness(0);
+                }
+
+                // Highlight current cell
+                border.BorderBrush = Brushes.Blue;
+                border.BorderThickness = new Thickness(2);
+                selectedCellBorder = border;
+
+                // Pass to MainWindow
+                var mainWindow = Application.Current.MainWindow as MainWindow;
+                mainWindow?                                                                                                                                                                                  .SelectElement(textBlock); // You are selecting the TextBlock, not Border
+            }
+        }
+
     }
 }
+
+   

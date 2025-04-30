@@ -107,7 +107,7 @@ namespace Report_Mark1
 
         #region Dataside
 
-        private void SelectElement(UIElement element)
+        public void SelectElement(UIElement element)
         {
             selectedElement = element;
 
@@ -629,14 +629,20 @@ namespace Report_Mark1
 
         #region Ribbon
 
-        private void BtnBold_Click(object sender, RoutedEventArgs e)
+        private void BoldButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedElement is Control ctrl)
+            if (selectedElement is TextBlock textBlock)
             {
-                // Toggle font weight
-                ctrl.FontWeight = (ctrl.FontWeight == FontWeights.Bold) ? FontWeights.Normal : FontWeights.Bold;
+                textBlock.FontWeight = textBlock.FontWeight == FontWeights.Bold
+                    ? FontWeights.Normal
+                    : FontWeights.Bold;
             }
         }
+
+
+      
+
+
 
         private void FontGallery_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {

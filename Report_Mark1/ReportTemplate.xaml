@@ -48,49 +48,53 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Text="Product Sales Data" FontSize="16" FontWeight="Bold" 
                                        Foreground="#2E2E2E" Margin="0,0,0,10"/>
-                            <DataGrid x:Name="reportDataGrid" Grid.Row="1"
-                                      AutoGenerateColumns="True"
-                                      Background="White"
-                                      CanUserAddRows="False"
-                                      CanUserDeleteRows="False"
-                                      GridLinesVisibility="All"
-                                      IsReadOnly="False"
-                                      ItemsSource="{Binding ReportItems}">
-                                <DataGrid.Resources>
-                                    <!-- Style for DataGrid Column Headers -->
-                                    <Style TargetType="DataGridColumnHeader">
-                                        <Setter Property="Background" Value="#E0E0E0"/>
-                                        <Setter Property="BorderBrush" Value="#333333"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                        <Setter Property="Padding" Value="5"/>
-                                        <Setter Property="FontWeight" Value="Bold"/>
-                                        <Setter Property="Foreground" Value="#1E90FF"/>
-                                    </Style>
-                                    <!-- Style for DataGrid Cells -->
-                                    <Style TargetType="DataGridCell">
-                                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
-                                        <Setter Property="BorderThickness" Value="0.5"/>
-                                        <Setter Property="Padding" Value="5"/>
-                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter Property="Background" Value="#D3D3D3"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                    <!-- Style for DataGrid Rows -->
-                                    <Style TargetType="DataGridRow">
-                                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
-                                        <Setter Property="BorderThickness" Value="0.5"/>
-                                        <Setter Property="MinHeight" Value="30"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="AlternationIndex" Value="1">
-                                                <Setter Property="Background" Value="#F9F9F9"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DataGrid.Resources>
+                            <DataGrid x:Name="reportDataGrid"
+          Grid.Row="1"
+          AutoGenerateColumns="False"
+          Background="White"
+          CanUserAddRows="False"
+          CanUserDeleteRows="False"
+          GridLinesVisibility="All"
+          IsReadOnly="False"
+          ItemsSource="{Binding ReportItems}">
+
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="Column1">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border BorderThickness="0" BorderBrush="Transparent">
+                                                    <TextBlock 
+            Text="{Binding [0]}" 
+            MouseLeftButtonDown="ReportCell_Click"
+            Tag="0" 
+            Padding="5" 
+            Focusable="True"/>
+                                                </Border>
+                                            </DataTemplate>
+
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="Column2">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border BorderThickness="0" BorderBrush="Transparent">
+                                                    <TextBlock 
+            Text="{Binding [1]}" 
+            MouseLeftButtonDown="ReportCell_Click"
+            Tag="0" 
+            Padding="5" 
+            Focusable="True"/>
+                                                </Border>
+                                            </DataTemplate>
+
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Add more columns as needed -->
+                                </DataGrid.Columns>
                             </DataGrid>
+
                         </Grid>
                     </Border>
                 </Canvas>
