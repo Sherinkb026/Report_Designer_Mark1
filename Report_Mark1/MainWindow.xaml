@@ -26,7 +26,6 @@
         <!-- 🟢 Ribbon (Stretches Entire Top) -->
         <ribbon:Ribbon Grid.Row="0" Grid.ColumnSpan="3">
             <ribbon:RibbonTab Header="HomeTab">
-
                 <!-- Clipboard Group -->
                 <ribbon:RibbonGroup Header="Clipboard">
                     <ribbon:RibbonButton Label="New" SmallImageSource="/Images/new-document.png"/>
@@ -74,7 +73,6 @@
                     <ribbon:RibbonButton Label="Undo" SmallImageSource="/Images/undo.png"/>
                     <ribbon:RibbonButton Label="Redo" SmallImageSource="/Images/redo.png"/>
                 </ribbon:RibbonGroup>
-
             </ribbon:RibbonTab>
         </ribbon:Ribbon>
 
@@ -92,62 +90,46 @@
             <Button Content="Export PDF" Margin="5" Background="LightGreen" Click="ExportPDF_Click"/>
         </StackPanel>
 
-        <!-- 🟡 Designer Canvas -->
+        <!-- 🟡 Designer Canvas with Zoom -->
         <Border Grid.Row="1" Grid.Column="1" Background="#dddddd" Margin="10" CornerRadius="6" BorderBrush="#aaa" BorderThickness="1">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <Canvas x:Name="designSurface" Background="LightGray">
-                    <!-- Embed the ReportTemplate here if needed -->
-                </Canvas>
-            </ScrollViewer>
+            <Grid>
+                <ScrollViewer x:Name="scrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Canvas x:Name="designSurface" Background="LightGray" Width="1200" Height="1600">
+                        <Canvas.LayoutTransform>
+                            <ScaleTransform x:Name="canvasScaleTransform" ScaleX="1" ScaleY="1"/>
+                        </Canvas.LayoutTransform>
+                    </Canvas>
+                </ScrollViewer>
+                <!-- Zoom Slider in Bottom Right -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
+                    <TextBlock Text="Zoom:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <Slider x:Name="zoomSlider" Width="100" Minimum="0.5" Maximum="2" Value="1" 
+                            ValueChanged="ZoomSlider_ValueChanged" TickFrequency="0.1" IsSnapToTickEnabled="True"/>
+                    <TextBlock x:Name="zoomLabel" Text="100%" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Grid>
         </Border>
 
         <!-- 🔵 Data Panel -->
         <Border Grid.Row="1" Grid.Column="2" Background="White" Margin="10" Padding="10">
             <StackPanel>
                 <TextBlock Text="Data Source" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
-
                 <ComboBox x:Name="dataTypeComboBox" Margin="0,0,0,10">
                     <ComboBoxItem Content="Sales"/>
                     <ComboBoxItem Content="Product"/>
                     <ComboBoxItem Content="Invoice"/>
                     <ComboBoxItem Content="Quotation"/>
                 </ComboBox>
-
                 <TextBlock Text="From:"/>
                 <DatePicker x:Name="fromDatePicker" Margin="0,0,0,5"/>
-
                 <TextBlock Text="To:"/>
                 <DatePicker x:Name="toDatePicker" Margin="0,0,0,10"/>
-
                 <Button Content="Generate Report" Click="GenerateReport_Click"
                         Background="Green" Foreground="White" FontWeight="Bold" Height="30" Margin="0,0,0,10"/>
-
                 <DataGrid x:Name="dataPreviewGrid" AutoGenerateColumns="True" Height="200"/>
-
                 <Button Content="Select" Click="SelectReport_Click"
                         Background="Green" Foreground="White" FontWeight="Bold" Height="30" Margin="0,0,0,10"/>
             </StackPanel>
         </Border>
-
     </Grid>
 </Window>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

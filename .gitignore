@@ -13,3 +13,9 @@ obj/
 # Ignore other temp/log files
 *.log
 *.tmp
+"/bin/" 
+"/obj/" 
+"*.exe" 
+"*.pdb" 
+"*.cache" 
+"*.baml" 
