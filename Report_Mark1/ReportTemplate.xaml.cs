@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -11,151 +11,61 @@ namespace Report_Mark1
 {
     public partial class ReportTemplate : UserControl
     {
-        public DataTable SourceDataTable { get; private set; }
-
-        // Variables for dragging
-        private bool isDragging = false;
-        private Point mouseOffset;
-        private UIElement draggedElement = null;
-        private Border selectedElement = null;
-
         public ReportTemplate()
         {
             InitializeComponent();
+            DataContext = this;
 
-            // Attach drag handlers to each border
-            headerBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
-            headerBorder.PreviewMouseMove += Element_MouseMove;
-            headerBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
-
-            tableBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
-            tableBorder.PreviewMouseMove += Element_MouseMove;
-            tableBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
-
-            footerBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
-            footerBorder.PreviewMouseMove += Element_MouseMove;
-            footerBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
-
-            // Set initial positions
-            Canvas.SetLeft(headerCanvas, 0);
-            Canvas.SetTop(headerCanvas, 0);
-
-            Canvas.SetLeft(tableCanvas, 0);
-            Canvas.SetTop(tableCanvas, 120); // Adjusted to give more space below header
-
-            Canvas.SetLeft(footerCanvas, 0); // Full width, aligned left
-            Canvas.SetTop(footerCanvas, 650); // Positioned further down to fit content
+            if (this.FindName("headerBorder") == null ||
+                this.FindName("tableBorder") == null ||
+                this.FindName("footerBorder") == null)
+            {
+                throw new InvalidOperationException("One or more border elements (headerBorder, tableBorder, footerBorder) were not found in the XAML.");
+            }
         }
 
-        public void LoadReportData(IEnumerable<DataRow> fetchedData)
+        public void LoadReportData(IEnumerable<DataRow> dataRows)
         {
-            if (fetchedData == null || !fetchedData.Any())
+            DataTable reportData = new DataTable();
+            reportData.Columns.Add("Description", typeof(string));
+            reportData.Columns.Add("Quantity", typeof(string));
+            reportData.Columns.Add("Price", typeof(string));
+            reportData.Columns.Add("Total", typeof(string));
+
+            int index = 0;
+            foreach (var row in dataRows)
             {
-                MessageBox.Show("No data to display in the report.",
-                    "Empty Data", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                if (index >= 5) break;
+                string description = $"Description of item or service goes here.";
+                string quantity = (index % 2 == 0) ? "5" : "1";
+                string price = (index % 2 == 0) ? "$100" : "$150";
+                string total = (index % 2 == 0) ? "$500" : "$150";
+                reportData.Rows.Add(description, quantity, price, total);
+                index++;
             }
 
-            // Store the original DataTable reference
-            SourceDataTable = fetchedData.First().Table;
-
-            // Create the ViewModel
-            var reportViewModel = new ReportViewModel
-            {
-                ReportItems = SourceDataTable,
-                CurrentDate = DateTime.Now.ToString("dd-MM-yyyy")
-            };
-
-            // Bind data context
-            this.DataContext = reportViewModel;
+            reportData.Rows.Add("TOTAL", "", "", "$5000");
+            reportDataGrid.ItemsSource = reportData.DefaultView;
         }
 
-        #region Dragging Handlers
+        public string CurrentDate => DateTime.Now.ToString("yyyy-MM-dd");
 
-        private void Element_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void HeaderBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Border border = sender as Border;
-            if (border != null)
-            {
-                // Select the element
-                if (selectedElement != null)
-                {
-                    selectedElement.BorderBrush = Brushes.Transparent; // Reset to transparent
-                    selectedElement.BorderThickness = new Thickness(0); // Reset to 0 thickness
-                }
-                selectedElement = border;
-                selectedElement.BorderBrush = Brushes.Blue;
-                selectedElement.BorderThickness = new Thickness(2);
-
-                // Only start dragging if the mouse is held down for a drag action
-                if (e.ClickCount == 1 && e.LeftButton == MouseButtonState.Pressed)
-                {
-                    draggedElement = sender as UIElement;
-                    mouseOffset = e.GetPosition(draggedElement);
-                    isDragging = true;
-                    draggedElement.CaptureMouse();
-                }
-                else
-                {
-                    // Allow single clicks to pass through for editing (e.g., DataGrid cells)
-                    e.Handled = false;
-                }
-            }
+            var parentWindow = Window.GetWindow(this) as MainWindow;
+            parentWindow?.SelectElement(headerBorder);
         }
 
-        private void Element_MouseMove(object sender, MouseEventArgs e)
+        private void TableBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (isDragging && draggedElement != null)
-            {
-                Canvas parentCanvas = null;
-                if (draggedElement == headerBorder)
-                    parentCanvas = headerCanvas;
-                else if (draggedElement == tableBorder)
-                    parentCanvas = tableCanvas;
-                else if (draggedElement == footerBorder)
-                    parentCanvas = footerCanvas;
-
-                if (parentCanvas != null)
-                {
-                    Point position = e.GetPosition(mainCanvas);
-                    Canvas.SetLeft(parentCanvas, position.X - mouseOffset.X);
-                    Canvas.SetTop(parentCanvas, position.Y - mouseOffset.Y);
-                }
-            }
-            else
-            {
-                // Allow mouse move events to pass through if not dragging
-                e.Handled = false;
-            }
+            var parentWindow = Window.GetWindow(this) as MainWindow;
+            parentWindow?.SelectElement(tableBorder);
         }
 
-        private void Element_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void FooterBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (draggedElement != null)
-            {
-                draggedElement.ReleaseMouseCapture();
-                draggedElement = null;
-                isDragging = false;
-            }
-
-            // Reset the selected element's border to invisible when mouse is released
-            if (selectedElement != null)
-            {
-                selectedElement.BorderBrush = Brushes.Transparent;
-                selectedElement.BorderThickness = new Thickness(0);
-                selectedElement = null; // Clear the selection
-            }
-
-            // Allow mouse up events to pass through
-            e.Handled = false;
+            var parentWindow = Window.GetWindow(this) as MainWindow;
+            parentWindow?.SelectElement(footerBorder);
         }
-
-        #endregion
-    }
-
-    public class ReportViewModel
-    {
-        public DataTable ReportItems { get; set; }
-        public string CurrentDate { get; set; }
     }
 }

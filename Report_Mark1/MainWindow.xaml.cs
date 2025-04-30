@@ -2,18 +2,15 @@
 using DevExpress.Xpf.Printing;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
+using System.Windows.Media; // Use WPF-specific Media namespace
 using System.Data;
 using System;
 using DevExpress.Xpf.Bars;
-using System.Reflection.Emit;
 using System.Collections.Generic;
 using System.Windows.Input;
-using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls.Ribbon;
 using WpfLabel = System.Windows.Controls.Label;
-using WpfBrushes = System.Windows.Media.Brushes;
 
 namespace Report_Mark1
 {
@@ -43,7 +40,6 @@ namespace Report_Mark1
             InitializeComponent();
             DataContext = this;
 
-            // Initialize an empty report with a detail band
             report = new XtraReport();
             DetailBand detail = new DetailBand();
             report.Bands.Add(detail);
@@ -57,8 +53,8 @@ namespace Report_Mark1
         {
             if (e.Key == Key.Delete && selectedElement != null)
             {
-                DeleteElement(); // Reuse the deletion logic
-                e.Handled = true; // Mark the event as handled to prevent further processing
+                DeleteElement();
+                e.Handled = true;
             }
         }
 
@@ -72,13 +68,11 @@ namespace Report_Mark1
                 return;
             }
 
-            // Remove the element from the design surface
             if (designSurface.Children.Contains(selectedElement))
             {
                 designSurface.Children.Remove(selectedElement);
             }
 
-            // Remove the corresponding XRControl from the report backend (if it exists)
             if (elementMapping.ContainsKey(selectedElement))
             {
                 XRControl control = elementMapping[selectedElement];
@@ -89,7 +83,6 @@ namespace Report_Mark1
                 elementMapping.Remove(selectedElement);
             }
 
-            // Clear the selection
             selectedElement = null;
 
             MessageBox.Show("Element deleted successfully.",
@@ -99,9 +92,58 @@ namespace Report_Mark1
 
         #region Dataside
 
-        private void SelectElement(UIElement element)
+        public void SelectElement(UIElement element)
         {
+            foreach (UIElement child in designSurface.Children)
+            {
+                if (child is Control ctrl)
+                {
+                    ctrl.BorderBrush = Brushes.Transparent;
+                }
+                else if (child is Border border)
+                {
+                    border.BorderBrush = border.Tag != null ? (Brush)border.Tag : Brushes.Transparent;
+                    border.BorderThickness = new Thickness(1);
+                }
+                else if (child is ReportTemplate reportTemplate)
+                {
+                    var headerBorder = reportTemplate.FindName("headerBorder") as Border;
+                    var tableBorder = reportTemplate.FindName("tableBorder") as Border;
+                    var footerBorder = reportTemplate.FindName("footerBorder") as Border;
+
+                    if (headerBorder != null)
+                    {
+                        headerBorder.BorderBrush = headerBorder.Tag != null ? (Brush)headerBorder.Tag : Brushes.Transparent;
+                        headerBorder.BorderThickness = new Thickness(1);
+                    }
+                    if (tableBorder != null)
+                    {
+                        tableBorder.BorderBrush = tableBorder.Tag != null ? (Brush)tableBorder.Tag : Brushes.Transparent;
+                        tableBorder.BorderThickness = new Thickness(1);
+                    }
+                    if (footerBorder != null)
+                    {
+                        footerBorder.BorderBrush = footerBorder.Tag != null ? (Brush)footerBorder.Tag : Brushes.Transparent;
+                        footerBorder.BorderThickness = new Thickness(1);
+                    }
+                }
+            }
+
             selectedElement = element;
+
+            if (selectedElement is Control selectedCtrl)
+            {
+                selectedCtrl.BorderBrush = Brushes.Blue;
+            }
+            else if (selectedElement is Border selectedBorder)
+            {
+                if (selectedBorder.Tag == null)
+                {
+                    selectedBorder.Tag = selectedBorder.BorderBrush;
+                }
+                selectedBorder.BorderBrush = Brushes.Blue;
+                selectedBorder.BorderThickness = new Thickness(2);
+            }
         }
 
         private void GenerateReport_Click(object sender, RoutedEventArgs e)
@@ -117,7 +159,6 @@ namespace Report_Mark1
                 return;
             }
 
-            // Generate demo data
             currentData = new DataTable();
 
             switch (selectedType)
@@ -167,29 +208,44 @@ namespace Report_Mark1
 
         private void SelectReport_Click(object sender, RoutedEventArgs e)
         {
-            // Clear any existing content in the design surface
             designSurface.Children.Clear();
 
-            // Check if there is any data
             if (currentData != null)
             {
-                // Create a new instance of ReportTemplate
                 ReportTemplate reportTemplate = new ReportTemplate
                 {
                     Width = 793,
                     Height = 1122
                 };
 
-                // Load the data into the ReportTemplate
                 reportTemplate.LoadReportData(currentData.AsEnumerable());
 
-                // Add the ReportTemplate to the canvas
                 Canvas.SetLeft(reportTemplate, 10);
                 Canvas.SetTop(reportTemplate, 10);
                 designSurface.Children.Add(reportTemplate);
 
-                // Selection (still allow selecting the entire report for other purposes)
-                reportTemplate.PreviewMouseLeftButtonDown += (s, args) => SelectElement(reportTemplate);
+                var headerBorder = reportTemplate.FindName("headerBorder") as Border;
+                var tableBorder = reportTemplate.FindName("tableBorder") as Border;
+                var footerBorder = reportTemplate.FindName("footerBorder") as Border;
+
+                if (headerBorder != null)
+                {
+                    headerBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
+                    headerBorder.PreviewMouseMove += Element_MouseMove;
+                    headerBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+                }
+                if (tableBorder != null)
+                {
+                    tableBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
+                    tableBorder.PreviewMouseMove += Element_MouseMove;
+                    tableBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+                }
+                if (footerBorder != null)
+                {
+                    footerBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
+                    footerBorder.PreviewMouseMove += Element_MouseMove;
+                    footerBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+                }
 
                 MessageBox.Show("Report loaded into canvas.",
                     "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -208,27 +264,21 @@ namespace Report_Mark1
         {
             var clicked = sender as UIElement;
 
-            // Traverse up the visual tree to find the outer Border with a Grid inside
             DependencyObject current = clicked;
             while (current != null)
             {
                 if (current is Border border && border.Child is Grid)
                 {
-                    // Set selection
-                    selectedElement = border;
-
-                    // Optional: Clear all other borders' highlight before setting new one
+                    SelectElement(border);
                     foreach (var child in designSurface.Children)
                     {
                         if (child is Border b)
-                            b.BorderBrush = System.Windows.Media.Brushes.Black;
+                            b.BorderBrush = b.Tag != null ? (Brush)b.Tag : Brushes.Black;
                     }
-
-                    border.BorderBrush = System.Windows.Media.Brushes.Blue;
+                    border.BorderBrush = Brushes.Blue;
                     border.BorderThickness = new Thickness(2);
                     break;
                 }
-
                 current = VisualTreeHelper.GetParent(current);
             }
         }
@@ -243,8 +293,8 @@ namespace Report_Mark1
                 Content = "New Label",
                 FontSize = 16,
                 Margin = new Thickness(10),
-                Background = WpfBrushes.Transparent,
-                BorderBrush = WpfBrushes.Transparent,
+                Background = Brushes.Transparent,
+                BorderBrush = Brushes.Transparent,
                 BorderThickness = new Thickness(1)
             };
 
@@ -269,17 +319,15 @@ namespace Report_Mark1
                 Height = 60,
                 AcceptsReturn = true,
                 TextWrapping = TextWrapping.Wrap,
-                Background = System.Windows.Media.Brushes.White,
-                BorderBrush = System.Windows.Media.Brushes.Gray,
+                Background = Brushes.White,
+                BorderBrush = Brushes.Gray,
                 BorderThickness = new Thickness(1)
             };
 
-            // Attach drag handlers
             textbox.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
             textbox.PreviewMouseMove += Element_MouseMove;
             textbox.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
 
-            // Optional: selection
             textbox.PreviewMouseLeftButtonDown += (s, args) => SelectElement(textbox);
 
             Canvas.SetLeft(textbox, 50);
@@ -294,11 +342,10 @@ namespace Report_Mark1
             Grid tableGrid = new Grid
             {
                 ShowGridLines = true,
-                Background = System.Windows.Media.Brushes.White,
+                Background = Brushes.White,
                 Margin = new Thickness(5)
             };
 
-            // Sample 3x2 Grid
             for (int i = 0; i < 2; i++) tableGrid.RowDefinitions.Add(new RowDefinition());
             for (int j = 0; j < 3; j++) tableGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
@@ -310,7 +357,7 @@ namespace Report_Mark1
                     {
                         Text = $"R{i}C{j}",
                         Padding = new Thickness(5),
-                        BorderBrush = System.Windows.Media.Brushes.Black,
+                        BorderBrush = Brushes.Black,
                         BorderThickness = new Thickness(0.5)
                     };
                     Grid.SetRow(cell, i);
@@ -321,17 +368,15 @@ namespace Report_Mark1
 
             Border wrapper = new Border
             {
-                BorderBrush = System.Windows.Media.Brushes.Black,
+                BorderBrush = Brushes.Black,
                 BorderThickness = new Thickness(1),
                 Child = tableGrid
             };
 
-            // Attach drag handlers to the wrapper instead of tableGrid
             wrapper.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
             wrapper.PreviewMouseMove += Element_MouseMove;
             wrapper.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
 
-            // Also enable selection on click
             wrapper.PreviewMouseLeftButtonDown += (s, args) => SelectElement(wrapper);
 
             Canvas.SetLeft(wrapper, 50);
@@ -347,9 +392,9 @@ namespace Report_Mark1
             {
                 Width = 400,
                 Height = 300,
-                BorderBrush = System.Windows.Media.Brushes.Black,
+                BorderBrush = Brushes.Black,
                 BorderThickness = new Thickness(1),
-                Background = System.Windows.Media.Brushes.LightYellow,
+                Background = Brushes.LightYellow,
                 Child = new TextBlock
                 {
                     Text = "Chart Placeholder",
@@ -357,16 +402,14 @@ namespace Report_Mark1
                     VerticalAlignment = VerticalAlignment.Center,
                     FontSize = 18,
                     FontWeight = FontWeights.Bold,
-                    Foreground = System.Windows.Media.Brushes.DarkSlateGray
+                    Foreground = Brushes.DarkSlateGray
                 }
             };
 
-            // Make draggable
             chartBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
             chartBorder.PreviewMouseMove += Element_MouseMove;
             chartBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
 
-            // Select on click
             chartBorder.PreviewMouseLeftButtonDown += (s, args) => SelectElement(chartBorder);
 
             Canvas.SetLeft(chartBorder, 100);
@@ -375,7 +418,6 @@ namespace Report_Mark1
 
             SelectElement(chartBorder);
 
-            // Optionally: Add actual chart to report backend (invisible for now)
             XRChart chart = new XRChart
             {
                 WidthF = 400,
@@ -386,14 +428,13 @@ namespace Report_Mark1
 
         private void AddBarcode_Click(object sender, RoutedEventArgs e)
         {
-            // Create a visible placeholder for WPF design surface
             Border barcodeBorder = new Border
             {
                 Width = 200,
                 Height = 50,
-                BorderBrush = System.Windows.Media.Brushes.Black,
+                BorderBrush = Brushes.Black,
                 BorderThickness = new Thickness(1),
-                Background = System.Windows.Media.Brushes.LightGray,
+                Background = Brushes.LightGray,
                 Child = new TextBlock
                 {
                     Text = "Barcode: 123456789",
@@ -401,26 +442,22 @@ namespace Report_Mark1
                     VerticalAlignment = VerticalAlignment.Center,
                     FontSize = 14,
                     FontWeight = FontWeights.Bold,
-                    Foreground = System.Windows.Media.Brushes.DarkBlue
+                    Foreground = Brushes.DarkBlue
                 }
             };
 
-            // Make it draggable
             barcodeBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
             barcodeBorder.PreviewMouseMove += Element_MouseMove;
             barcodeBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
 
-            // Make it selectable
             barcodeBorder.PreviewMouseLeftButtonDown += (s, args) => SelectElement(barcodeBorder);
 
-            // Add to canvas
             Canvas.SetLeft(barcodeBorder, 100);
             Canvas.SetTop(barcodeBorder, 150);
             designSurface.Children.Add(barcodeBorder);
 
             SelectElement(barcodeBorder);
 
-            // Add the actual XRBarcode to the report backend
             XRBarCode barcode = new XRBarCode
             {
                 Text = "123456789",
@@ -434,86 +471,76 @@ namespace Report_Mark1
 
         private void AddImage_Click(object sender, RoutedEventArgs e)
         {
-            // Create a file dialog to select an image
             var filePicker = new Microsoft.Win32.OpenFileDialog();
             filePicker.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
 
             bool? result = filePicker.ShowDialog();
             if (result == true)
             {
-                // Get the selected image path
                 string filePath = filePicker.FileName;
 
-                // Create a visible Image control for the design surface
                 System.Windows.Controls.Image imageControl = new System.Windows.Controls.Image
                 {
                     Width = 150,
                     Height = 150,
                     Stretch = Stretch.Fill,
-                    Source = new BitmapImage(new Uri(filePath)) // Use the selected file path
+                    Source = new BitmapImage(new Uri(filePath))
                 };
 
-                // Create a Border to wrap the image
                 Border imageBorder = new Border
                 {
                     Width = 150,
                     Height = 150,
-                    BorderBrush = System.Windows.Media.Brushes.Gray,
+                    BorderBrush = Brushes.Gray,
                     BorderThickness = new Thickness(1),
                     Child = imageControl
                 };
 
-                // Variables to track initial mouse position and size for resizing
                 System.Windows.Point resizeStartPosition = new System.Windows.Point();
                 double originalWidth = imageBorder.Width;
                 double originalHeight = imageBorder.Height;
-                bool isResizing = false; // Flag to track if we're in resizing mode
+                bool isResizing = false;
 
-                // Make the image border draggable
                 imageBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
                 imageBorder.PreviewMouseMove += Element_MouseMove;
                 imageBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
 
-                // Dynamically update the cursor when hovering over the resize handle
                 imageBorder.MouseMove += (s, args) =>
                 {
-                    if (!imageBorder.IsMouseCaptured) // Only change cursor if not currently resizing or dragging
+                    if (!imageBorder.IsMouseCaptured)
                     {
                         if (IsMouseOverResizeHandle(args, imageBorder))
                         {
-                            imageBorder.Cursor = Cursors.SizeNWSE; // Resize cursor over bottom-right corner
+                            imageBorder.Cursor = Cursors.SizeNWSE;
                         }
                         else
                         {
-                            imageBorder.Cursor = Cursors.Arrow; // Default cursor elsewhere
+                            imageBorder.Cursor = Cursors.Arrow;
                         }
                     }
                 };
 
-                // Ensure cursor resets when leaving the image
                 imageBorder.MouseLeave += (s, args) =>
                 {
-                    imageBorder.Cursor = Cursors.Arrow; // Reset cursor when leaving the image
+                    imageBorder.Cursor = Cursors.Arrow;
                 };
 
-                // Enable resizing by dragging the image border's corner
                 imageBorder.MouseLeftButtonDown += (s, args) =>
                 {
                     if (IsMouseOverResizeHandle(args, imageBorder))
                     {
-                        // Start resizing when mouse is over the corner
                         imageBorder.CaptureMouse();
-                        resizeStartPosition = args.GetPosition(designSurface); // Store starting mouse position
-                        originalWidth = imageBorder.Width; // Store initial width
-                        originalHeight = imageBorder.Height; // Store initial height
-                        isResizing = true; // Set resizing mode
-                        args.Handled = true; // Prevent drag interference
+                        resizeStartPosition = args.GetPosition(designSurface);
+                        originalWidth = imageBorder.Width;
+                        originalHeight = imageBorder.Height;
+                        isResizing = true;
+                        args.Handled = true;
                     }
                 };
 
                 imageBorder.MouseMove += (s, args) =>
                 {
-                    if (imageBorder.IsMouseCaptured && isResizing) // Only resize if in resizing mode
+                    if (imageBorder.IsMouseCaptured && isResizing)
                     {
                         System.Diagnostics.Debug.WriteLine("Resizing...");
                         System.Windows.Point currentPos = args.GetPosition(designSurface);
@@ -533,20 +560,17 @@ namespace Report_Mark1
                     if (imageBorder.IsMouseCaptured)
                     {
                         imageBorder.ReleaseMouseCapture();
-                        imageBorder.Cursor = Cursors.Arrow; // Reset cursor after resizing
-                        isResizing = false; // Reset resizing mode
+                        imageBorder.Cursor = Cursors.Arrow;
+                        isResizing = false;
                     }
                 };
 
-                // Add to the canvas
                 Canvas.SetLeft(imageBorder, 120);
                 Canvas.SetTop(imageBorder, 120);
                 designSurface.Children.Add(imageBorder);
 
-                // Optionally, select the element
                 SelectElement(imageBorder);
 
-                // Add the actual XRPictureBox to the report backend
                 XRPictureBox image = new XRPictureBox
                 {
                     ImageUrl = filePath,
@@ -561,12 +585,10 @@ namespace Report_Mark1
 
         private bool IsMouseOverResizeHandle(MouseEventArgs args, Border border)
         {
-            // Get the mouse position relative to the border
             System.Windows.Point position = args.GetPosition(border);
             double borderWidth = border.ActualWidth;
             double borderHeight = border.ActualHeight;
 
-            // Check if the mouse is within 20 pixels of the bottom-right corner of the border
             return position.X >= borderWidth - 5 && position.X <= borderWidth &&
                    position.Y >= borderHeight - 5 && position.Y <= borderHeight;
         }
@@ -585,24 +607,51 @@ namespace Report_Mark1
         }
         #endregion
 
+        #region Zoom Functionality
+        private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (canvasScaleTransform != null && scrollViewer != null)
+            {
+                double zoomValue = e.NewValue;
+                double oldValue = e.OldValue;
+
+                if (oldValue <= 0) oldValue = 1;
+
+                canvasScaleTransform.ScaleX = zoomValue;
+                canvasScaleTransform.ScaleY = zoomValue;
+
+                if (zoomLabel != null)
+                {
+                    zoomLabel.Text = $"{(int)(zoomValue * 100)}%";
+                }
+
+                double newHorizontalOffset = scrollViewer.HorizontalOffset * zoomValue / oldValue;
+                double newVerticalOffset = scrollViewer.VerticalOffset * zoomValue / oldValue;
+
+                newHorizontalOffset = Math.Max(0, Math.Min(newHorizontalOffset, scrollViewer.ScrollableWidth));
+                newVerticalOffset = Math.Max(0, Math.Min(newVerticalOffset, scrollViewer.ScrollableHeight));
+
+                scrollViewer.ScrollToHorizontalOffset(newHorizontalOffset);
+                scrollViewer.ScrollToVerticalOffset(newVerticalOffset);
+            }
+        }
+        #endregion
+
         #region Ribbon
 
         private void BtnBold_Click(object sender, RoutedEventArgs e)
         {
             if (selectedElement is Control ctrl)
             {
-                // Toggle font weight
                 ctrl.FontWeight = (ctrl.FontWeight == FontWeights.Bold) ? FontWeights.Normal : FontWeights.Bold;
             }
         }
 
         private void FontGallery_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            // Your logic for handling selection change in the RibbonGallery
-            var selectedItem = e.NewValue; // e.NewValue is the selected item
+            var selectedItem = e.NewValue;
             if (selectedItem != null)
             {
-                // Example logic: Do something with the selected item
                 MessageBox.Show($"You selected: {selectedItem}");
             }
         }
@@ -613,34 +662,19 @@ namespace Report_Mark1
 
         private void Element_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // Clear previous selection visual
-            foreach (UIElement child in designSurface.Children)
-            {
-                if (child is Control ctrl)
-                {
-                    ctrl.BorderBrush = WpfBrushes.Transparent;
-                }
-            }
-
-            // Set the new selected element
             draggedElement = sender as UIElement;
-            mouseOffset = e.GetPosition(designSurface); // Use designSurface for scroll-aware positioning
+            mouseOffset = e.GetPosition(designSurface);
             isDragging = true;
             draggedElement.CaptureMouse();
 
-            // Update selection
-            selectedElement = draggedElement;
-            if (selectedElement is Control selectedCtrl)
-            {
-                selectedCtrl.BorderBrush = WpfBrushes.Blue;
-            }
+            SelectElement(draggedElement);
         }
 
         private void Element_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDragging && draggedElement != null)
             {
-                System.Windows.Point position = e.GetPosition(designSurface); // Use designSurface for scroll-aware positioning
+                System.Windows.Point position = e.GetPosition(designSurface);
                 Canvas.SetLeft(draggedElement, position.X - mouseOffset.X);
                 Canvas.SetTop(draggedElement, position.Y - mouseOffset.Y);
             }
