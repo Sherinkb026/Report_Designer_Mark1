@@ -23,17 +23,17 @@
             <!-- Data Panel -->
         </Grid.ColumnDefinitions>
 
-        <!-- 🟢 Ribbon (Stretches Entire Top) -->
+        <!-- 🟢 Ribbon (Stretches Entire Top) --><!--
         <ribbon:Ribbon Grid.Row="0" Grid.ColumnSpan="3">
             <ribbon:RibbonTab Header="HomeTab">
-                <!-- Clipboard Group -->
+                --><!-- Clipboard Group --><!--
                 <ribbon:RibbonGroup Header="Clipboard">
                     <ribbon:RibbonButton Label="New" SmallImageSource="/Images/new-document.png"/>
                     <ribbon:RibbonButton Label="Open" SmallImageSource="/Images/open.png"/>
                     <ribbon:RibbonButton Label="Save" SmallImageSource="/Images/save.png"/>
                 </ribbon:RibbonGroup>
 
-                <!-- Font Group -->
+                --><!-- Font Group --><!--
                 <ribbon:RibbonGroup Header="Font">
                     <ribbon:RibbonButton Label="Bold" SmallImageSource="/Images/bold.png" Name="btnBold" Click="BoldButton_Click"/>
                     <ribbon:RibbonButton Label="Italic" SmallImageSource="/Images/italic.png"/>
@@ -61,20 +61,42 @@
                     </ribbon:RibbonComboBox>
                 </ribbon:RibbonGroup>
 
-                <!-- Paragraph Group -->
+                --><!-- Paragraph Group --><!--
                 <ribbon:RibbonGroup Header="Paragraph">
                     <ribbon:RibbonButton Label="Align Left" SmallImageSource="/Images/align-left.png"/>
                     <ribbon:RibbonButton Label="Center" SmallImageSource="/Images/align-center.png"/>
                     <ribbon:RibbonButton Label="Align Right" SmallImageSource="/Images/align-right.png"/>
                 </ribbon:RibbonGroup>
 
-                <!-- Editing Group -->
+                --><!-- Editing Group --><!--
                 <ribbon:RibbonGroup Header="Editing">
                     <ribbon:RibbonButton Label="Undo" SmallImageSource="/Images/undo.png"/>
                     <ribbon:RibbonButton Label="Redo" SmallImageSource="/Images/redo.png"/>
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
-        </ribbon:Ribbon>
+        </ribbon:Ribbon>-->
+        <!-- Editing Group Extended -->
+        <ribbon:RibbonGroup Header="Editing">
+            <ribbon:RibbonButton Label="Undo" SmallImageSource="/Images/undo.png"/>
+            <ribbon:RibbonButton Label="Redo" SmallImageSource="/Images/redo.png"/>
+            <ribbon:RibbonButton Label="Cut" SmallImageSource="/Images/cut.png"/>
+            <ribbon:RibbonButton Label="Copy" SmallImageSource="/Images/copy.png"/>
+            <ribbon:RibbonButton Label="Paste" SmallImageSource="/Images/paste.png"/>
+        </ribbon:RibbonGroup>
+
+        <!-- Insert Group -->
+        <ribbon:RibbonGroup Header="Insert">
+            <ribbon:RibbonButton Label="Insert Table" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="AddTable_Click"/>
+            <ribbon:RibbonButton Label="Insert Chart" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="AddChart_Click"/>
+            <ribbon:RibbonButton Label="Insert Barcode" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="AddBarcode_Click"/>
+            <ribbon:RibbonButton Label="Insert Image" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="AddImage_Click"/>
+        </ribbon:RibbonGroup>
+
+        <!-- Tools Group -->
+        <ribbon:RibbonGroup Header="Tools">
+            <ribbon:RibbonButton Label="Preview" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="ShowPreview_Click"/>
+            <ribbon:RibbonButton Label="Export PDF" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="ExportPDF_Click"/>
+        </ribbon:RibbonGroup>
 
         <!-- 🟣 Toolbox -->
         <StackPanel Grid.Row="1" Grid.Column="0" Background="#eeeeee" Margin="5">
