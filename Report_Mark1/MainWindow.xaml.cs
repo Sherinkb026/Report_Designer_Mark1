@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media; // Use WPF-specific Media namespace
 using System.Data;
 using System;
+using System.Windows.Shapes;
 using DevExpress.Xpf.Bars;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -280,6 +281,77 @@ namespace Report_Mark1
                     break;
                 }
                 current = VisualTreeHelper.GetParent(current);
+            }
+        }
+        private void DesignSurface_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.Copy;
+            e.Handled = true;
+        }
+
+        private void DesignSurface_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.StringFormat))
+            {
+                string toolType = e.Data.GetData(DataFormats.StringFormat) as string;
+                Point dropPosition = e.GetPosition(designSurface);
+
+                UIElement newElement = null;
+
+                switch (toolType)
+                {
+                    case "Title":
+                        newElement = new TextBlock
+                        {
+                            Text = "Title",
+                            FontSize = 24,
+                            FontWeight = FontWeights.Bold,
+                            Foreground = Brushes.Black
+                        };
+                        break;
+
+                    case "TextBlock":
+                        newElement = new TextBlock
+                        {
+                            Text = "Editable Text",
+                            FontSize = 14,
+                            Foreground = Brushes.Black
+                        };
+                        break;
+
+                    case "Image":
+                        newElement = new Image
+                        {
+                            Width = 100,
+                            Height = 100,
+                            Source = new BitmapImage(new Uri("pack://application:,,,/Images/placeholder.png"))
+                        };
+                        break;
+
+                    case "Table":
+                        Grid table = new Grid();
+                        table.RowDefinitions.Add(new RowDefinition());
+                        table.ColumnDefinitions.Add(new ColumnDefinition());
+                        table.Children.Add(new TextBlock { Text = "Cell 1", Margin = new Thickness(5) });
+                        newElement = table;
+                        break;
+
+                    case "Divider":
+                        newElement = new Rectangle
+                        {
+                            Height = 2,
+                            Width = 200,
+                            Fill = Brushes.DarkGray
+                        };
+                        break;
+                }
+
+                if (newElement != null)
+                {
+                    Canvas.SetLeft(newElement, dropPosition.X);
+                    Canvas.SetTop(newElement, dropPosition.Y);
+                    designSurface.Children.Add(newElement);
+                }
             }
         }
 
@@ -605,6 +677,15 @@ namespace Report_Mark1
             report.ExportToPdf(path);
             MessageBox.Show($"Exported to {path}");
         }
+
+        private void Tool_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && sender is Border border)
+            {
+                string toolType = border.Tag as string;
+                DragDrop.DoDragDrop(border, toolType, DragDropEffects.Copy);
+            }
+        }
         #endregion
 
         #region Zoom Functionality
@@ -662,6 +743,25 @@ namespace Report_Mark1
                 MessageBox.Show($"You selected: {selectedItem}");
             }
         }
+
+        private void TextColor_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (textColorGallery.SelectedItem is RibbonGalleryItem item && item.Background is SolidColorBrush brush)
+            {
+                // Apply brush.Color to selected text
+                // Example: richTextBox.Selection.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
+            }
+        }
+
+        private void BackgroundColor_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (bgColorGallery.SelectedItem is RibbonGalleryItem item && item.Background is SolidColorBrush brush)
+            {
+                // Apply brush.Color to selected element's background
+                // Example: richTextBox.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, brush);
+            }
+        }
+
 
         #endregion
 

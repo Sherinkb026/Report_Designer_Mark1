@@ -23,17 +23,17 @@
             <!-- Data Panel -->
         </Grid.ColumnDefinitions>
 
-        <!-- 🟢 Ribbon (Stretches Entire Top) --><!--
+        <!-- 🟢 Ribbon (Stretches Entire Top) -->
         <ribbon:Ribbon Grid.Row="0" Grid.ColumnSpan="3">
             <ribbon:RibbonTab Header="HomeTab">
-                --><!-- Clipboard Group --><!--
+                <!-- Clipboard Group -->
                 <ribbon:RibbonGroup Header="Clipboard">
                     <ribbon:RibbonButton Label="New" SmallImageSource="/Images/new-document.png"/>
                     <ribbon:RibbonButton Label="Open" SmallImageSource="/Images/open.png"/>
                     <ribbon:RibbonButton Label="Save" SmallImageSource="/Images/save.png"/>
                 </ribbon:RibbonGroup>
 
-                --><!-- Font Group --><!--
+                <!-- Font Group -->
                 <ribbon:RibbonGroup Header="Font">
                     <ribbon:RibbonButton Label="Bold" SmallImageSource="/Images/bold.png" Name="btnBold" Click="BoldButton_Click"/>
                     <ribbon:RibbonButton Label="Italic" SmallImageSource="/Images/italic.png"/>
@@ -61,62 +61,118 @@
                     </ribbon:RibbonComboBox>
                 </ribbon:RibbonGroup>
 
-                --><!-- Paragraph Group --><!--
+                <!-- Paragraph Group -->
                 <ribbon:RibbonGroup Header="Paragraph">
                     <ribbon:RibbonButton Label="Align Left" SmallImageSource="/Images/align-left.png"/>
                     <ribbon:RibbonButton Label="Center" SmallImageSource="/Images/align-center.png"/>
                     <ribbon:RibbonButton Label="Align Right" SmallImageSource="/Images/align-right.png"/>
                 </ribbon:RibbonGroup>
 
-                --><!-- Editing Group --><!--
+                <!-- Editing Group -->
                 <ribbon:RibbonGroup Header="Editing">
                     <ribbon:RibbonButton Label="Undo" SmallImageSource="/Images/undo.png"/>
                     <ribbon:RibbonButton Label="Redo" SmallImageSource="/Images/redo.png"/>
+                    <ribbon:RibbonButton Label="Cut" SmallImageSource="/Images/cut.png"/>
+                    <ribbon:RibbonButton Label="Copy" SmallImageSource="/Images/copy.png"/>
+                    <ribbon:RibbonButton Label="Paste" SmallImageSource="/Images/paste.png"/>
                 </ribbon:RibbonGroup>
+
+                <!-- Insert Group -->
+                <ribbon:RibbonGroup Header="Insert">
+                    <ribbon:RibbonButton Label="Insert Table" SmallImageSource="/Images/paste.png" Click="AddTable_Click"/>
+                    <ribbon:RibbonButton Label="Insert Chart" SmallImageSource="/Images/paste.png" Click="AddChart_Click"/>
+                    <ribbon:RibbonButton Label="Insert Barcode" SmallImageSource="/Images/paste.png" Click="AddBarcode_Click"/>
+                    <ribbon:RibbonButton Label="Insert Image" SmallImageSource="/Images/paste.png" Click="AddImage_Click"/>
+                </ribbon:RibbonGroup>
+
+                <!-- Tools Group -->
+                <ribbon:RibbonGroup Header="Tools">
+                    <ribbon:RibbonButton Label="Preview" SmallImageSource="/Images/paste.png" Click="ShowPreview_Click"/>
+                    <ribbon:RibbonButton Label="Export PDF" SmallImageSource="/Images/paste.png" Click="ExportPDF_Click" Background="Green" Foreground="White"/>
+                </ribbon:RibbonGroup>
+
+                <!-- Color Group -->
+                <ribbon:RibbonGroup Header="Color">
+                    <!-- Text Color -->
+                    <ribbon:RibbonSplitButton Label="Text Color" Name="textColorButton">
+                        <ribbon:RibbonSplitButton.SmallImageSource>
+                            <BitmapImage UriSource="/Images/text-color.png"/>
+                        </ribbon:RibbonSplitButton.SmallImageSource>
+                        <ribbon:RibbonSplitButton.Items>
+                            <ribbon:RibbonGallery Name="textColorGallery" SelectionChanged="TextColor_SelectionChanged">
+                                <ribbon:RibbonGalleryCategory>
+                                    <ribbon:RibbonGalleryItem Content="Black" Background="Black" Foreground="White"/>
+                                    <ribbon:RibbonGalleryItem Content="Red" Background="Red"/>
+                                    <ribbon:RibbonGalleryItem Content="Blue" Background="Blue"/>
+                                    <ribbon:RibbonGalleryItem Content="Green" Background="Green"/>
+                                </ribbon:RibbonGalleryCategory>
+                            </ribbon:RibbonGallery>
+                        </ribbon:RibbonSplitButton.Items>
+                    </ribbon:RibbonSplitButton>
+
+                    <!-- Background Color -->
+                    <ribbon:RibbonSplitButton Label="Background Color" Name="bgColorButton">
+                        <ribbon:RibbonSplitButton.SmallImageSource>
+                            <BitmapImage UriSource="/Images/background-color.png"/>
+                        </ribbon:RibbonSplitButton.SmallImageSource>
+                        <ribbon:RibbonSplitButton.Items>
+                            <ribbon:RibbonGallery Name="bgColorGallery" SelectionChanged="BackgroundColor_SelectionChanged">
+                                <ribbon:RibbonGalleryCategory>
+                                    <ribbon:RibbonGalleryItem Content="White" Background="White"/>
+                                    <ribbon:RibbonGalleryItem Content="Yellow" Background="Yellow"/>
+                                    <ribbon:RibbonGalleryItem Content="Cyan" Background="Cyan"/>
+                                    <ribbon:RibbonGalleryItem Content="LightGray" Background="LightGray"/>
+                                </ribbon:RibbonGalleryCategory>
+                            </ribbon:RibbonGallery>
+                        </ribbon:RibbonSplitButton.Items>
+                    </ribbon:RibbonSplitButton>
+                </ribbon:RibbonGroup>
+
             </ribbon:RibbonTab>
-        </ribbon:Ribbon>-->
-        <!-- Editing Group Extended -->
-        <ribbon:RibbonGroup Header="Editing">
-            <ribbon:RibbonButton Label="Undo" SmallImageSource="/Images/undo.png"/>
-            <ribbon:RibbonButton Label="Redo" SmallImageSource="/Images/redo.png"/>
-            <ribbon:RibbonButton Label="Cut" SmallImageSource="/Images/cut.png"/>
-            <ribbon:RibbonButton Label="Copy" SmallImageSource="/Images/copy.png"/>
-            <ribbon:RibbonButton Label="Paste" SmallImageSource="/Images/paste.png"/>
-        </ribbon:RibbonGroup>
-
-        <!-- Insert Group -->
-        <ribbon:RibbonGroup Header="Insert">
-            <ribbon:RibbonButton Label="Insert Table" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="AddTable_Click"/>
-            <ribbon:RibbonButton Label="Insert Chart" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="AddChart_Click"/>
-            <ribbon:RibbonButton Label="Insert Barcode" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="AddBarcode_Click"/>
-            <ribbon:RibbonButton Label="Insert Image" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="AddImage_Click"/>
-        </ribbon:RibbonGroup>
-
-        <!-- Tools Group -->
-        <ribbon:RibbonGroup Header="Tools">
-            <ribbon:RibbonButton Label="Preview" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="ShowPreview_Click"/>
-            <ribbon:RibbonButton Label="Export PDF" SmallImageSource="C:\Users\User\Desktop\ZOUL\New folder\Report_Mark1\Images\save.png" Click="ExportPDF_Click"/>
-        </ribbon:RibbonGroup>
+        </ribbon:Ribbon>
 
         <!-- 🟣 Toolbox -->
-        <StackPanel Grid.Row="1" Grid.Column="0" Background="#eeeeee" Margin="5">
-            <TextBlock Text="Elements" FontWeight="Bold" Margin="5"/>
-            <Button Content="Label" Margin="5" Click="AddLabel_Click"/>
-            <Button Content="Textbox" Margin="5" Click="AddTextbox_Click"/>
-            <Button Content="Table" Margin="5" Click="AddTable_Click"/>
-            <Button Content="Chart" Margin="5" Click="AddChart_Click"/>
-            <Button Content="Barcode" Margin="5" Click="AddBarcode_Click"/>
-            <Button Content="Image" Margin="5" Click="AddImage_Click"/>
-            <Separator Margin="5"/>
-            <Button Content="Preview" Margin="5" Background="LightBlue" Click="ShowPreview_Click"/>
-            <Button Content="Export PDF" Margin="5" Background="LightGreen" Click="ExportPDF_Click"/>
+        <StackPanel Grid.Column="0" Grid.Row="1" Background="#f4f4f4" Margin="10">
+            <TextBlock Text="Toolbox" FontWeight="Bold" FontSize="16" Margin="0 0 0 10"/>
+
+            <!-- Draggable Tool Items -->
+            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10"
+            MouseMove="Tool_MouseMove" Tag="Title">
+                <TextBlock Text="🅰️ Title" FontWeight="SemiBold"/>
+            </Border>
+
+            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10"
+            MouseMove="Tool_MouseMove" Tag="TextBlock">
+                <TextBlock Text="✏️ Text Block" FontWeight="SemiBold"/>
+            </Border>
+
+            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10"
+            MouseMove="Tool_MouseMove" Tag="Image">
+                <TextBlock Text="📷 Image" FontWeight="SemiBold"/>
+            </Border>
+
+            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10"
+            MouseMove="Tool_MouseMove" Tag="Table">
+                <TextBlock Text="📊 Table" FontWeight="SemiBold"/>
+            </Border>
+
+            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10"
+            MouseMove="Tool_MouseMove" Tag="Divider">
+                <TextBlock Text="➖ Divider" FontWeight="SemiBold"/>
+            </Border>
         </StackPanel>
+
 
         <!-- 🟡 Designer Canvas with Zoom -->
         <Border Grid.Row="1" Grid.Column="1" Background="#dddddd" Margin="10" CornerRadius="6" BorderBrush="#aaa" BorderThickness="1">
             <Grid>
                 <ScrollViewer x:Name="scrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <Canvas x:Name="designSurface" Background="LightGray" Width="1200" Height="1600">
+                    <Canvas x:Name="designSurface" 
+                            Background="LightGray"
+                            Width="1200" Height="1600" 
+                            AllowDrop="True"
+                            Drop="DesignSurface_Drop"
+                            DragOver="DesignSurface_DragOver">
                         <Canvas.LayoutTransform>
                             <ScaleTransform x:Name="canvasScaleTransform" ScaleX="1" ScaleY="1"/>
                         </Canvas.LayoutTransform>
