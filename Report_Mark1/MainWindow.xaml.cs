@@ -2,23 +2,22 @@
 using DevExpress.Xpf.Printing;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media; // Use WPF-specific Media namespace
+using System.Windows.Media;
 using System.Data;
 using System;
-using System.Windows.Shapes;
-using DevExpress.Xpf.Bars;
 using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls.Ribbon;
 using WpfLabel = System.Windows.Controls.Label;
+using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 
 namespace Report_Mark1
 {
     public partial class MainWindow : Window
     {
         #region Member Variables
-
         private XtraReport report;
         private DataTable currentData;
         private Dictionary<UIElement, XRControl> elementMapping = new Dictionary<UIElement, XRControl>();
@@ -29,13 +28,13 @@ namespace Report_Mark1
         private Border imageBorder;
         private System.Windows.Controls.Image imageControl;
         private bool isResizing = false;
-
+        private double originalWidth;
+        private double originalHeight;
         #endregion
 
         public string SelectedFont { get; set; } = "Calibri";
 
         #region Constructor
-
         public MainWindow()
         {
             InitializeComponent();
@@ -46,9 +45,17 @@ namespace Report_Mark1
             report.Bands.Add(detail);
 
             this.KeyDown += MainWindow_KeyDown;
+            designSurface.PreviewMouseLeftButtonDown += DesignSurface_PreviewMouseLeftButtonDown;
         }
-
         #endregion
+
+        private void DesignSurface_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource == designSurface)
+            {
+                SelectElement(null);
+            }
+        }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
@@ -92,7 +99,6 @@ namespace Report_Mark1
         #endregion
 
         #region Dataside
-
         public void SelectElement(UIElement element)
         {
             foreach (UIElement child in designSurface.Children)
@@ -225,6 +231,8 @@ namespace Report_Mark1
                 Canvas.SetTop(reportTemplate, 10);
                 designSurface.Children.Add(reportTemplate);
 
+                AttachClickEventsRecursively(reportTemplate);
+
                 var headerBorder = reportTemplate.FindName("headerBorder") as Border;
                 var tableBorder = reportTemplate.FindName("tableBorder") as Border;
                 var footerBorder = reportTemplate.FindName("footerBorder") as Border;
@@ -234,18 +242,54 @@ namespace Report_Mark1
                     headerBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
                     headerBorder.PreviewMouseMove += Element_MouseMove;
                     headerBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+                    headerBorder.MouseMove += (s, args) =>
+                    {
+                        if (!headerBorder.IsMouseCaptured && IsMouseOverResizeHandle(args, headerBorder))
+                        {
+                            headerBorder.Cursor = Cursors.SizeNWSE;
+                        }
+                        else if (!headerBorder.IsMouseCaptured)
+                        {
+                            headerBorder.Cursor = Cursors.Arrow;
+                        }
+                    };
+                    headerBorder.MouseLeave += (s, args) => headerBorder.Cursor = Cursors.Arrow;
                 }
                 if (tableBorder != null)
                 {
                     tableBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
                     tableBorder.PreviewMouseMove += Element_MouseMove;
                     tableBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+                    tableBorder.MouseMove += (s, args) =>
+                    {
+                        if (!tableBorder.IsMouseCaptured && IsMouseOverResizeHandle(args, tableBorder))
+                        {
+                            tableBorder.Cursor = Cursors.SizeNWSE;
+                        }
+                        else if (!tableBorder.IsMouseCaptured)
+                        {
+                            tableBorder.Cursor = Cursors.Arrow;
+                        }
+                    };
+                    tableBorder.MouseLeave += (s, args) => tableBorder.Cursor = Cursors.Arrow;
                 }
                 if (footerBorder != null)
                 {
                     footerBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
                     footerBorder.PreviewMouseMove += Element_MouseMove;
                     footerBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+                    footerBorder.MouseMove += (s, args) =>
+                    {
+                        if (!footerBorder.IsMouseCaptured && IsMouseOverResizeHandle(args, footerBorder))
+                        {
+                            footerBorder.Cursor = Cursors.SizeNWSE;
+                        }
+                        else if (!footerBorder.IsMouseCaptured)
+                        {
+                            footerBorder.Cursor = Cursors.Arrow;
+                        }
+                    };
+                    footerBorder.MouseLeave += (s, args) => footerBorder.Cursor = Cursors.Arrow;
                 }
 
                 MessageBox.Show("Report loaded into canvas.",
@@ -258,103 +302,64 @@ namespace Report_Mark1
             }
         }
 
+        void AttachClickEventsRecursively(DependencyObject parent)
+        {
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childCount; i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is TextBlock || child is TextBox || child is Label || child is Border || child is Grid)
+                {
+                    if (child is UIElement uiElement)
+                    {
+                        uiElement.PreviewMouseLeftButtonDown -= CanvasElement_Click;
+                        uiElement.PreviewMouseLeftButtonDown += CanvasElement_Click;
+                    }
+                }
+
+                AttachClickEventsRecursively(child);
+            }
+        }
         #endregion
 
         #region Canvas
         private void CanvasElement_Click(object sender, MouseButtonEventArgs e)
         {
-            var clicked = sender as UIElement;
+            ClearAllSelections();
 
-            DependencyObject current = clicked;
-            while (current != null)
+            Border selected = sender as Border;
+            if (selected != null)
             {
-                if (current is Border border && border.Child is Grid)
-                {
-                    SelectElement(border);
-                    foreach (var child in designSurface.Children)
-                    {
-                        if (child is Border b)
-                            b.BorderBrush = b.Tag != null ? (Brush)b.Tag : Brushes.Black;
-                    }
-                    border.BorderBrush = Brushes.Blue;
-                    border.BorderThickness = new Thickness(2);
-                    break;
-                }
-                current = VisualTreeHelper.GetParent(current);
+                selected.BorderBrush = Brushes.Blue;
             }
-        }
-        private void DesignSurface_DragOver(object sender, DragEventArgs e)
-        {
-            e.Effects = DragDropEffects.Copy;
+
             e.Handled = true;
         }
 
-        private void DesignSurface_Drop(object sender, DragEventArgs e)
+        private void ClearAllSelections()
         {
-            if (e.Data.GetDataPresent(DataFormats.StringFormat))
+            foreach (var child in designSurface.Children)
             {
-                string toolType = e.Data.GetData(DataFormats.StringFormat) as string;
-                Point dropPosition = e.GetPosition(designSurface);
-
-                UIElement newElement = null;
-
-                switch (toolType)
+                if (child is Border border)
                 {
-                    case "Title":
-                        newElement = new TextBlock
-                        {
-                            Text = "Title",
-                            FontSize = 24,
-                            FontWeight = FontWeights.Bold,
-                            Foreground = Brushes.Black
-                        };
-                        break;
-
-                    case "TextBlock":
-                        newElement = new TextBlock
-                        {
-                            Text = "Editable Text",
-                            FontSize = 14,
-                            Foreground = Brushes.Black
-                        };
-                        break;
-
-                    case "Image":
-                        newElement = new Image
-                        {
-                            Width = 100,
-                            Height = 100,
-                            Source = new BitmapImage(new Uri("pack://application:,,,/Images/placeholder.png"))
-                        };
-                        break;
-
-                    case "Table":
-                        Grid table = new Grid();
-                        table.RowDefinitions.Add(new RowDefinition());
-                        table.ColumnDefinitions.Add(new ColumnDefinition());
-                        table.Children.Add(new TextBlock { Text = "Cell 1", Margin = new Thickness(5) });
-                        newElement = table;
-                        break;
-
-                    case "Divider":
-                        newElement = new Rectangle
-                        {
-                            Height = 2,
-                            Width = 200,
-                            Fill = Brushes.DarkGray
-                        };
-                        break;
-                }
-
-                if (newElement != null)
-                {
-                    Canvas.SetLeft(newElement, dropPosition.X);
-                    Canvas.SetTop(newElement, dropPosition.Y);
-                    designSurface.Children.Add(newElement);
+                    border.BorderBrush = Brushes.Transparent;
                 }
             }
         }
 
+        void HighlightSelectedElement(UIElement element)
+        {
+            if (element is Control ctrl)
+            {
+                ctrl.BorderBrush = Brushes.Blue;
+                ctrl.BorderThickness = new Thickness(2);
+            }
+            else if (element is TextBlock tb)
+            {
+                tb.Background = Brushes.LightBlue;
+            }
+        }
         #endregion
 
         #region Left side
@@ -614,7 +619,6 @@ namespace Report_Mark1
                 {
                     if (imageBorder.IsMouseCaptured && isResizing)
                     {
-                        System.Diagnostics.Debug.WriteLine("Resizing...");
                         System.Windows.Point currentPos = args.GetPosition(designSurface);
                         double deltaX = currentPos.X - resizeStartPosition.X;
                         double deltaY = currentPos.Y - resizeStartPosition.Y;
@@ -718,63 +722,56 @@ namespace Report_Mark1
         }
         #endregion
 
-        #region Ribbon
-
-        private void BoldButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (selectedElement is TextBlock textBlock)
-            {
-                textBlock.FontWeight = textBlock.FontWeight == FontWeights.Bold
-                    ? FontWeights.Normal
-                    : FontWeights.Bold;
-            }
-        }
-
-
-      
-
-
-
-        private void FontGallery_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            var selectedItem = e.NewValue;
-            if (selectedItem != null)
-            {
-                MessageBox.Show($"You selected: {selectedItem}");
-            }
-        }
-
-        private void TextColor_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            if (textColorGallery.SelectedItem is RibbonGalleryItem item && item.Background is SolidColorBrush brush)
-            {
-                // Apply brush.Color to selected text
-                // Example: richTextBox.Selection.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
-            }
-        }
-
-        private void BackgroundColor_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            if (bgColorGallery.SelectedItem is RibbonGalleryItem item && item.Background is SolidColorBrush brush)
-            {
-                // Apply brush.Color to selected element's background
-                // Example: richTextBox.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, brush);
-            }
-        }
-
-
-        #endregion
-
         #region Mouse Events
-
         private void Element_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            draggedElement = sender as UIElement;
-            mouseOffset = e.GetPosition(designSurface);
-            isDragging = true;
-            draggedElement.CaptureMouse();
+            var clickedElement = sender as UIElement;
+            if (clickedElement != null)
+            {
+                // Check if the event originates from a DataGrid element
+                if (e.OriginalSource is DependencyObject source)
+                {
+                    DependencyObject parent = source;
+                    while (parent != null)
+                    {
+                        if (parent is DataGrid || parent is DataGridColumnHeader || parent is DataGridRow)
+                        {
+                            e.Handled = false; // Let DataGrid handle resizing
+                            return;
+                        }
+                        parent = VisualTreeHelper.GetParent(parent);
+                    }
+                }
 
-            SelectElement(draggedElement);
+                SelectElement(clickedElement);
+
+                draggedElement = clickedElement;
+
+                if (clickedElement is Border border)
+                {
+                    if (IsMouseOverResizeHandle(e, border))
+                    {
+                        border.CaptureMouse();
+                        mouseOffset = e.GetPosition(designSurface);
+                        originalWidth = border.ActualWidth;
+                        originalHeight = border.ActualHeight;
+                        isResizing = true;
+                        return;
+                    }
+
+                    isDragging = true;
+                    mouseOffset = e.GetPosition(designSurface);
+                    border.CaptureMouse();
+                }
+                else
+                {
+                    isDragging = true;
+                    mouseOffset = e.GetPosition(designSurface);
+                    clickedElement.CaptureMouse();
+                }
+
+                e.Handled = true;
+            }
         }
 
         private void Element_MouseMove(object sender, MouseEventArgs e)
@@ -785,6 +782,27 @@ namespace Report_Mark1
                 Canvas.SetLeft(draggedElement, position.X - mouseOffset.X);
                 Canvas.SetTop(draggedElement, position.Y - mouseOffset.Y);
             }
+            else if (isResizing && draggedElement is Border border)
+            {
+                System.Windows.Point currentPos = e.GetPosition(designSurface);
+                double deltaX = currentPos.X - mouseOffset.X;
+                double deltaY = currentPos.Y - mouseOffset.Y;
+                double newWidth = originalWidth + deltaX;
+                double newHeight = originalHeight + deltaY;
+
+                if (newWidth > 50) border.Width = newWidth;
+                if (newHeight > 50) border.Height = newHeight;
+
+                if (border.Name == "tableBorder")
+                {
+                    var dataGrid = FindVisualChild<DataGrid>(border);
+                    if (dataGrid != null)
+                    {
+                        dataGrid.Width = newWidth - 20;
+                        dataGrid.Height = newHeight - 20;
+                    }
+                }
+            }
         }
 
         private void Element_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -792,11 +810,31 @@ namespace Report_Mark1
             if (draggedElement != null)
             {
                 draggedElement.ReleaseMouseCapture();
+                if (isResizing)
+                {
+                    isResizing = false;
+                }
+                else if (isDragging)
+                {
+                    isDragging = false;
+                }
                 draggedElement = null;
-                isDragging = false;
             }
         }
 
+        private T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child != null && child is T)
+                    return (T)child;
+                var result = FindVisualChild<T>(child);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
         #endregion
     }
 }
