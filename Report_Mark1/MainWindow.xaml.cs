@@ -12,6 +12,10 @@ using System.Windows.Controls.Ribbon;
 using WpfLabel = System.Windows.Controls.Label;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
+using Microsoft.Win32;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using System.IO;
 
 namespace Report_Mark1
 {
@@ -30,6 +34,7 @@ namespace Report_Mark1
         private bool isResizing = false;
         private double originalWidth;
         private double originalHeight;
+        private EditBox editBox;
         #endregion
 
         public string SelectedFont { get; set; } = "Calibri";
@@ -46,323 +51,14 @@ namespace Report_Mark1
 
             this.KeyDown += MainWindow_KeyDown;
             designSurface.PreviewMouseLeftButtonDown += DesignSurface_PreviewMouseLeftButtonDown;
+            editBox = new EditBox { Visibility = Visibility.Collapsed };
+            dataPanelGrid.Children.Add(editBox);
+            editBox.CloseRequested += (s, e) => editBox.Visibility = Visibility.Collapsed;
         }
         #endregion
 
-        private void DesignSurface_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.OriginalSource == designSurface)
-            {
-                SelectElement(null);
-            }
-        }
+        #region Ribbon
 
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete && selectedElement != null)
-            {
-                DeleteElement();
-                e.Handled = true;
-            }
-        }
-
-        #region Deletion section
-        private void DeleteElement()
-        {
-            if (selectedElement == null)
-            {
-                MessageBox.Show("Please select an element to delete.",
-                    "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (designSurface.Children.Contains(selectedElement))
-            {
-                designSurface.Children.Remove(selectedElement);
-            }
-
-            if (elementMapping.ContainsKey(selectedElement))
-            {
-                XRControl control = elementMapping[selectedElement];
-                if (report.Bands[BandKind.Detail].Controls.Contains(control))
-                {
-                    report.Bands[BandKind.Detail].Controls.Remove(control);
-                }
-                elementMapping.Remove(selectedElement);
-            }
-
-            selectedElement = null;
-
-            MessageBox.Show("Element deleted successfully.",
-                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        #endregion
-
-        #region Dataside
-        public void SelectElement(UIElement element)
-        {
-            foreach (UIElement child in designSurface.Children)
-            {
-                if (child is Control ctrl)
-                {
-                    ctrl.BorderBrush = Brushes.Transparent;
-                }
-                else if (child is Border border)
-                {
-                    border.BorderBrush = border.Tag != null ? (Brush)border.Tag : Brushes.Transparent;
-                    border.BorderThickness = new Thickness(1);
-                }
-                else if (child is ReportTemplate reportTemplate)
-                {
-                    var headerBorder = reportTemplate.FindName("headerBorder") as Border;
-                    var tableBorder = reportTemplate.FindName("tableBorder") as Border;
-                    var footerBorder = reportTemplate.FindName("footerBorder") as Border;
-
-                    if (headerBorder != null)
-                    {
-                        headerBorder.BorderBrush = headerBorder.Tag != null ? (Brush)headerBorder.Tag : Brushes.Transparent;
-                        headerBorder.BorderThickness = new Thickness(1);
-                    }
-                    if (tableBorder != null)
-                    {
-                        tableBorder.BorderBrush = tableBorder.Tag != null ? (Brush)tableBorder.Tag : Brushes.Transparent;
-                        tableBorder.BorderThickness = new Thickness(1);
-                    }
-                    if (footerBorder != null)
-                    {
-                        footerBorder.BorderBrush = footerBorder.Tag != null ? (Brush)footerBorder.Tag : Brushes.Transparent;
-                        footerBorder.BorderThickness = new Thickness(1);
-                    }
-                }
-            }
-
-            selectedElement = element;
-
-            if (selectedElement is Control selectedCtrl)
-            {
-                selectedCtrl.BorderBrush = Brushes.Blue;
-            }
-            else if (selectedElement is Border selectedBorder)
-            {
-                if (selectedBorder.Tag == null)
-                {
-                    selectedBorder.Tag = selectedBorder.BorderBrush;
-                }
-                selectedBorder.BorderBrush = Brushes.Blue;
-                selectedBorder.BorderThickness = new Thickness(2);
-            }
-        }
-
-        private void GenerateReport_Click(object sender, RoutedEventArgs e)
-        {
-            string selectedType = (dataTypeComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-            DateTime? fromDate = fromDatePicker.SelectedDate;
-            DateTime? toDate = toDatePicker.SelectedDate;
-
-            if (string.IsNullOrEmpty(selectedType) || fromDate == null || toDate == null)
-            {
-                MessageBox.Show("Please select data type and date range.",
-                    "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            currentData = new DataTable();
-
-            switch (selectedType)
-            {
-                case "Sales":
-                    currentData.Columns.Add("Bill No");
-                    currentData.Columns.Add("Date");
-                    currentData.Columns.Add("Total");
-
-                    currentData.Rows.Add("S001", "2025-04-01", "500");
-                    currentData.Rows.Add("S002", "2025-04-02", "650");
-                    break;
-
-                case "Product":
-                    currentData.Columns.Add("Product ID");
-                    currentData.Columns.Add("Name");
-                    currentData.Columns.Add("Price");
-
-                    currentData.Rows.Add("P001", "Cake", "300");
-                    currentData.Rows.Add("P002", "Bread", "50");
-                    break;
-
-                case "Invoice":
-                    currentData.Columns.Add("Invoice No");
-                    currentData.Columns.Add("Customer");
-                    currentData.Columns.Add("Amount");
-
-                    currentData.Rows.Add("INV001", "John", "700");
-                    currentData.Rows.Add("INV002", "Doe", "800");
-                    break;
-
-                case "Quotation":
-                    currentData.Columns.Add("Quote No");
-                    currentData.Columns.Add("Requested By");
-                    currentData.Columns.Add("Estimate");
-
-                    currentData.Rows.Add("Q001", "Manager", "900");
-                    currentData.Rows.Add("Q002", "Client", "1200");
-                    break;
-            }
-
-            dataPreviewGrid.ItemsSource = currentData.DefaultView;
-
-            MessageBox.Show($"Demo {selectedType} data generated.",
-                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        private void SelectReport_Click(object sender, RoutedEventArgs e)
-        {
-            designSurface.Children.Clear();
-
-            if (currentData != null)
-            {
-                ReportTemplate reportTemplate = new ReportTemplate
-                {
-                    Width = 793,
-                    Height = 1122
-                };
-
-                reportTemplate.LoadReportData(currentData.AsEnumerable());
-
-                Canvas.SetLeft(reportTemplate, 10);
-                Canvas.SetTop(reportTemplate, 10);
-                designSurface.Children.Add(reportTemplate);
-
-                AttachClickEventsRecursively(reportTemplate);
-
-                var headerBorder = reportTemplate.FindName("headerBorder") as Border;
-                var tableBorder = reportTemplate.FindName("tableBorder") as Border;
-                var footerBorder = reportTemplate.FindName("footerBorder") as Border;
-
-                if (headerBorder != null)
-                {
-                    headerBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
-                    headerBorder.PreviewMouseMove += Element_MouseMove;
-                    headerBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
-                    headerBorder.MouseMove += (s, args) =>
-                    {
-                        if (!headerBorder.IsMouseCaptured && IsMouseOverResizeHandle(args, headerBorder))
-                        {
-                            headerBorder.Cursor = Cursors.SizeNWSE;
-                        }
-                        else if (!headerBorder.IsMouseCaptured)
-                        {
-                            headerBorder.Cursor = Cursors.Arrow;
-                        }
-                    };
-                    headerBorder.MouseLeave += (s, args) => headerBorder.Cursor = Cursors.Arrow;
-                }
-                if (tableBorder != null)
-                {
-                    tableBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
-                    tableBorder.PreviewMouseMove += Element_MouseMove;
-                    tableBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
-                    tableBorder.MouseMove += (s, args) =>
-                    {
-                        if (!tableBorder.IsMouseCaptured && IsMouseOverResizeHandle(args, tableBorder))
-                        {
-                            tableBorder.Cursor = Cursors.SizeNWSE;
-                        }
-                        else if (!tableBorder.IsMouseCaptured)
-                        {
-                            tableBorder.Cursor = Cursors.Arrow;
-                        }
-                    };
-                    tableBorder.MouseLeave += (s, args) => tableBorder.Cursor = Cursors.Arrow;
-                }
-                if (footerBorder != null)
-                {
-                    footerBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
-                    footerBorder.PreviewMouseMove += Element_MouseMove;
-                    footerBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
-                    footerBorder.MouseMove += (s, args) =>
-                    {
-                        if (!footerBorder.IsMouseCaptured && IsMouseOverResizeHandle(args, footerBorder))
-                        {
-                            footerBorder.Cursor = Cursors.SizeNWSE;
-                        }
-                        else if (!footerBorder.IsMouseCaptured)
-                        {
-                            footerBorder.Cursor = Cursors.Arrow;
-                        }
-                    };
-                    footerBorder.MouseLeave += (s, args) => footerBorder.Cursor = Cursors.Arrow;
-                }
-
-                MessageBox.Show("Report loaded into canvas.",
-                    "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Please generate data before selecting a report.",
-                    "No Data", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-        }
-
-        void AttachClickEventsRecursively(DependencyObject parent)
-        {
-            int childCount = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < childCount; i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
-
-                if (child is TextBlock || child is TextBox || child is Label || child is Border || child is Grid)
-                {
-                    if (child is UIElement uiElement)
-                    {
-                        uiElement.PreviewMouseLeftButtonDown -= CanvasElement_Click;
-                        uiElement.PreviewMouseLeftButtonDown += CanvasElement_Click;
-                    }
-                }
-
-                AttachClickEventsRecursively(child);
-            }
-        }
-        #endregion
-
-        #region Canvas
-        private void CanvasElement_Click(object sender, MouseButtonEventArgs e)
-        {
-            ClearAllSelections();
-
-            Border selected = sender as Border;
-            if (selected != null)
-            {
-                selected.BorderBrush = Brushes.Blue;
-            }
-
-            e.Handled = true;
-        }
-
-        private void ClearAllSelections()
-        {
-            foreach (var child in designSurface.Children)
-            {
-                if (child is Border border)
-                {
-                    border.BorderBrush = Brushes.Transparent;
-                }
-            }
-        }
-
-        void HighlightSelectedElement(UIElement element)
-        {
-            if (element is Control ctrl)
-            {
-                ctrl.BorderBrush = Brushes.Blue;
-                ctrl.BorderThickness = new Thickness(2);
-            }
-            else if (element is TextBlock tb)
-            {
-                tb.Background = Brushes.LightBlue;
-            }
-        }
-        #endregion
-
-        #region Left side
         private void AddLabel_Click(object sender, RoutedEventArgs e)
         {
             WpfLabel label = new WpfLabel
@@ -486,7 +182,6 @@ namespace Report_Mark1
             chartBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
             chartBorder.PreviewMouseMove += Element_MouseMove;
             chartBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
-
             chartBorder.PreviewMouseLeftButtonDown += (s, args) => SelectElement(chartBorder);
 
             Canvas.SetLeft(chartBorder, 100);
@@ -501,6 +196,17 @@ namespace Report_Mark1
                 HeightF = 300
             };
             report.Bands[BandKind.Detail].Controls.Add(chart);
+
+            if (currentData != null)
+            {
+                editBox.LoadData(currentData, chart);
+                editBox.Visibility = Visibility.Visible;
+                editBox.Tag = chartBorder; // Link to chartBorder
+            }
+            else
+            {
+                MessageBox.Show("Generate data first.", "No Data", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void AddBarcode_Click(object sender, RoutedEventArgs e)
@@ -658,6 +364,391 @@ namespace Report_Mark1
                 report.Bands[BandKind.Detail].Controls.Add(image);
             }
         }
+        private void ExportPDF_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Create a SaveFileDialog to let the user choose the PDF file location
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "PDF files (*.pdf)|*.pdf",
+                    Title = "Save Report as PDF",
+                    FileName = "Report.pdf"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    // Create a new PDF document
+                    using (PdfDocument document = new PdfDocument())
+                    {
+                        // Create a new page
+                        PdfPage page = document.AddPage();
+                        page.Width = XUnit.FromPoint(designSurface.Width);
+                        page.Height = XUnit.FromPoint(designSurface.Height);
+
+                        // Get graphics context for drawing
+                        using (XGraphics gfx = XGraphics.FromPdfPage(page))
+                        {
+                            // Render the Canvas to a bitmap
+                            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+                                (int)designSurface.Width,
+                                (int)designSurface.Height,
+                                96, // DPI
+                                96, // DPI
+                                PixelFormats.Pbgra32);
+
+                            // Ensure the Canvas is measured and arranged
+                            designSurface.Measure(new Size(designSurface.Width, designSurface.Height));
+                            designSurface.Arrange(new Rect(0, 0, designSurface.Width, designSurface.Height));
+                            renderBitmap.Render(designSurface);
+
+                            // Convert the bitmap to a format PdfSharp can use
+                            using (MemoryStream stream = new MemoryStream())
+                            {
+                                BitmapEncoder encoder = new PngBitmapEncoder();
+                                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+                                encoder.Save(stream);
+                                stream.Position = 0;
+
+                                // Draw the image onto the PDF page
+                                XImage image = XImage.FromStream(stream);
+                                gfx.DrawImage(image, 0, 0, designSurface.Width, designSurface.Height);
+                            }
+                        }
+
+                        // Save the PDF document
+                        document.Save(saveFileDialog.FileName);
+                    }
+
+                    MessageBox.Show("PDF exported successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting PDF: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region Deletion section
+        private void DeleteElement()
+        {
+            if (selectedElement == null)
+            {
+                MessageBox.Show("Please select an element to delete.",
+                    "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (designSurface.Children.Contains(selectedElement))
+            {
+                designSurface.Children.Remove(selectedElement);
+            }
+
+            if (elementMapping.ContainsKey(selectedElement))
+            {
+                XRControl control = elementMapping[selectedElement];
+                if (report.Bands[BandKind.Detail].Controls.Contains(control))
+                {
+                    report.Bands[BandKind.Detail].Controls.Remove(control);
+                }
+                elementMapping.Remove(selectedElement);
+            }
+
+            selectedElement = null;
+
+            MessageBox.Show("Element deleted successfully.",
+                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        #endregion
+
+        #region Dataside
+        
+
+        private void GenerateReport_Click(object sender, RoutedEventArgs e)
+        {
+            string selectedType = (dataTypeComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+            DateTime? fromDate = fromDatePicker.SelectedDate;
+            DateTime? toDate = toDatePicker.SelectedDate;
+
+            if (string.IsNullOrEmpty(selectedType) || fromDate == null || toDate == null)
+            {
+                MessageBox.Show("Please select data type and date range.",
+                    "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            currentData = new DataTable();
+
+            switch (selectedType)
+            {
+                case "Sales":
+                    currentData.Columns.Add("Bill No");
+                    currentData.Columns.Add("Date");
+                    currentData.Columns.Add("Total");
+
+                    currentData.Rows.Add("S001", "2025-04-01", "500");
+                    currentData.Rows.Add("S002", "2025-04-02", "650");
+                    break;
+
+                case "Product":
+                    currentData.Columns.Add("Product ID");
+                    currentData.Columns.Add("Name");
+                    currentData.Columns.Add("Price");
+
+                    currentData.Rows.Add("P001", "Cake", "300");
+                    currentData.Rows.Add("P002", "Bread", "50");
+                    break;
+
+                case "Invoice":
+                    currentData.Columns.Add("Invoice No");
+                    currentData.Columns.Add("Customer");
+                    currentData.Columns.Add("Amount");
+
+                    currentData.Rows.Add("INV001", "John", "700");
+                    currentData.Rows.Add("INV002", "Doe", "800");
+                    break;
+
+                case "Quotation":
+                    currentData.Columns.Add("Quote No");
+                    currentData.Columns.Add("Requested By");
+                    currentData.Columns.Add("Estimate");
+
+                    currentData.Rows.Add("Q001", "Manager", "900");
+                    currentData.Rows.Add("Q002", "Client", "1200");
+                    break;
+            }
+
+            dataPreviewGrid.ItemsSource = currentData.DefaultView;
+
+            MessageBox.Show($"Demo {selectedType} data generated.",
+                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        
+        private void SelectReport_Click(object sender, RoutedEventArgs e)
+        {
+            designSurface.Children.Clear();
+
+            if (currentData != null)
+            {
+                UserControl reportControl = null;
+                string selectedType = (dataTypeComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+                switch (selectedType)
+                {
+                    case "Invoice":
+                        reportControl = new Invoice(); // Make sure Invoice.xaml is a UserControl
+                        (reportControl as Invoice)?.LoadReportData(currentData.AsEnumerable());
+                        break;
+
+                    case "Sales":
+                        reportControl = new Sales(); // Make sure Invoice.xaml is a UserControl
+                        (reportControl as Sales)?.LoadReportData(currentData.AsEnumerable());
+                        break;
+                    case "Product":
+                        reportControl = new ReportTemplate();
+                        (reportControl as ReportTemplate)?.LoadReportData(currentData.AsEnumerable());
+                        break;
+                    case "Quotation":
+                        reportControl = new Quotation();
+                        (reportControl as Quotation)?.LoadReportData(currentData.AsEnumerable());
+                        break;
+
+                    default:
+                        MessageBox.Show("Unsupported report type.");
+                        return;
+                }
+
+                if (reportControl != null)
+                {
+                    reportControl.Width = 793;
+                    reportControl.Height = 1122;
+
+                    Canvas.SetLeft(reportControl, 10);
+                    Canvas.SetTop(reportControl, 10);
+                    designSurface.Children.Add(reportControl);
+
+                    AttachClickEventsRecursively(reportControl);
+
+                    Border headerBorder = reportControl.FindName("headerBorder") as Border;
+                    Border tableBorder = reportControl.FindName("tableBorder") as Border;
+                    Border footerBorder = reportControl.FindName("footerBorder") as Border;
+
+                    SetupBorderEvents(headerBorder);
+                    SetupBorderEvents(tableBorder);
+                    SetupBorderEvents(footerBorder);
+
+                    MessageBox.Show("Report loaded into canvas.",
+                        "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please generate data before selecting a report.",
+                    "No Data", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void SetupBorderEvents(Border border)
+        {
+            if (border == null) return;
+
+            border.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
+            border.PreviewMouseMove += Element_MouseMove;
+            border.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+
+            border.MouseMove += (s, args) =>
+            {
+                if (!border.IsMouseCaptured && IsMouseOverResizeHandle(args, border))
+                {
+                    border.Cursor = Cursors.SizeNWSE;
+                }
+                else if (!border.IsMouseCaptured)
+                {
+                    border.Cursor = Cursors.Arrow;
+                }
+            };
+
+            border.MouseLeave += (s, args) => border.Cursor = Cursors.Arrow;
+        }
+
+
+        void AttachClickEventsRecursively(DependencyObject parent)
+        {
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childCount; i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is TextBlock || child is TextBox || child is Label || child is Border || child is Grid)
+                {
+                    if (child is UIElement uiElement)
+                    {
+                        uiElement.PreviewMouseLeftButtonDown -= CanvasElement_Click;
+                        uiElement.PreviewMouseLeftButtonDown += CanvasElement_Click;
+                    }
+                }
+
+                AttachClickEventsRecursively(child);
+            }
+        }
+        #endregion
+
+        #region Canvas
+        private void CanvasElement_Click(object sender, MouseButtonEventArgs e)
+        {
+            ClearAllSelections();
+
+            Border selected = sender as Border;
+            if (selected != null)
+            {
+                selected.BorderBrush = Brushes.Blue;
+            }
+
+            e.Handled = true;
+        }
+
+        public void SelectElement(UIElement element)
+        {
+            foreach (UIElement child in designSurface.Children)
+            {
+                if (child is Control ctrl)
+                {
+                    ctrl.BorderBrush = Brushes.Transparent;
+                }
+                else if (child is Border border)
+                {
+                    border.BorderBrush = border.Tag != null ? (Brush)border.Tag : Brushes.Transparent;
+                    border.BorderThickness = new Thickness(1);
+                }
+                else if (child is ReportTemplate reportTemplate)
+                {
+                    var headerBorder = reportTemplate.FindName("headerBorder") as Border;
+                    var tableBorder = reportTemplate.FindName("tableBorder") as Border;
+                    var footerBorder = reportTemplate.FindName("footerBorder") as Border;
+
+                    if (headerBorder != null)
+                    {
+                        headerBorder.BorderBrush = headerBorder.Tag != null ? (Brush)headerBorder.Tag : Brushes.Transparent;
+                        headerBorder.BorderThickness = new Thickness(1);
+                    }
+                    if (tableBorder != null)
+                    {
+                        tableBorder.BorderBrush = tableBorder.Tag != null ? (Brush)tableBorder.Tag : Brushes.Transparent;
+                        tableBorder.BorderThickness = new Thickness(1);
+                    }
+                    if (footerBorder != null)
+                    {
+                        footerBorder.BorderBrush = footerBorder.Tag != null ? (Brush)footerBorder.Tag : Brushes.Transparent;
+                        footerBorder.BorderThickness = new Thickness(1);
+                    }
+                }
+            }
+
+            selectedElement = element;
+
+            if (selectedElement is Control selectedCtrl)
+            {
+                selectedCtrl.BorderBrush = Brushes.Blue;
+            }
+            else if (selectedElement is Border selectedBorder)
+            {
+                if (selectedBorder.Tag == null)
+                {
+                    selectedBorder.Tag = selectedBorder.BorderBrush;
+                }
+                selectedBorder.BorderBrush = Brushes.Blue;
+                selectedBorder.BorderThickness = new Thickness(2);
+            }
+        }
+
+        private void ClearAllSelections()
+        {
+            foreach (var child in designSurface.Children)
+            {
+                if (child is Border border)
+                {
+                    border.BorderBrush = Brushes.Transparent;
+                }
+            }
+        }
+
+        void HighlightSelectedElement(UIElement element)
+        {
+            if (element is Control ctrl)
+            {
+                ctrl.BorderBrush = Brushes.Blue;
+                ctrl.BorderThickness = new Thickness(2);
+            }
+            else if (element is TextBlock tb)
+            {
+                tb.Background = Brushes.LightBlue;
+            }
+        }
+
+        private void DesignSurface_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Check if the click is directly on the canvas (empty space)
+            if (e.OriginalSource == designSurface || !(e.OriginalSource is UIElement))
+            {
+                SelectElement(null); // Deselect any selected element
+                e.Handled = true; // Mark the event as handled to prevent bubbling
+            }
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete && selectedElement != null)
+            {
+                DeleteElement();
+                e.Handled = true;
+            }
+        }
+        #endregion
+
+         #region Left side
+
 
         private bool IsMouseOverResizeHandle(MouseEventArgs args, Border border)
         {
@@ -675,12 +766,7 @@ namespace Report_Mark1
             preview.ShowDialog();
         }
 
-        private void ExportPDF_Click(object sender, RoutedEventArgs e)
-        {
-            string path = "report_output.pdf";
-            report.ExportToPdf(path);
-            MessageBox.Show($"Exported to {path}");
-        }
+    
 
         private void Tool_MouseMove(object sender, MouseEventArgs e)
         {

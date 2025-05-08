@@ -113,34 +113,34 @@ namespace Report_Mark1
             e.Handled = false;
         }
 
-        public void SelectElement(UIElement element)
-        {
-            // Deselect previously selected element
-            if (selectedElementBorder != null)
-            {
-                selectedElementBorder.BorderBrush = Brushes.Transparent;
-                selectedElementBorder.BorderThickness = new Thickness(0);
-            }
+        //public void SelectElement(UIElement element)
+        //{
+        //    // Deselect previously selected element
+        //    if (selectedElementBorder != null)
+        //    {
+        //        selectedElementBorder.BorderBrush = Brushes.Transparent;
+        //        selectedElementBorder.BorderThickness = new Thickness(0);
+        //    }
 
-            selectedElement = element;
+        //    selectedElement = element;
 
-            if (element is TextBlock tb && tb.Parent is Border borderFromText)
-            {
-                borderFromText.BorderBrush = Brushes.Blue;
-                borderFromText.BorderThickness = new Thickness(2);
-                selectedElementBorder = borderFromText;
-            }
-            else if (element is Border border)
-            {
-                border.BorderBrush = Brushes.Blue;
-                border.BorderThickness = new Thickness(2);
-                selectedElementBorder = border;
-            }
-            else
-            {
-                selectedElementBorder = null;
-            }
-        }
+        //    if (element is TextBlock tb && tb.Parent is Border borderFromText)
+        //    {
+        //        borderFromText.BorderBrush = Brushes.Blue;
+        //        borderFromText.BorderThickness = new Thickness(2);
+        //        selectedElementBorder = borderFromText;
+        //    }
+        //    else if (element is Border border)
+        //    {
+        //        border.BorderBrush = Brushes.Blue;
+        //        border.BorderThickness = new Thickness(2);
+        //        selectedElementBorder = border;
+        //    }
+        //    else
+        //    {
+        //        selectedElementBorder = null;
+        //    }
+        //}
          
 
         private void ReportCell_Click(object sender, MouseButtonEventArgs e)
@@ -178,21 +178,52 @@ namespace Report_Mark1
 
         private void MainGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // Check if the clicked element is NOT a Border or a TextBlock
+            // Get the clicked element
             var clickedElement = e.OriginalSource as DependencyObject;
             var border = FindParent<Border>(clickedElement);
             var textBlock = FindParent<TextBlock>(clickedElement);
 
+            // If the clicked element is not a Border or TextBlock, deselect the current element
             if (border == null && textBlock == null)
             {
-                // Deselect the previously selected element
-                if (selectedElementBorder != null)
-                {
-                    selectedElementBorder.BorderBrush = Brushes.Transparent;
-                    selectedElementBorder.BorderThickness = new Thickness(0);
-                    selectedElementBorder = null;
-                    selectedElement = null;
-                }
+                var parentWindow = Window.GetWindow(this) as MainWindow;
+                parentWindow?.SelectElement(null); // Deselect in MainWindow
+                SelectElement(null); // Deselect in ReportTemplate
+                e.Handled = true; // Mark the event as handled
+            }
+        }
+
+        public void SelectElement(UIElement element)
+        {
+            // Reset the previous selection's border
+            if (selectedElementBorder != null)
+            {
+                selectedElementBorder.BorderBrush = Brushes.Transparent;
+                selectedElementBorder.BorderThickness = new Thickness(0);
+            }
+
+            // Clear the previous cell border if it exists
+            if (selectedCellBorder != null)
+            {
+                selectedCellBorder.BorderBrush = Brushes.Transparent;
+                selectedCellBorder.BorderThickness = new Thickness(0);
+            }
+
+            selectedElement = element;
+            selectedElementBorder = null;
+            selectedCellBorder = null;
+
+            if (element is TextBlock tb && tb.Parent is Border borderFromText)
+            {
+                borderFromText.BorderBrush = Brushes.Blue;
+                borderFromText.BorderThickness = new Thickness(2);
+                selectedElementBorder = borderFromText;
+            }
+            else if (element is Border border)
+            {
+                border.BorderBrush = Brushes.Blue;
+                border.BorderThickness = new Thickness(2);
+                selectedElementBorder = border;
             }
         }
 

@@ -6,7 +6,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DesignHeight="1122" d:DesignWidth="793" mc:Ignorable="d">
     
-    <Border Padding="30" Background="White" BorderBrush="#333333" BorderThickness="1" CornerRadius="5">
+    <Border Padding="30" Background="White" BorderBrush="#333333" BorderThickness="1" CornerRadius="5"
+            >
+        
         <StackPanel Orientation="Vertical">
             <!-- Header Section (unchanged) -->
             <Border x:Name="headerBorder" BorderBrush="#CCCCCC" BorderThickness="0,0,0,1" Background="#FFF5F5"

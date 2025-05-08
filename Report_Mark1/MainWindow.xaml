@@ -4,57 +4,40 @@
         xmlns:local="clr-namespace:Report_Mark1"
         xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon;assembly=System.Windows.Controls.Ribbon"
         Title="KR BAKERS" Height="720" Width="1366" Background="#f5f5f5">
-
-
     <Window.Resources>
         <Style x:Key="SelectableBorderStyle" TargetType="Border">
             <Setter Property="Focusable" Value="True"/>
             <Style.Triggers>
                 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                    <Setter Property="BorderBrush" Value="Blue"/>
-                    <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="BorderBrush" Value="LightCyan"/>
+                    <Setter Property="BorderThickness" Value="0.5"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
-
     </Window.Resources>
-
     <Grid>
-        <!-- Layout Definitions -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Ribbon -->
             <RowDefinition Height="*"/>
-            <!-- Main content -->
         </Grid.RowDefinitions>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
-            <!-- Toolbox -->
             <ColumnDefinition Width="*"/>
-            <!-- Designer Canvas -->
             <ColumnDefinition Width="300"/>
-            <!-- Data Panel -->
         </Grid.ColumnDefinitions>
-
-        <!-- 🟢 Ribbon (Stretches Entire Top) -->
         <ribbon:Ribbon Grid.Row="0" Grid.ColumnSpan="3">
             <ribbon:RibbonTab Header="HomeTab">
-                <!-- Clipboard Group -->
                 <ribbon:RibbonGroup Header="Clipboard">
                     <ribbon:RibbonButton Label="New" SmallImageSource="/Images/new-document.png"/>
                     <ribbon:RibbonButton Label="Open" SmallImageSource="/Images/open.png"/>
                     <ribbon:RibbonButton Label="Save" SmallImageSource="/Images/save.png"/>
                 </ribbon:RibbonGroup>
-
-                <!-- Font Group -->
                 <ribbon:RibbonGroup Header="Font">
-                    <ribbon:RibbonButton Label="Bold" SmallImageSource="/Images/bold.png" Name="btnBold" />
+                    <ribbon:RibbonButton Label="Bold" SmallImageSource="/Images/bold.png" Name="btnBold"/>
                     <ribbon:RibbonButton Label="Italic" SmallImageSource="/Images/italic.png"/>
                     <ribbon:RibbonButton Label="Underline" SmallImageSource="/Images/underline.png"/>
-
                     <ribbon:RibbonComboBox Label="Font" Name="fontComboBox">
-                        <ribbon:RibbonGallery >
+                        <ribbon:RibbonGallery>
                             <ribbon:RibbonGalleryCategory>
                                 <ribbon:RibbonGalleryItem Content="Arial"/>
                                 <ribbon:RibbonGalleryItem Content="Calibri"/>
@@ -62,7 +45,6 @@
                             </ribbon:RibbonGalleryCategory>
                         </ribbon:RibbonGallery>
                     </ribbon:RibbonComboBox>
-
                     <ribbon:RibbonComboBox Label="Font Size">
                         <ribbon:RibbonGallery>
                             <ribbon:RibbonGalleryCategory>
@@ -74,15 +56,11 @@
                         </ribbon:RibbonGallery>
                     </ribbon:RibbonComboBox>
                 </ribbon:RibbonGroup>
-
-                <!-- Paragraph Group -->
                 <ribbon:RibbonGroup Header="Paragraph">
                     <ribbon:RibbonButton Label="Align Left" SmallImageSource="/Images/align-left.png"/>
                     <ribbon:RibbonButton Label="Center" SmallImageSource="/Images/align-center.png"/>
                     <ribbon:RibbonButton Label="Align Right" SmallImageSource="/Images/align-right.png"/>
                 </ribbon:RibbonGroup>
-
-                <!-- Editing Group -->
                 <ribbon:RibbonGroup Header="Editing">
                     <ribbon:RibbonButton Label="Undo" SmallImageSource="/Images/undo.png"/>
                     <ribbon:RibbonButton Label="Redo" SmallImageSource="/Images/redo.png"/>
@@ -90,56 +68,36 @@
                     <ribbon:RibbonButton Label="Copy" SmallImageSource="/Images/copy.png"/>
                     <ribbon:RibbonButton Label="Paste" SmallImageSource="/Images/paste.png"/>
                 </ribbon:RibbonGroup>
-
-                <!-- Insert Group -->
                 <ribbon:RibbonGroup Header="Insert">
                     <ribbon:RibbonButton Label="Insert Table" SmallImageSource="/Images/paste.png" Click="AddTable_Click"/>
                     <ribbon:RibbonButton Label="Insert Chart" SmallImageSource="/Images/paste.png" Click="AddChart_Click"/>
                     <ribbon:RibbonButton Label="Insert Barcode" SmallImageSource="/Images/paste.png" Click="AddBarcode_Click"/>
                     <ribbon:RibbonButton Label="Insert Image" SmallImageSource="/Images/paste.png" Click="AddImage_Click"/>
                 </ribbon:RibbonGroup>
-
-                <!-- Tools Group -->
                 <ribbon:RibbonGroup Header="Tools">
                     <ribbon:RibbonButton Label="Preview" SmallImageSource="/Images/paste.png" Click="ShowPreview_Click"/>
                     <ribbon:RibbonButton Label="Export PDF" SmallImageSource="/Images/paste.png" Click="ExportPDF_Click" Background="Green" Foreground="White"/>
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ribbon:Ribbon>
-
-        <!-- 🟣 Toolbox -->
         <StackPanel Grid.Column="0" Grid.Row="1" Background="#f4f4f4" Margin="10">
             <TextBlock Text="Toolbox" FontWeight="Bold" FontSize="16" Margin="0 0 0 10"/>
-
-            <!-- Draggable Tool Items -->
-            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10"
-      MouseMove="Tool_MouseMove" Tag="Title">
+            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10" MouseMove="Tool_MouseMove" Tag="Title">
                 <TextBlock Text="🅰️ Title" FontWeight="SemiBold"/>
             </Border>
-
-            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10"
-      MouseMove="Tool_MouseMove" Tag="TextBlock">
+            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10" MouseMove="Tool_MouseMove" Tag="TextBlock">
                 <TextBlock Text="✏️ Text Block" FontWeight="SemiBold"/>
             </Border>
-
-            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10"
-      MouseMove="Tool_MouseMove" Tag="Image">
+            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10" MouseMove="Tool_MouseMove" Tag="Image">
                 <TextBlock Text="📷 Image" FontWeight="SemiBold"/>
             </Border>
-
-            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10"
-      MouseMove="Tool_MouseMove" Tag="Table">
+            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10" MouseMove="Tool_MouseMove" Tag="Table">
                 <TextBlock Text="📊 Table" FontWeight="SemiBold"/>
             </Border>
-
-            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10"
-      MouseMove="Tool_MouseMove" Tag="Divider">
+            <Border Background="White" BorderBrush="LightGray" CornerRadius="5" Margin="0 5" Padding="10" MouseMove="Tool_MouseMove" Tag="Divider">
                 <TextBlock Text="➖ Divider" FontWeight="SemiBold"/>
             </Border>
         </StackPanel>
-
-
-        <!-- 🟡 Designer Canvas with Zoom -->
         <Border Grid.Row="1" Grid.Column="1" Background="#dddddd" Margin="10" CornerRadius="6" BorderBrush="#aaa" BorderThickness="1">
             <Grid>
                 <ScrollViewer x:Name="scrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -149,41 +107,32 @@
                         </Canvas.LayoutTransform>
                     </Canvas>
                 </ScrollViewer>
-                <!-- Zoom Slider in Bottom Right -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
                     <TextBlock Text="Zoom:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                    <Slider x:Name="zoomSlider" Width="100" Minimum="0.5" Maximum="2" Value="1" 
-                            ValueChanged="ZoomSlider_ValueChanged" TickFrequency="0.1" IsSnapToTickEnabled="True"/>
+                    <Slider x:Name="zoomSlider" Width="100" Minimum="0.5" Maximum="2" Value="1" ValueChanged="ZoomSlider_ValueChanged" TickFrequency="0.1" IsSnapToTickEnabled="True"/>
                     <TextBlock x:Name="zoomLabel" Text="100%" VerticalAlignment="Center" Margin="5,0,0,0"/>
                 </StackPanel>
             </Grid>
         </Border>
-
-        <!-- 🔵 Data Panel -->
         <Border Grid.Row="1" Grid.Column="2" Background="White" Margin="10" Padding="10">
-            <StackPanel>
-                <TextBlock Text="Data Source" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
-                <ComboBox x:Name="dataTypeComboBox" Margin="0,0,0,10">
-                    <ComboBoxItem Content="Sales"/>
-                    <ComboBoxItem Content="Product"/>
-                    <ComboBoxItem Content="Invoice"/>
-                    <ComboBoxItem Content="Quotation"/>
-                </ComboBox>
-                <TextBlock Text="From:"/>
-                <DatePicker x:Name="fromDatePicker" Margin="0,0,0,5"/>
-                <TextBlock Text="To:"/>
-
-
-
-
-                <DatePicker x:Name="toDatePicker" Margin="0,0,0,10"/>
-                <Button Content="Generate Report" Click="GenerateReport_Click"
-                        Background="Green" Foreground="White" FontWeight="Bold" Height="30" Margin="0,0,0,10"/>
-                <DataGrid x:Name="dataPreviewGrid" AutoGenerateColumns="True" Height="200"/>
-                <Button Content="Select" Click="SelectReport_Click"
-                        Background="Green" Foreground="White" FontWeight="Bold" Height="30" Margin="0,0,0,10"/>
-            </StackPanel>
+            <Grid x:Name="dataPanelGrid">
+                <StackPanel x:Name="dataPanelStackPanel">
+                    <TextBlock Text="Data Source" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+                    <ComboBox x:Name="dataTypeComboBox" Margin="0,0,0,10">
+                        <ComboBoxItem Content="Sales"/>
+                        <ComboBoxItem Content="Product"/>
+                        <ComboBoxItem Content="Invoice"/>
+                        <ComboBoxItem Content="Quotation"/>
+                    </ComboBox>
+                    <TextBlock Text="From:"/>
+                    <DatePicker x:Name="fromDatePicker" Margin="0,0,0,5"/>
+                    <TextBlock Text="To:"/>
+                    <DatePicker x:Name="toDatePicker" Margin="0,0,0,10"/>
+                    <Button Content="Generate Report" Click="GenerateReport_Click" Background="Green" Foreground="White" FontWeight="Bold" Height="30" Margin="0,0,0,10"/>
+                    <DataGrid x:Name="dataPreviewGrid" AutoGenerateColumns="True" Height="200"/>
+                    <Button Content="Select" Click="SelectReport_Click" Background="Green" Foreground="White" FontWeight="Bold" Height="30" Margin="0,0,0,10"/>
+                </StackPanel>
+            </Grid>
         </Border>
     </Grid>
 </Window>
-    
