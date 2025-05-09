@@ -13,8 +13,8 @@ using WpfLabel = System.Windows.Controls.Label;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using Microsoft.Win32;
-using PdfSharp.Drawing;
-using PdfSharp.Pdf;
+using PdfSharpCore.Drawing;
+using PdfSharpCore.Pdf;
 using System.IO;
 
 namespace Report_Mark1
@@ -410,8 +410,11 @@ namespace Report_Mark1
                                 encoder.Save(stream);
                                 stream.Position = 0;
 
+                                // Wrap MemoryStream in a Func<Stream>
+                                Func<Stream> streamFunc = () => stream;
+
                                 // Draw the image onto the PDF page
-                                XImage image = XImage.FromStream(stream);
+                                XImage image = XImage.FromStream(streamFunc);
                                 gfx.DrawImage(image, 0, 0, designSurface.Width, designSurface.Height);
                             }
                         }
