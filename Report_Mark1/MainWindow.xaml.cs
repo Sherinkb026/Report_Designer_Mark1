@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using System.IO;
+using System.Linq;
 
 namespace Report_Mark1
 {
@@ -37,7 +38,11 @@ namespace Report_Mark1
         private EditBox editBox;
         #endregion
 
+        #region Property
         public string SelectedFont { get; set; } = "Calibri";
+
+        #endregion
+
 
         #region Constructor
         public MainWindow()
@@ -54,10 +59,14 @@ namespace Report_Mark1
             editBox = new EditBox { Visibility = Visibility.Collapsed };
             dataPanelGrid.Children.Add(editBox);
             editBox.CloseRequested += (s, e) => editBox.Visibility = Visibility.Collapsed;
+
+            fontSizeComboBox.AddHandler(RibbonGalleryItem.PreviewMouseLeftButtonDownEvent,
+    new MouseButtonEventHandler(FontSizeComboBox_ItemSelected), true);
+
         }
         #endregion
 
-        #region Ribbon
+        #region LeftSide Controls
 
         private void AddLabel_Click(object sender, RoutedEventArgs e)
         {
@@ -466,7 +475,7 @@ namespace Report_Mark1
         #endregion
 
         #region Dataside
-        
+
 
         private void GenerateReport_Click(object sender, RoutedEventArgs e)
         {
@@ -528,7 +537,7 @@ namespace Report_Mark1
                 "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        
+
         private void SelectReport_Click(object sender, RoutedEventArgs e)
         {
             designSurface.Children.Clear();
@@ -717,19 +726,6 @@ namespace Report_Mark1
             }
         }
 
-        void HighlightSelectedElement(UIElement element)
-        {
-            if (element is Control ctrl)
-            {
-                ctrl.BorderBrush = Brushes.Blue;
-                ctrl.BorderThickness = new Thickness(2);
-            }
-            else if (element is TextBlock tb)
-            {
-                tb.Background = Brushes.LightBlue;
-            }
-        }
-
         private void DesignSurface_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             // Check if the click is directly on the canvas (empty space)
@@ -750,7 +746,7 @@ namespace Report_Mark1
         }
         #endregion
 
-         #region Left side
+        #region Left side
 
 
         private bool IsMouseOverResizeHandle(MouseEventArgs args, Border border)
@@ -769,7 +765,7 @@ namespace Report_Mark1
             preview.ShowDialog();
         }
 
-    
+
 
         private void Tool_MouseMove(object sender, MouseEventArgs e)
         {
@@ -925,5 +921,425 @@ namespace Report_Mark1
             return null;
         }
         #endregion
+
+        #region Ribbon
+
+        public static IEnumerable<T> FindChildrenOfType<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj == null)
+                yield break;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                if (child is T t)
+                    yield return t;
+
+                foreach (var childOfChild in FindChildrenOfType<T>(child))
+                    yield return childOfChild;
+            }
+        }
+
+        private void btnBold_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedElement == null)
+            {
+                MessageBox.Show("No element selected.");
+                return;
+            }
+
+            // If a specific TextBlock or TextBox is selected, only toggle that
+            var selectedTextBlock = selectedElement as TextBlock;
+            var selectedTextBox = selectedElement as TextBox;
+            var selectedRichTextBox = selectedElement as RichTextBox;
+
+            if (selectedTextBlock != null)
+            {
+                // Toggle bold for the selected TextBlock only
+                selectedTextBlock.FontWeight = selectedTextBlock.FontWeight == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold;
+            }
+            else if (selectedTextBox != null)
+            {
+                // Toggle bold for the selected TextBox only
+                selectedTextBox.FontWeight = selectedTextBox.FontWeight == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold;
+            }
+            else if (selectedRichTextBox != null)
+            {
+                // Apply bold only to selected text in the RichTextBox (if any selection exists)
+                var selection = selectedRichTextBox.Selection;
+                var range = selection.IsEmpty
+                    ? new TextRange(selectedRichTextBox.Document.ContentStart, selectedRichTextBox.Document.ContentEnd)
+                    : new TextRange(selection.Start, selection.End);
+
+                var currentFontWeight = range.GetPropertyValue(TextElement.FontWeightProperty);
+                if (currentFontWeight != DependencyProperty.UnsetValue && currentFontWeight is FontWeight fw)
+                {
+                    range.ApplyPropertyValue(TextElement.FontWeightProperty,
+                        fw == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold);
+                }
+                else
+                {
+                    range.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
+                }
+            }
+            else
+            {
+                // If no specific element is selected, apply bold to all elements in the selected section (header/footer/table)
+                var textBlocks = FindChildrenOfType<TextBlock>(selectedElement);
+                foreach (var tb in textBlocks)
+                {
+                    tb.FontWeight = tb.FontWeight == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold;
+                }
+
+                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                foreach (var tb in textBoxes)
+                {
+                    tb.FontWeight = tb.FontWeight == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold;
+                }
+
+                var richTextBoxes = FindChildrenOfType<RichTextBox>(selectedElement);
+                foreach (var rtb in richTextBoxes)
+                {
+                    var range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                    var currentFontWeight = range.GetPropertyValue(TextElement.FontWeightProperty);
+                    if (currentFontWeight != DependencyProperty.UnsetValue && currentFontWeight is FontWeight fw)
+                    {
+                        range.ApplyPropertyValue(TextElement.FontWeightProperty,
+                            fw == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold);
+                    }
+                    else
+                    {
+                        range.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
+                    }
+                }
+            }
+        }
+
+
+        private void btnItalic_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedElement == null)
+            {
+                MessageBox.Show("No element selected.");
+                return;
+            }
+
+            // Try direct casting
+            var selectedTextBlock = selectedElement as TextBlock;
+            var selectedTextBox = selectedElement as TextBox;
+            var selectedRichTextBox = selectedElement as RichTextBox;
+
+            // If none found, try to find a single child of each type
+            if (selectedTextBlock == null)
+            {
+                var textBlocks = FindChildrenOfType<TextBlock>(selectedElement);
+                if (textBlocks.Count() == 1)
+                    selectedTextBlock = textBlocks.First();
+            }
+
+            if (selectedTextBox == null)
+            {
+                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                if (textBoxes.Count() == 1)
+                    selectedTextBox = textBoxes.First();
+            }
+
+            if (selectedRichTextBox == null)
+            {
+                var richTextBoxes = FindChildrenOfType<RichTextBox>(selectedElement);
+                if (richTextBoxes.Count() == 1)
+                    selectedRichTextBox = richTextBoxes.First();
+            }
+
+            // Apply Italic style
+            if (selectedTextBlock != null)
+            {
+                selectedTextBlock.FontStyle = selectedTextBlock.FontStyle == FontStyles.Italic ? FontStyles.Normal : FontStyles.Italic;
+            }
+            else if (selectedTextBox != null)
+            {
+                selectedTextBox.FontStyle = selectedTextBox.FontStyle == FontStyles.Italic ? FontStyles.Normal : FontStyles.Italic;
+            }
+            else if (selectedRichTextBox != null)
+            {
+                var selection = selectedRichTextBox.Selection;
+                var range = selection.IsEmpty
+                    ? new TextRange(selectedRichTextBox.Document.ContentStart, selectedRichTextBox.Document.ContentEnd)
+                    : new TextRange(selection.Start, selection.End);
+
+                var currentFontStyle = range.GetPropertyValue(TextElement.FontStyleProperty);
+                if (currentFontStyle != DependencyProperty.UnsetValue && currentFontStyle is FontStyle fs)
+                {
+                    range.ApplyPropertyValue(TextElement.FontStyleProperty,
+                        fs == FontStyles.Italic ? FontStyles.Normal : FontStyles.Italic);
+                }
+                else
+                {
+                    range.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Italic);
+                }
+            }
+            else
+            {
+                // Apply to all child elements if it's a container with multiple
+                var textBlocks = FindChildrenOfType<TextBlock>(selectedElement);
+                foreach (var tb in textBlocks)
+                {
+                    tb.FontStyle = tb.FontStyle == FontStyles.Italic ? FontStyles.Normal : FontStyles.Italic;
+                }
+
+                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                foreach (var tb in textBoxes)
+                {
+                    tb.FontStyle = tb.FontStyle == FontStyles.Italic ? FontStyles.Normal : FontStyles.Italic;
+                }
+
+                var richTextBoxes = FindChildrenOfType<RichTextBox>(selectedElement);
+                foreach (var rtb in richTextBoxes)
+                {
+                    var range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                    var currentFontStyle = range.GetPropertyValue(TextElement.FontStyleProperty);
+                    if (currentFontStyle != DependencyProperty.UnsetValue && currentFontStyle is FontStyle fs)
+                    {
+                        range.ApplyPropertyValue(TextElement.FontStyleProperty,
+                            fs == FontStyles.Italic ? FontStyles.Normal : FontStyles.Italic);
+                    }
+                    else
+                    {
+                        range.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Italic);
+                    }
+                }
+            }
+        }
+
+        private void btnUnderline_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedElement == null)
+            {
+                MessageBox.Show("No element selected.");
+                return;
+            }
+
+            var selectedTextBlock = selectedElement as TextBlock;
+            var selectedTextBox = selectedElement as TextBox;
+            var selectedRichTextBox = selectedElement as RichTextBox;
+
+            // Try to find single children if needed
+            if (selectedTextBlock == null)
+            {
+                var textBlocks = FindChildrenOfType<TextBlock>(selectedElement);
+                if (textBlocks.Count()== 1)
+                    selectedTextBlock = textBlocks.First();
+            }
+
+            if (selectedTextBox == null)
+            {
+                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                if (textBoxes.Count() == 1)
+                    selectedTextBox = textBoxes.First();
+            }
+
+            if (selectedRichTextBox == null)
+            {
+                var richTextBoxes = FindChildrenOfType<RichTextBox>(selectedElement);
+                if (richTextBoxes.Count() == 1)
+                    selectedRichTextBox = richTextBoxes.First();
+            }
+
+            if (selectedTextBlock != null)
+            {
+                selectedTextBlock.TextDecorations = selectedTextBlock.TextDecorations == TextDecorations.Underline
+                    ? null : TextDecorations.Underline;
+            }
+            else if (selectedTextBox != null)
+            {
+                selectedTextBox.TextDecorations = selectedTextBox.TextDecorations == TextDecorations.Underline
+                    ? null : TextDecorations.Underline;
+            }
+            else if (selectedRichTextBox != null)
+            {
+                var selection = selectedRichTextBox.Selection;
+                var range = selection.IsEmpty
+                    ? new TextRange(selectedRichTextBox.Document.ContentStart, selectedRichTextBox.Document.ContentEnd)
+                    : new TextRange(selection.Start, selection.End);
+
+                var currentDecor = range.GetPropertyValue(Inline.TextDecorationsProperty);
+                if (currentDecor != DependencyProperty.UnsetValue && currentDecor is TextDecorationCollection tdc &&
+                    tdc == TextDecorations.Underline)
+                {
+                    range.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
+                }
+                else
+                {
+                    range.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+                }
+            }
+            else
+            {
+                // Handle all children if it's a container
+                var textBlocks = FindChildrenOfType<TextBlock>(selectedElement);
+                foreach (var tb in textBlocks)
+                {
+                    tb.TextDecorations = tb.TextDecorations == TextDecorations.Underline ? null : TextDecorations.Underline;
+                }
+
+                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                foreach (var tb in textBoxes)
+                {
+                    tb.TextDecorations = tb.TextDecorations == TextDecorations.Underline ? null : TextDecorations.Underline;
+                }
+
+                var richTextBoxes = FindChildrenOfType<RichTextBox>(selectedElement);
+                foreach (var rtb in richTextBoxes)
+                {
+                    var range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                    var currentDecor = range.GetPropertyValue(Inline.TextDecorationsProperty);
+                    if (currentDecor != DependencyProperty.UnsetValue && currentDecor is TextDecorationCollection tdc &&
+                        tdc == TextDecorations.Underline)
+                    {
+                        range.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
+                    }
+                    else
+                    {
+                        range.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+                    }
+                }
+            }
+        }
+
+        //*******************************************************************************************************************************************************//
+
+        private void FontGalleryItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (selectedElement == null)
+                return;
+
+            if (sender is RibbonGalleryItem item && item.Content is string fontName)
+            {
+                var fontFamily = new FontFamily(fontName);
+                ApplyFontFamilyToSelectedElement(fontFamily);
+            }
+        }
+
+
+        private void ApplyFontFamilyToSelectedElement(FontFamily fontFamily)
+        {
+            if (selectedElement is TextBlock textBlock)
+            {
+                textBlock.FontFamily = fontFamily;
+            }
+            else if (selectedElement is TextBox textBox)
+            {
+                textBox.FontFamily = fontFamily;
+            }
+            else if (selectedElement is RichTextBox richTextBox)
+            {
+                var selection = richTextBox.Selection;
+                var range = selection.IsEmpty
+                    ? new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd)
+                    : new TextRange(selection.Start, selection.End);
+
+                range.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
+            }
+            else
+            {
+                // Apply to children if selected element is a container
+                foreach (var tb in FindChildrenOfType<TextBlock>(selectedElement))
+                {
+                    tb.FontFamily = fontFamily;
+                }
+                foreach (var tb in FindChildrenOfType<TextBox>(selectedElement))
+                {
+                    tb.FontFamily = fontFamily;
+                }
+                foreach (var rtb in FindChildrenOfType<RichTextBox>(selectedElement))
+                {
+                    var range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                    range.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
+                }
+            }
+        }
+
+
+        //************************************************************************************************************************************************************//
+
+
+        private void FontSizeComboBox_ItemSelected(object sender, MouseButtonEventArgs e)
+        {
+            var item = FindAncestor<RibbonGalleryItem>(e.OriginalSource as DependencyObject);
+            if (item == null || selectedElement == null)
+                return;
+
+            if (double.TryParse(item.Content.ToString(), out double fontSize))
+            {
+                ApplyFontSizeToSelectedElement(fontSize);
+            }
+        }
+
+        private T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            while (current != null && !(current is T))
+            {
+                current = VisualTreeHelper.GetParent(current);
+            }
+            return current as T;
+        }
+
+
+
+
+        private void ApplyFontSizeToSelectedElement(double fontSize)
+        {
+            if (selectedElement is TextBlock textBlock)
+            {
+                textBlock.FontSize = fontSize;
+            }
+            else if (selectedElement is TextBox textBox)
+            {
+                textBox.FontSize = fontSize;
+            }
+            else if (selectedElement is RichTextBox richTextBox)
+            {
+                var selection = richTextBox.Selection;
+                var range = selection.IsEmpty
+                    ? new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd)
+                    : new TextRange(selection.Start, selection.End);
+
+                range.ApplyPropertyValue(TextElement.FontSizeProperty, fontSize);
+            }
+            else
+            {
+                // Handle containers like Border, Grid, etc.
+                var textBlocks = FindChildrenOfType<TextBlock>(selectedElement);
+                foreach (var tb in textBlocks)
+                    tb.FontSize = fontSize;
+
+                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                foreach (var tb in textBoxes)
+                    tb.FontSize = fontSize;
+
+                var richTextBoxes = FindChildrenOfType<RichTextBox>(selectedElement);
+                foreach (var rtb in richTextBoxes)
+                {
+                    var range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                    range.ApplyPropertyValue(TextElement.FontSizeProperty, fontSize);
+                }
+            }
+        }
+
+
+
+
+        //************************************************************************************************************************************************************//
+
+
+
+
+
+
+
+
+        #endregion
+
     }
 }

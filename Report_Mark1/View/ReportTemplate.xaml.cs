@@ -46,7 +46,7 @@ namespace Report_Mark1
                         return;
                     }
                 }
-                HeaderBorder_PreviewMouseLeftButtonDown(s, e);
+                Element_PreviewMouseLeftButtonDown(s, e);
             };
         }
 
@@ -89,58 +89,31 @@ namespace Report_Mark1
 
         public string CurrentDate => DateTime.Now.ToString("yyyy-MM-dd");
 
-        private void HeaderBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var parentWindow = Window.GetWindow(this) as MainWindow;
-            parentWindow?.SelectElement(headerBorder);
-            SelectElement(headerBorder);
-            e.Handled = false;
-        }
-
-        private void TableBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var parentWindow = Window.GetWindow(this) as MainWindow;
-            parentWindow?.SelectElement(tableBorder);
-            SelectElement(tableBorder);
-            e.Handled = false;
-        }
-
-        private void FooterBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var parentWindow = Window.GetWindow(this) as MainWindow;
-            parentWindow?.SelectElement(footerBorder);
-            SelectElement(footerBorder);
-            e.Handled = false;
-        }
-
-        //public void SelectElement(UIElement element)
+        //private void HeaderBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         //{
-        //    // Deselect previously selected element
-        //    if (selectedElementBorder != null)
-        //    {
-        //        selectedElementBorder.BorderBrush = Brushes.Transparent;
-        //        selectedElementBorder.BorderThickness = new Thickness(0);
-        //    }
-
-        //    selectedElement = element;
-
-        //    if (element is TextBlock tb && tb.Parent is Border borderFromText)
-        //    {
-        //        borderFromText.BorderBrush = Brushes.Blue;
-        //        borderFromText.BorderThickness = new Thickness(2);
-        //        selectedElementBorder = borderFromText;
-        //    }
-        //    else if (element is Border border)
-        //    {
-        //        border.BorderBrush = Brushes.Blue;
-        //        border.BorderThickness = new Thickness(2);
-        //        selectedElementBorder = border;
-        //    }
-        //    else
-        //    {
-        //        selectedElementBorder = null;
-        //    }
+        //    var parentWindow = Window.GetWindow(this) as MainWindow;
+        //    parentWindow?.SelectElement(headerBorder);
+        //    SelectElement(headerBorder);
+        //    e.Handled = false;
         //}
+
+        //private void TableBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    var parentWindow = Window.GetWindow(this) as MainWindow;
+        //    parentWindow?.SelectElement(tableBorder);
+        //    SelectElement(tableBorder);
+        //    e.Handled = false;
+        //}
+
+        //private void FooterBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    var parentWindow = Window.GetWindow(this) as MainWindow;
+        //    parentWindow?.SelectElement(footerBorder);
+        //    SelectElement(footerBorder);
+        //    e.Handled = false;
+        //}
+
+        
          
 
         private void ReportCell_Click(object sender, MouseButtonEventArgs e)
@@ -166,9 +139,32 @@ namespace Report_Mark1
 
         private void Element_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (sender is Border border)
+            // Try to find a TextBlock or TextBox inside the clicked element
+            DependencyObject clickedElement = e.OriginalSource as DependencyObject;
+
+            var textBlock = FindParent<TextBlock>(clickedElement);
+            var textBox = FindParent<TextBox>(clickedElement);
+            var richTextBox = FindParent<RichTextBox>(clickedElement);
+
+            var parentWindow = Window.GetWindow(this) as MainWindow;
+
+            if (textBlock != null)
             {
-                var parentWindow = Window.GetWindow(this) as MainWindow;
+                parentWindow?.SelectElement(textBlock);
+                SelectElement(textBlock);
+            }
+            else if (textBox != null)
+            {
+                parentWindow?.SelectElement(textBox);
+                SelectElement(textBox);
+            }
+            else if (richTextBox != null)
+            {
+                parentWindow?.SelectElement(richTextBox);
+                SelectElement(richTextBox);
+            }
+            else if (sender is Border border)
+            {
                 parentWindow?.SelectElement(border);
                 SelectElement(border);
             }

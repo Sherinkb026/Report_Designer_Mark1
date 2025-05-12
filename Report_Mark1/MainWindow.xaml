@@ -33,28 +33,47 @@
                     <ribbon:RibbonButton Label="Save" SmallImageSource="/Images/save.png"/>
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Font">
-                    <ribbon:RibbonButton Label="Bold" SmallImageSource="/Images/bold.png" Name="btnBold"/>
-                    <ribbon:RibbonButton Label="Italic" SmallImageSource="/Images/italic.png"/>
-                    <ribbon:RibbonButton Label="Underline" SmallImageSource="/Images/underline.png"/>
-                    <ribbon:RibbonComboBox Label="Font" Name="fontComboBox">
-                        <ribbon:RibbonGallery>
+                    <ribbon:RibbonButton Label="Bold" SmallImageSource="/Images/bold.png" Name="btnBold" Click="btnBold_Click"/>
+                    <ribbon:RibbonButton Label="Italic" SmallImageSource="/Images/italic.png" Click="btnItalic_Click"/>
+                    <ribbon:RibbonButton Label="Underline" SmallImageSource="/Images/underline.png" Click="btnUnderline_Click"/>
+<!--**********************************************************************************************************************************************-->
+                    <ribbon:RibbonComboBox Label="Font" x:Name="fontComboBox">
+                        <ribbon:RibbonGallery x:Name="fontGallery">
                             <ribbon:RibbonGalleryCategory>
-                                <ribbon:RibbonGalleryItem Content="Arial"/>
-                                <ribbon:RibbonGalleryItem Content="Calibri"/>
-                                <ribbon:RibbonGalleryItem Content="Times New Roman"/>
+                                <ribbon:RibbonGalleryItem Content="Arial" Selected="FontGalleryItem_Selected"/>
+                                <ribbon:RibbonGalleryItem Content="Calibri" Selected="FontGalleryItem_Selected"/>
+                                <ribbon:RibbonGalleryItem Content="Segoe UI" Selected="FontGalleryItem_Selected"/>
+                                <ribbon:RibbonGalleryItem Content="Verdana" Selected="FontGalleryItem_Selected"/>
+                                <ribbon:RibbonGalleryItem Content="Tahoma" Selected="FontGalleryItem_Selected"/>
+                                <ribbon:RibbonGalleryItem Content="Georgia" Selected="FontGalleryItem_Selected"/>
+                                <ribbon:RibbonGalleryItem Content="Courier New" Selected="FontGalleryItem_Selected"/>
+                                <ribbon:RibbonGalleryItem Content="Lucida Console" Selected="FontGalleryItem_Selected"/>
+                                <ribbon:RibbonGalleryItem Content="Impact" Selected="FontGalleryItem_Selected"/>
+                               
                             </ribbon:RibbonGalleryCategory>
                         </ribbon:RibbonGallery>
                     </ribbon:RibbonComboBox>
-                    <ribbon:RibbonComboBox Label="Font Size">
+ <!--******************************************************************************************************************************************-->                   
+                    <ribbon:RibbonComboBox Label="Font Size" Name="fontSizeComboBox" SelectionBoxWidth="60">
                         <ribbon:RibbonGallery>
                             <ribbon:RibbonGalleryCategory>
                                 <ribbon:RibbonGalleryItem Content="8"/>
                                 <ribbon:RibbonGalleryItem Content="10"/>
-                                <ribbon:RibbonGalleryItem Content="11"/>
                                 <ribbon:RibbonGalleryItem Content="12"/>
+                                <ribbon:RibbonGalleryItem Content="14"/>
+                                <ribbon:RibbonGalleryItem Content="16"/>
+                                <ribbon:RibbonGalleryItem Content="18"/>
+                                <ribbon:RibbonGalleryItem Content="20"/>
+                                <ribbon:RibbonGalleryItem Content="24"/>
+                                <ribbon:RibbonGalleryItem Content="28"/>
+                                <ribbon:RibbonGalleryItem Content="36"/>
+                                <ribbon:RibbonGalleryItem Content="48"/>
+                                <ribbon:RibbonGalleryItem Content="72"/>
                             </ribbon:RibbonGalleryCategory>
                         </ribbon:RibbonGallery>
                     </ribbon:RibbonComboBox>
+<!--****************************************-->
+
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Paragraph">
                     <ribbon:RibbonButton Label="Align Left" SmallImageSource="/Images/align-left.png"/>
