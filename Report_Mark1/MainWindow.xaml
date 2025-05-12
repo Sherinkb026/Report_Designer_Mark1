@@ -36,7 +36,6 @@
                     <ribbon:RibbonButton Label="Bold" SmallImageSource="/Images/bold.png" Name="btnBold" Click="btnBold_Click"/>
                     <ribbon:RibbonButton Label="Italic" SmallImageSource="/Images/italic.png" Click="btnItalic_Click"/>
                     <ribbon:RibbonButton Label="Underline" SmallImageSource="/Images/underline.png" Click="btnUnderline_Click"/>
-<!--**********************************************************************************************************************************************-->
                     <ribbon:RibbonComboBox Label="Font" x:Name="fontComboBox">
                         <ribbon:RibbonGallery x:Name="fontGallery">
                             <ribbon:RibbonGalleryCategory>
@@ -53,7 +52,6 @@
                             </ribbon:RibbonGalleryCategory>
                         </ribbon:RibbonGallery>
                     </ribbon:RibbonComboBox>
- <!--******************************************************************************************************************************************-->                   
                     <ribbon:RibbonComboBox Label="Font Size" Name="fontSizeComboBox" SelectionBoxWidth="60">
                         <ribbon:RibbonGallery>
                             <ribbon:RibbonGalleryCategory>
@@ -72,11 +70,11 @@
                             </ribbon:RibbonGalleryCategory>
                         </ribbon:RibbonGallery>
                     </ribbon:RibbonComboBox>
-<!--****************************************-->
+<!--**********************************************************************************************************-->
 
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Paragraph">
-                    <ribbon:RibbonButton Label="Align Left" SmallImageSource="/Images/align-left.png"/>
+                    <ribbon:RibbonButton Label="Align Left" SmallImageSource="/Images/align-left.png" Click="AlignTextRecursive"/>
                     <ribbon:RibbonButton Label="Center" SmallImageSource="/Images/align-center.png"/>
                     <ribbon:RibbonButton Label="Align Right" SmallImageSource="/Images/align-right.png"/>
                 </ribbon:RibbonGroup>

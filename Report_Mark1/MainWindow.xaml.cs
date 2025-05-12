@@ -1112,6 +1112,7 @@ namespace Report_Mark1
             }
         }
 
+
         private void btnUnderline_Click(object sender, RoutedEventArgs e)
         {
             if (selectedElement == null)
@@ -1207,7 +1208,6 @@ namespace Report_Mark1
             }
         }
 
-        //*******************************************************************************************************************************************************//
 
         private void FontGalleryItem_Selected(object sender, RoutedEventArgs e)
         {
@@ -1261,9 +1261,6 @@ namespace Report_Mark1
         }
 
 
-        //************************************************************************************************************************************************************//
-
-
         private void FontSizeComboBox_ItemSelected(object sender, MouseButtonEventArgs e)
         {
             var item = FindAncestor<RibbonGalleryItem>(e.OriginalSource as DependencyObject);
@@ -1284,8 +1281,6 @@ namespace Report_Mark1
             }
             return current as T;
         }
-
-
 
 
         private void ApplyFontSizeToSelectedElement(double fontSize)
@@ -1333,9 +1328,39 @@ namespace Report_Mark1
         //************************************************************************************************************************************************************//
 
 
+        private void btnAlignLeft_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedElement == null)
+                return;
+
+            AlignTextRecursive(selectedElement);
+        }
 
 
+      
 
+        private void AlignTextRecursive(DependencyObject parent)
+        {
+            if (parent is TextBlock tb)
+                tb.TextAlignment = TextAlignment.Left;
+
+            else if (parent is TextBox tx)
+                tx.TextAlignment = TextAlignment.Left;
+
+            else if (parent is RichTextBox rtb)
+            {
+                var range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                range.ApplyPropertyValue(Paragraph.TextAlignmentProperty, TextAlignment.Left);
+            }
+
+            // Traverse children recursively
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                AlignTextRecursive(child);
+            }
+        }
 
 
 
