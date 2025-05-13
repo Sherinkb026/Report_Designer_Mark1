@@ -1452,10 +1452,6 @@ namespace Report_Mark1
         }
 
 
-
-
-
-
         private void CutContent()
         {
             var focusedElement = Keyboard.FocusedElement;
@@ -1480,6 +1476,47 @@ namespace Report_Mark1
                 }
             }
 
+        }
+
+
+
+
+
+        private void btnCopy_Click(object sender, RoutedEventArgs e)
+        {
+            bool copyPerformed = CopyContent();
+
+            if (copyPerformed)
+                MessageBox.Show("Content copied successfully.");
+            else
+                MessageBox.Show("No content was selected to copy.");
+        }
+
+
+
+        private bool CopyContent()
+        {
+            var focusedElement = Keyboard.FocusedElement;
+
+            if (focusedElement is TextBox textBox)
+            {
+                if (!string.IsNullOrEmpty(textBox.SelectedText))
+                {
+                    Clipboard.SetText(textBox.SelectedText);
+                    return true;
+                }
+            }
+            else if (focusedElement is RichTextBox richTextBox)
+            {
+                var selection = richTextBox.Selection;
+                if (!selection.IsEmpty)
+                {
+                    Clipboard.SetText(selection.Text);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 
