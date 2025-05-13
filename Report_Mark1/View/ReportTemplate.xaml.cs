@@ -22,6 +22,9 @@ namespace Report_Mark1
         {
             InitializeComponent();
             DataContext = this;
+            //MainGrid.AddHandler(UIElement.PreviewMouseLeftButtonDownEvent,
+            //new MouseButtonEventHandler(Element_PreviewMouseLeftButtonDown), true);
+
 
             if (this.FindName("headerBorder") == null ||
                 this.FindName("tableBorder") == null ||
@@ -89,30 +92,7 @@ namespace Report_Mark1
 
         public string CurrentDate => DateTime.Now.ToString("yyyy-MM-dd");
 
-        //private void HeaderBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    var parentWindow = Window.GetWindow(this) as MainWindow;
-        //    parentWindow?.SelectElement(headerBorder);
-        //    SelectElement(headerBorder);
-        //    e.Handled = false;
-        //}
-
-        //private void TableBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    var parentWindow = Window.GetWindow(this) as MainWindow;
-        //    parentWindow?.SelectElement(tableBorder);
-        //    SelectElement(tableBorder);
-        //    e.Handled = false;
-        //}
-
-        //private void FooterBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    var parentWindow = Window.GetWindow(this) as MainWindow;
-        //    parentWindow?.SelectElement(footerBorder);
-        //    SelectElement(footerBorder);
-        //    e.Handled = false;
-        //}
-
+       
         
          
 
@@ -137,72 +117,183 @@ namespace Report_Mark1
             }
         }
 
+
+
+        //private void Element_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    DependencyObject clickedElement = e.OriginalSource as DependencyObject;
+
+        //    var textBlock = FindParent<TextBlock>(clickedElement);
+        //    var textBox = FindParent<TextBox>(clickedElement);
+        //    var richTextBox = FindParent<RichTextBox>(clickedElement);
+        //    var parentWindow = Window.GetWindow(this) as MainWindow;
+
+        //    bool selectionMade = false;
+
+        //    if (textBlock != null)
+        //    {
+        //        parentWindow?.SelectElement(textBlock);
+        //        SelectElement(textBlock);
+        //        selectionMade = true;
+        //    }
+        //    else if (textBox != null)
+        //    {
+        //        parentWindow?.SelectElement(textBox);
+        //        SelectElement(textBox);
+        //        selectionMade = true;
+        //    }
+        //    else if (richTextBox != null)
+        //    {
+        //        parentWindow?.SelectElement(richTextBox);
+        //        SelectElement(richTextBox);
+        //        selectionMade = true;
+        //    }
+        //    else if (sender is Border border)
+        //    {
+        //        parentWindow?.SelectElement(border);
+        //        SelectElement(border);
+        //        selectionMade = true;
+        //    }
+
+        //    e.Handled = selectionMade; // ✅ only stop bubbling if something was selected
+        //}
+
+
+        //private void MainGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    // Get the clicked element
+        //    var clickedElement = e.OriginalSource as DependencyObject;
+        //    var border = FindParent<Border>(clickedElement);
+        //    var textBlock = FindParent<TextBlock>(clickedElement);
+
+        //    // If the clicked element is not a Border or TextBlock, deselect the current element
+        //    if (border == null && textBlock == null)
+        //    {
+        //        var parentWindow = Window.GetWindow(this) as MainWindow;
+        //        parentWindow?.SelectElement(null); // Deselect in MainWindow
+        //        SelectElement(null); // Deselect in ReportTemplate
+        //        e.Handled = true; // Mark the event as handled
+        //    }
+        //}
+
+/// /////////////
+
         private void Element_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // Try to find a TextBlock or TextBox inside the clicked element
             DependencyObject clickedElement = e.OriginalSource as DependencyObject;
-
-            var textBlock = FindParent<TextBlock>(clickedElement);
-            var textBox = FindParent<TextBox>(clickedElement);
-            var richTextBox = FindParent<RichTextBox>(clickedElement);
 
             var parentWindow = Window.GetWindow(this) as MainWindow;
 
-            if (textBlock != null)
+            // Traverse up to find the closest container (Border, Panel, TextBlock, etc.)
+            var selectableElement = FindSelectableVisual(clickedElement);
+
+            if (selectableElement is UIElement uiElement)
             {
-                parentWindow?.SelectElement(textBlock);
-                SelectElement(textBlock);
-            }
-            else if (textBox != null)
-            {
-                parentWindow?.SelectElement(textBox);
-                SelectElement(textBox);
-            }
-            else if (richTextBox != null)
-            {
-                parentWindow?.SelectElement(richTextBox);
-                SelectElement(richTextBox);
-            }
-            else if (sender is Border border)
-            {
-                parentWindow?.SelectElement(border);
-                SelectElement(border);
+                parentWindow?.SelectElement(uiElement);
+                SelectElement(uiElement);
             }
 
             e.Handled = false;
         }
+        private UIElement FindSelectableVisual(DependencyObject start)
+        {
+            while (start != null)
+            {
+                if (start is Border || start is TextBlock || start is TextBox || start is RichTextBox || start is StackPanel || start is Grid)
+                {
+                    return start as UIElement;
+                }
+
+                start = VisualTreeHelper.GetParent(start);
+            }
+            return null;
+        }
+        /// <summary>
+        /// //////////
+      
+
+
 
         private void MainGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // Get the clicked element
             var clickedElement = e.OriginalSource as DependencyObject;
+
+            // Let WPF handle resizing if the user is on a resize grip
+            if (FindParent<System.Windows.Controls.Primitives.Thumb>(clickedElement) != null)
+            {
+                return; // Don't mark event as handled
+            }
+
             var border = FindParent<Border>(clickedElement);
             var textBlock = FindParent<TextBlock>(clickedElement);
+            var textBox = FindParent<TextBox>(clickedElement);
+            var richTextBox = FindParent<RichTextBox>(clickedElement);
 
-            // If the clicked element is not a Border or TextBlock, deselect the current element
-            if (border == null && textBlock == null)
+            bool isInSelectableBorder = IsInsideSelectableBorder(clickedElement);
+
+            if (textBlock == null && textBox == null && richTextBox == null && !isInSelectableBorder)
             {
                 var parentWindow = Window.GetWindow(this) as MainWindow;
-                parentWindow?.SelectElement(null); // Deselect in MainWindow
-                SelectElement(null); // Deselect in ReportTemplate
-                e.Handled = true; // Mark the event as handled
+                parentWindow?.SelectElement(null);
+                SelectElement(null);
+                // ✅ Removed e.Handled = true to let WPF handle resizing/etc.
             }
         }
+
+
+
+        private bool IsInsideSelectableBorder(DependencyObject element)
+        {
+            while (element != null)
+            {
+                if (element is Border border &&
+                    (border.Name == "headerBorder" || border.Name == "tableBorder" || border.Name == "footerBorder"))
+                {
+                    return true;
+                }
+                element = VisualTreeHelper.GetParent(element);
+            }
+            return false;
+        }
+        private bool IsInsideDataGridResizer(DependencyObject source)
+        {
+            while (source != null)
+            {
+                if (source is System.Windows.Controls.Primitives.Thumb thumb)
+                {
+                    return true;
+                }
+                source = VisualTreeHelper.GetParent(source);
+            }
+            return false;
+        }
+
+
+
+        // ✅ Helper to filter only those borders you marked selectable (not layout/outer borders)
+        //private bool IsSelectableBorder(Border border)
+        //{
+        //    if (border == null) return false;
+
+        //    // Check by name or some other logic if it's a selectable border
+        //    return border.Name == "headerBorder" || border.Name == "tableBorder" || border.Name == "footerBorder";
+        //}
+
 
         public void SelectElement(UIElement element)
         {
             // Reset the previous selection's border
             if (selectedElementBorder != null)
             {
-                selectedElementBorder.BorderBrush = Brushes.Transparent;
-                selectedElementBorder.BorderThickness = new Thickness(0);
+                selectedElementBorder.BorderBrush = Brushes.Gray;
+                selectedElementBorder.BorderThickness = new Thickness(1);
             }
 
             // Clear the previous cell border if it exists
             if (selectedCellBorder != null)
             {
-                selectedCellBorder.BorderBrush = Brushes.Transparent;
-                selectedCellBorder.BorderThickness = new Thickness(0);
+                selectedCellBorder.BorderBrush = Brushes.Gray;
+                selectedCellBorder.BorderThickness = new Thickness(1);
             }
 
             selectedElement = element;
@@ -211,14 +302,14 @@ namespace Report_Mark1
 
             if (element is TextBlock tb && tb.Parent is Border borderFromText)
             {
-                borderFromText.BorderBrush = Brushes.Blue;
-                borderFromText.BorderThickness = new Thickness(2);
+                borderFromText.BorderBrush = Brushes.Cyan;
+                borderFromText.BorderThickness = new Thickness(1);
                 selectedElementBorder = borderFromText;
             }
             else if (element is Border border)
             {
-                border.BorderBrush = Brushes.Blue;
-                border.BorderThickness = new Thickness(2);
+                border.BorderBrush = Brushes.Cyan;
+                border.BorderThickness = new Thickness(1);
                 selectedElementBorder = border;
             }
         }
