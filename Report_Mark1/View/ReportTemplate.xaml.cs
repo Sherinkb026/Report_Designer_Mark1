@@ -94,8 +94,6 @@ namespace Report_Mark1
 
 
 
-
-
         private void ReportCell_Click(object sender, MouseButtonEventArgs e)
         {
             e.Handled = false;
@@ -176,7 +174,7 @@ namespace Report_Mark1
         //    }
         //}
 
-        /// /////////////
+
 
         private void Element_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -208,9 +206,7 @@ namespace Report_Mark1
             }
             return null;
         }
-        /// <summary>
-        /// //////////
-
+  
 
 
 

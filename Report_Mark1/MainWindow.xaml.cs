@@ -1131,7 +1131,7 @@ namespace Report_Mark1
             if (selectedTextBlock == null)
             {
                 var textBlocks = FindChildrenOfType<TextBlock>(selectedElement);
-                if (textBlocks.Count()== 1)
+                if (textBlocks.Count() == 1)
                     selectedTextBlock = textBlocks.First();
             }
 
@@ -1326,11 +1326,6 @@ namespace Report_Mark1
 
 
 
-
-        //************************************************************************************************************************************************************//
-
-
-     
         private void BtnAlignLeft_Click(object sender, RoutedEventArgs e)
         {
             AlignContentLeft();
@@ -1366,16 +1361,21 @@ namespace Report_Mark1
                 AlignTextRecursive(child);
             }
         }
-     
 
 
+
+        private void btnAlignCenter_Click(object sender, RoutedEventArgs e)
+        {
+            AlignContentCenter();
+        }
 
         private void AlignContentCenter()
         {
             if (selectedElement == null)
                 return;
-
+            
             AlignTextCenterRecursive(selectedElement);
+            
         }
 
         private void AlignTextCenterRecursive(DependencyObject parent)
@@ -1401,13 +1401,12 @@ namespace Report_Mark1
             }
         }
 
-        private void btnAlignCenter_Click(object sender, RoutedEventArgs e)
+
+
+        private void btnAlignRight_Click(object sender, RoutedEventArgs e)
         {
-            AlignContentCenter();
+            AlignContentRight();
         }
-
-
-
         private void AlignContentRight()
         {
             if (selectedElement == null)
@@ -1439,10 +1438,93 @@ namespace Report_Mark1
             }
         }
 
-        private void btnAlignRight_Click(object sender, RoutedEventArgs e)
+
+
+        private void btnCut_Click(object sender, RoutedEventArgs e)
         {
-            AlignContentRight();
+            bool cutPerformed = CutContent(); // This now correctly returns a bool
+
+            if (cutPerformed)
+                MessageBox.Show("Content cut successfully.");
+            else
+                MessageBox.Show("No editable content was selected to cut.");
         }
+
+        private bool CutContent()
+        {
+            if (selectedElement == null)
+                return false;
+
+            return CutContentRecursive(selectedElement); // returns a bool
+        }
+
+
+        private bool CutContentRecursive(DependencyObject parent)
+        {
+            bool cutDone = false;
+
+            if (parent is TextBox tx && tx.IsFocused)
+            {
+                if (!string.IsNullOrEmpty(tx.SelectedText))
+                {
+                    Clipboard.SetText(tx.SelectedText);
+                    tx.SelectedText = string.Empty;
+                    cutDone = true;
+                }
+                else if (!string.IsNullOrEmpty(tx.Text))
+                {
+                    Clipboard.SetText(tx.Text);
+                    tx.Clear();
+                    cutDone = true;
+                }
+            }
+            else if (parent is RichTextBox rtb && rtb.IsFocused)
+            {
+                var selection = rtb.Selection;
+                if (!selection.IsEmpty)
+                {
+                    Clipboard.SetText(selection.Text);
+                    selection.Text = string.Empty;
+                    cutDone = true;
+                }
+                else
+                {
+                    var range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                    if (!string.IsNullOrWhiteSpace(range.Text))
+                    {
+                        Clipboard.SetText(range.Text);
+                        range.Text = string.Empty;
+                        cutDone = true;
+                    }
+                }
+            }
+
+            if (cutDone)
+                return true;
+
+            // Recursively check children
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (CutContentRecursive(child))
+                    return true;
+            }
+
+            return false;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

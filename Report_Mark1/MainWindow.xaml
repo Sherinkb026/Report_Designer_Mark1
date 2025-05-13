@@ -48,7 +48,7 @@
                                 <ribbon:RibbonGalleryItem Content="Courier New" Selected="FontGalleryItem_Selected"/>
                                 <ribbon:RibbonGalleryItem Content="Lucida Console" Selected="FontGalleryItem_Selected"/>
                                 <ribbon:RibbonGalleryItem Content="Impact" Selected="FontGalleryItem_Selected"/>
-                               
+
                             </ribbon:RibbonGalleryCategory>
                         </ribbon:RibbonGallery>
                     </ribbon:RibbonComboBox>
@@ -70,8 +70,7 @@
                             </ribbon:RibbonGalleryCategory>
                         </ribbon:RibbonGallery>
                     </ribbon:RibbonComboBox>
-                    
-<!--***************************************************************************************************************************************************-->
+
 
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Paragraph">
@@ -82,7 +81,7 @@
                 <ribbon:RibbonGroup Header="Editing">
                     <ribbon:RibbonButton Label="Undo" SmallImageSource="/Images/undo.png" />
                     <ribbon:RibbonButton Label="Redo" SmallImageSource="/Images/redo.png"/>
-                    <ribbon:RibbonButton Label="Cut" SmallImageSource="/Images/cut.png"/>
+                    <ribbon:RibbonButton Label="Cut" SmallImageSource="/Images/cut.png" Click="btnCut_Click"/>
                     <ribbon:RibbonButton Label="Copy" SmallImageSource="/Images/copy.png"/>
                     <ribbon:RibbonButton Label="Paste" SmallImageSource="/Images/paste.png"/>
                 </ribbon:RibbonGroup>
