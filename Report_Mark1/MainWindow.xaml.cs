@@ -471,8 +471,6 @@ namespace Report_Mark1
 
             selectedElement = null;
 
-            MessageBox.Show("Element deleted successfully.",
-                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         #endregion
 
@@ -535,8 +533,7 @@ namespace Report_Mark1
 
             dataPreviewGrid.ItemsSource = currentData.DefaultView;
 
-            MessageBox.Show($"Demo {selectedType} data generated.",
-                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+           
         }
 
 
@@ -593,8 +590,7 @@ namespace Report_Mark1
                     SetupBorderEvents(tableBorder);
                     SetupBorderEvents(footerBorder);
 
-                    MessageBox.Show("Report loaded into canvas.",
-                        "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                  
                 }
             }
             else
@@ -657,7 +653,7 @@ namespace Report_Mark1
             Border selected = sender as Border;
             if (selected != null)
             {
-                selected.BorderBrush = Brushes.Blue;
+                selected.BorderBrush = Brushes.Cyan;
             }
 
             e.Handled = true;
@@ -704,7 +700,7 @@ namespace Report_Mark1
 
             if (selectedElement is Control selectedCtrl)
             {
-                selectedCtrl.BorderBrush = Brushes.Blue;
+                selectedCtrl.BorderBrush = Brushes.Cyan;
             }
             else if (selectedElement is Border selectedBorder)
             {
@@ -712,8 +708,8 @@ namespace Report_Mark1
                 {
                     selectedBorder.Tag = selectedBorder.BorderBrush;
                 }
-                selectedBorder.BorderBrush = Brushes.Blue;
-                selectedBorder.BorderThickness = new Thickness(2);
+                selectedBorder.BorderBrush = Brushes.Cyan;
+                selectedBorder.BorderThickness = new Thickness(1);
             }
         }
 
@@ -1326,6 +1322,10 @@ namespace Report_Mark1
 
 
 
+
+
+
+
         private void BtnAlignLeft_Click(object sender, RoutedEventArgs e)
         {
             AlignContentLeft();
@@ -1364,18 +1364,13 @@ namespace Report_Mark1
 
 
 
-        private void btnAlignCenter_Click(object sender, RoutedEventArgs e)
-        {
-            AlignContentCenter();
-        }
 
         private void AlignContentCenter()
         {
             if (selectedElement == null)
                 return;
-            
+
             AlignTextCenterRecursive(selectedElement);
-            
         }
 
         private void AlignTextCenterRecursive(DependencyObject parent)
@@ -1401,12 +1396,13 @@ namespace Report_Mark1
             }
         }
 
-
-
-        private void btnAlignRight_Click(object sender, RoutedEventArgs e)
+        private void btnAlignCenter_Click(object sender, RoutedEventArgs e)
         {
-            AlignContentRight();
+            AlignContentCenter();
         }
+
+
+
         private void AlignContentRight()
         {
             if (selectedElement == null)
@@ -1438,102 +1434,57 @@ namespace Report_Mark1
             }
         }
 
+        private void btnAlignRight_Click(object sender, RoutedEventArgs e)
+        {
+            AlignContentRight();
+        }
+
+
+
+
 
 
         private void btnCut_Click(object sender, RoutedEventArgs e)
         {
-            bool cutPerformed = CutContent(); // This now correctly returns a bool
+            CutContent();
 
-            if (cutPerformed)
-                MessageBox.Show("Content cut successfully.");
-            else
-                MessageBox.Show("No editable content was selected to cut.");
-        }
-
-        private bool CutContent()
-        {
-            if (selectedElement == null)
-                return false;
-
-            return CutContentRecursive(selectedElement); // returns a bool
+          
         }
 
 
-        private bool CutContentRecursive(DependencyObject parent)
-        {
-            bool cutDone = false;
 
-            if (parent is TextBox tx && tx.IsFocused)
+
+
+
+        private void CutContent()
+        {
+            var focusedElement = Keyboard.FocusedElement;
+
+            if (focusedElement is TextBox textBox)
             {
-                if (!string.IsNullOrEmpty(tx.SelectedText))
+                if (!string.IsNullOrEmpty(textBox.SelectedText))
                 {
-                    Clipboard.SetText(tx.SelectedText);
-                    tx.SelectedText = string.Empty;
-                    cutDone = true;
-                }
-                else if (!string.IsNullOrEmpty(tx.Text))
-                {
-                    Clipboard.SetText(tx.Text);
-                    tx.Clear();
-                    cutDone = true;
+                    Clipboard.SetText(textBox.SelectedText);
+                    textBox.SelectedText = string.Empty;
+                    
                 }
             }
-            else if (parent is RichTextBox rtb && rtb.IsFocused)
+            else if (focusedElement is RichTextBox richTextBox)
             {
-                var selection = rtb.Selection;
+                var selection = richTextBox.Selection;
                 if (!selection.IsEmpty)
                 {
                     Clipboard.SetText(selection.Text);
                     selection.Text = string.Empty;
-                    cutDone = true;
-                }
-                else
-                {
-                    var range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-                    if (!string.IsNullOrWhiteSpace(range.Text))
-                    {
-                        Clipboard.SetText(range.Text);
-                        range.Text = string.Empty;
-                        cutDone = true;
-                    }
+                    
                 }
             }
 
-            if (cutDone)
-                return true;
-
-            // Recursively check children
-            int childCount = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < childCount; i++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                if (CutContentRecursive(child))
-                    return true;
-            }
-
-            return false;
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         #endregion
+
 
     }
 }

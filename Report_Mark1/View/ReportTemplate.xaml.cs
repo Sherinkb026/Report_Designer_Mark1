@@ -251,18 +251,7 @@ namespace Report_Mark1
             }
             return false;
         }
-        private bool IsInsideDataGridResizer(DependencyObject source)
-        {
-            while (source != null)
-            {
-                if (source is System.Windows.Controls.Primitives.Thumb thumb)
-                {
-                    return true;
-                }
-                source = VisualTreeHelper.GetParent(source);
-            }
-            return false;
-        }
+      
 
 
 
