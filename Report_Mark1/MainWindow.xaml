@@ -83,7 +83,7 @@
                     <ribbon:RibbonButton Label="Redo" SmallImageSource="/Images/redo.png"/>
                     <ribbon:RibbonButton Label="Cut" SmallImageSource="/Images/cut.png" Click="btnCut_Click"/>
                     <ribbon:RibbonButton Label="Copy" SmallImageSource="/Images/copy.png" Click="btnCopy_Click"/>
-                    <ribbon:RibbonButton Label="Paste" SmallImageSource="/Images/paste.png"/>
+                    <ribbon:RibbonButton Label="Paste" SmallImageSource="/Images/paste.png" Click="btnPaste_Click"/>
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Insert">
                     <ribbon:RibbonButton Label="Insert Table" SmallImageSource="/Images/paste.png" Click="AddTable_Click"/>

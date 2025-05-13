@@ -939,6 +939,8 @@ namespace Report_Mark1
             }
         }
 
+
+        //BOLD
         private void btnBold_Click(object sender, RoutedEventArgs e)
         {
             if (selectedElement == null)
@@ -1015,6 +1017,7 @@ namespace Report_Mark1
         }
 
 
+        //ITALIC
         private void btnItalic_Click(object sender, RoutedEventArgs e)
         {
             if (selectedElement == null)
@@ -1111,6 +1114,7 @@ namespace Report_Mark1
         }
 
 
+        //UNDERLINE
         private void btnUnderline_Click(object sender, RoutedEventArgs e)
         {
             if (selectedElement == null)
@@ -1207,6 +1211,10 @@ namespace Report_Mark1
         }
 
 
+
+
+
+        //FONT FAMILY
         private void FontGalleryItem_Selected(object sender, RoutedEventArgs e)
         {
             if (selectedElement == null)
@@ -1219,7 +1227,7 @@ namespace Report_Mark1
             }
         }
 
-
+        //FONT FAMILY
         private void ApplyFontFamilyToSelectedElement(FontFamily fontFamily)
         {
             if (selectedElement is TextBlock textBlock)
@@ -1259,6 +1267,11 @@ namespace Report_Mark1
         }
 
 
+
+
+
+
+        //FONT SIZE
         private void FontSizeComboBox_ItemSelected(object sender, MouseButtonEventArgs e)
         {
             var item = FindAncestor<RibbonGalleryItem>(e.OriginalSource as DependencyObject);
@@ -1271,6 +1284,7 @@ namespace Report_Mark1
             }
         }
 
+        //FONT SIZE
         private T FindAncestor<T>(DependencyObject current) where T : DependencyObject
         {
             while (current != null && !(current is T))
@@ -1280,7 +1294,7 @@ namespace Report_Mark1
             return current as T;
         }
 
-
+        //FONT SIZE
         private void ApplyFontSizeToSelectedElement(double fontSize)
         {
             if (selectedElement is TextBlock textBlock)
@@ -1325,11 +1339,13 @@ namespace Report_Mark1
 
 
 
-
+        //ALIGN LEFT
         private void BtnAlignLeft_Click(object sender, RoutedEventArgs e)
         {
             AlignContentLeft();
         }
+
+        //ALIGN LEFT
         private void AlignContentLeft()
         {
             if (selectedElement == null)
@@ -1338,7 +1354,7 @@ namespace Report_Mark1
             AlignTextRecursive(selectedElement);
         }
 
-
+        //ALIGN LEFT
         private void AlignTextRecursive(DependencyObject parent)
         {
             if (parent is TextBlock tb)
@@ -1365,6 +1381,7 @@ namespace Report_Mark1
 
 
 
+        //ALIGN CENTER
         private void AlignContentCenter()
         {
             if (selectedElement == null)
@@ -1373,6 +1390,7 @@ namespace Report_Mark1
             AlignTextCenterRecursive(selectedElement);
         }
 
+        //ALIGN CENTER
         private void AlignTextCenterRecursive(DependencyObject parent)
         {
             if (parent is TextBlock tb)
@@ -1396,6 +1414,7 @@ namespace Report_Mark1
             }
         }
 
+        //ALIGN CENTER
         private void btnAlignCenter_Click(object sender, RoutedEventArgs e)
         {
             AlignContentCenter();
@@ -1403,6 +1422,8 @@ namespace Report_Mark1
 
 
 
+
+        //ALIGN RIGHT
         private void AlignContentRight()
         {
             if (selectedElement == null)
@@ -1411,6 +1432,7 @@ namespace Report_Mark1
             AlignTextRightRecursive(selectedElement);
         }
 
+        //ALIGN RIGHT
         private void AlignTextRightRecursive(DependencyObject parent)
         {
             if (parent is TextBlock tb)
@@ -1434,6 +1456,7 @@ namespace Report_Mark1
             }
         }
 
+        //ALIGN RIGHT
         private void btnAlignRight_Click(object sender, RoutedEventArgs e)
         {
             AlignContentRight();
@@ -1443,7 +1466,7 @@ namespace Report_Mark1
 
 
 
-
+        //CUT 
         private void btnCut_Click(object sender, RoutedEventArgs e)
         {
             CutContent();
@@ -1451,7 +1474,7 @@ namespace Report_Mark1
           
         }
 
-
+        //CUT
         private void CutContent()
         {
             var focusedElement = Keyboard.FocusedElement;
@@ -1481,7 +1504,7 @@ namespace Report_Mark1
 
 
 
-
+        //COPY 
         private void btnCopy_Click(object sender, RoutedEventArgs e)
         {
             bool copyPerformed = CopyContent();
@@ -1492,8 +1515,7 @@ namespace Report_Mark1
                 MessageBox.Show("No content was selected to copy.");
         }
 
-
-
+        //COPY
         private bool CopyContent()
         {
             var focusedElement = Keyboard.FocusedElement;
@@ -1518,6 +1540,55 @@ namespace Report_Mark1
 
             return false;
         }
+
+
+
+
+        //PASTE
+        private void btnPaste_Click(object sender, RoutedEventArgs e)
+        {
+            bool pastePerformed = PasteContent();
+
+            if (pastePerformed)
+                MessageBox.Show("Content pasted successfully.");
+            else
+                MessageBox.Show("No suitable editable field is focused or clipboard is empty.");
+        }
+
+        //PASTE
+        private bool PasteContent()
+        {
+            var focusedElement = Keyboard.FocusedElement;
+
+            if (!Clipboard.ContainsText())
+                return false;
+
+            string clipboardText = Clipboard.GetText();
+
+            if (focusedElement is TextBox textBox && !textBox.IsReadOnly)
+            {
+                if (textBox.SelectionLength > 0)
+                    textBox.SelectedText = clipboardText; // Replace selected text
+                else
+                    textBox.Text = textBox.Text.Insert(textBox.CaretIndex, clipboardText); // Insert at caret
+
+                return true;
+            }
+            else if (focusedElement is RichTextBox richTextBox && !richTextBox.IsReadOnly)
+            {
+                richTextBox.Selection.Text = clipboardText;
+                return true;
+            }
+
+            return false;
+        }
+
+
+
+
+
+
+
 
 
         #endregion
