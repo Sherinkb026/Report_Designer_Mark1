@@ -41,6 +41,8 @@ namespace Report_Mark1
         #region Property
         public string SelectedFont { get; set; } = "Calibri";
 
+
+
         #endregion
 
 
@@ -1328,7 +1330,12 @@ namespace Report_Mark1
         //************************************************************************************************************************************************************//
 
 
-        private void btnAlignLeft_Click(object sender, RoutedEventArgs e)
+     
+        private void BtnAlignLeft_Click(object sender, RoutedEventArgs e)
+        {
+            AlignContentLeft();
+        }
+        private void AlignContentLeft()
         {
             if (selectedElement == null)
                 return;
@@ -1336,8 +1343,6 @@ namespace Report_Mark1
             AlignTextRecursive(selectedElement);
         }
 
-
-      
 
         private void AlignTextRecursive(DependencyObject parent)
         {
@@ -1361,6 +1366,88 @@ namespace Report_Mark1
                 AlignTextRecursive(child);
             }
         }
+     
+
+
+
+        private void AlignContentCenter()
+        {
+            if (selectedElement == null)
+                return;
+
+            AlignTextCenterRecursive(selectedElement);
+        }
+
+        private void AlignTextCenterRecursive(DependencyObject parent)
+        {
+            if (parent is TextBlock tb)
+                tb.TextAlignment = TextAlignment.Center;
+
+            else if (parent is TextBox tx)
+                tx.TextAlignment = TextAlignment.Center;
+
+            else if (parent is RichTextBox rtb)
+            {
+                var range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                range.ApplyPropertyValue(Paragraph.TextAlignmentProperty, TextAlignment.Center);
+            }
+
+            // Traverse children recursively
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                AlignTextCenterRecursive(child);
+            }
+        }
+
+        private void btnAlignCenter_Click(object sender, RoutedEventArgs e)
+        {
+            AlignContentCenter();
+        }
+
+
+
+        private void AlignContentRight()
+        {
+            if (selectedElement == null)
+                return;
+
+            AlignTextRightRecursive(selectedElement);
+        }
+
+        private void AlignTextRightRecursive(DependencyObject parent)
+        {
+            if (parent is TextBlock tb)
+                tb.TextAlignment = TextAlignment.Right;
+
+            else if (parent is TextBox tx)
+                tx.TextAlignment = TextAlignment.Right;
+
+            else if (parent is RichTextBox rtb)
+            {
+                var range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                range.ApplyPropertyValue(Paragraph.TextAlignmentProperty, TextAlignment.Right);
+            }
+
+            // Recursively apply to children
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                AlignTextRightRecursive(child);
+            }
+        }
+
+        private void btnAlignRight_Click(object sender, RoutedEventArgs e)
+        {
+            AlignContentRight();
+        }
+
+
+
+
+
 
 
 

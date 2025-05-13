@@ -5,115 +5,122 @@
              xmlns:local="clr-namespace:Report_Mark1"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DesignHeight="1122" d:DesignWidth="793" mc:Ignorable="d">
-    
-    <Border Padding="30" Background="White" BorderBrush="#333333" BorderThickness="1" CornerRadius="5"
-            >
-        
-        <StackPanel Orientation="Vertical">
-            <!-- Header Section (unchanged) -->
-            <Border x:Name="headerBorder" BorderBrush="#CCCCCC" BorderThickness="0,0,0,1" Background="#FFF5F5"
-                    PreviewMouseLeftButtonDown="Element_PreviewMouseLeftButtonDown">
-                <Grid Margin="0,0,0,20">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Width="150" Height="50" Source="Images\paint.png" Margin="0,0,20,0" 
-                           Visibility="{x:Static Visibility.Visible}" />
-                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                        <TextBlock Text="KR BAKERS" FontSize="32" FontWeight="Bold" Foreground="#FF0000" FontFamily="Arial"/>
-                        <TextBlock Margin="0,8,0,0" FontSize="20" FontStyle="Italic" Text="SALES REPORT" Foreground="#333333" FontFamily="Arial"/>
-                        <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="#666666" Text="Kochi" FontFamily="Calibri"/>
-                    </StackPanel>
-                    <TextBlock Grid.Column="2" Margin="20,0,0,0" VerticalAlignment="Center" 
-                               FontSize="12" Foreground="#666666" Text="{Binding CurrentDate}" FontFamily="Calibri"/>
-                </Grid>
-            </Border>
 
-            <!-- Table Section -->
-            <Border x:Name="tableBorder" BorderBrush="#333333" BorderThickness="1" Margin="0,20,0,0"
-                    PreviewMouseLeftButtonDown="Element_PreviewMouseLeftButtonDown">
-                <Grid Margin="0,10,0,10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="Report" 
-                               FontSize="16" FontWeight="Bold" Foreground="#333333" Margin="0,0,0,10" FontFamily="Arial"/>
-                    <DataGrid x:Name="reportDataGrid" Grid.Row="1"
-                              AutoGenerateColumns="False" 
-                              Background="White"
-                              CanUserAddRows="False"
-                              CanUserDeleteRows="False"
-                              CanUserResizeRows="True"
-                              CanUserResizeColumns="True"
-                              HeadersVisibility="All"
-                              GridLinesVisibility="All"
-                              IsReadOnly="False"
-                              ItemsSource="{Binding ReportItems}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" CanUserResize="True"/>
-                            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="100" CanUserResize="True"/>
-                            <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="100" CanUserResize="True"/>
-                            <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="100" CanUserResize="True"/>
-                        </DataGrid.Columns>
-                        <DataGrid.Resources>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="#FFE6E6"/>
-                                <Setter Property="BorderBrush" Value="#333333"/>
-                                <Setter Property="BorderThickness" Value="1"/>
-                                <Setter Property="Padding" Value="8"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="Foreground" Value="#333333"/>
-                                <Setter Property="FontFamily" Value="Calibri"/>
-                                <!-- Add cursor to indicate resizability -->
-                                <Setter Property="Cursor" Value="SizeWE"/>
-                            </Style>
-                            <Style TargetType="DataGridCell">
-                                <Setter Property="BorderBrush" Value="#CCCCCC"/>
-                                <Setter Property="BorderThickness" Value="1"/>
-                                <Setter Property="Padding" Value="8"/>
-                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                                <Setter Property="FontFamily" Value="Calibri"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="#E0E0E0"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                            <Style TargetType="DataGridRow">
-                                <Setter Property="BorderBrush" Value="#CCCCCC"/>
-                                <Setter Property="BorderThickness" Value="1"/>
-                                <Setter Property="MinHeight" Value="35"/>
-                                <!-- Add cursor to indicate row resizing -->
-                                <Setter Property="Cursor" Value="SizeNS"/>
-                            </Style>
-                        </DataGrid.Resources>
-                    </DataGrid>
-                </Grid>
-            </Border>
+    <Grid x:Name="MainGrid"
+          Background="Transparent"
+          PreviewMouseLeftButtonDown="MainGrid_PreviewMouseLeftButtonDown">
 
-            <!-- Footer Section (unchanged) -->
-            <Border x:Name="footerBorder" BorderBrush="#CCCCCC" BorderThickness="1,0,0,0" Background="White" Margin="0,20,0,0"
-                    PreviewMouseLeftButtonDown="Element_PreviewMouseLeftButtonDown">
-                <Grid Margin="0,10,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
-                        <TextBlock FontStyle="Italic" Text="Thank you for your business!" FontSize="12" Foreground="#666666" FontFamily="Calibri"/>
-                        <TextBlock FontStyle="Italic" Text="Please let us know if there are any issues or concerns." FontSize="12" Foreground="#666666" FontFamily="Calibri"/>
-                        <TextBlock FontStyle="Italic" Text="Email: kr_bakers@krbakery.com" FontSize="12" Foreground="#666666" FontFamily="Calibri" Margin="0,5,0,0"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right">
-                        <TextBlock Text="KR BAKERS" FontSize="14" FontWeight="Bold" Foreground="#333333" FontFamily="Arial"/>
-                        <TextBlock Text="123 Angamaly St., Apt 123, 45678" FontSize="12" Foreground="#666666" FontFamily="Calibri"/>
-                        <TextBlock Text="(123) 456-7890 | krbakery.com" FontSize="12" Foreground="#666666" FontFamily="Calibri"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-        </StackPanel>
-    </Border>
+        <!-- ✅ Added PreviewMouseLeftButtonDown to outer border -->
+        <Border Padding="30"
+                Background="White"
+                BorderBrush="#333333"
+                BorderThickness="1"
+                CornerRadius="5"
+                PreviewMouseLeftButtonDown="MainGrid_PreviewMouseLeftButtonDown">
+
+            <StackPanel Orientation="Vertical">
+
+                <!-- Header Section -->
+                <Border x:Name="headerBorder" BorderBrush="#CCCCCC" BorderThickness="0,0,0,1" Background="#FFF5F5"
+                        PreviewMouseLeftButtonDown="Element_PreviewMouseLeftButtonDown">
+                    <Grid HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                            <TextBlock Text="KR BAKERS" Margin="5,8,0,0" FontSize="32" FontWeight="Bold" Foreground="#FF0000" FontFamily="Arial"/>
+                            <TextBlock Margin="5,8,0,0" FontSize="20" FontStyle="Italic" Text="SALES REPORT" Foreground="#333333" FontFamily="Arial"/>
+                            <TextBlock Margin="5,8,0,0" FontSize="14" Foreground="#666666" Text="Kochi" FontFamily="Calibri"/>
+                            <TextBlock Grid.Column="2" Margin="5,8,0,0" VerticalAlignment="Center" 
+                                       FontSize="12" Foreground="#666666" Text="{Binding CurrentDate}" FontFamily="Calibri"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Table Section -->
+                <Border x:Name="tableBorder" BorderBrush="#333333" BorderThickness="1" Margin="0,20,0,0"
+                        PreviewMouseLeftButtonDown="Element_PreviewMouseLeftButtonDown">
+                    <Grid Margin="0,10,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <DataGrid x:Name="reportDataGrid" Grid.Row="1"
+                                  AutoGenerateColumns="False" 
+                                  Background="White"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  CanUserSortColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  CanUserResizeRows="True"
+                                  CanUserResizeColumns="True"
+                                  HeadersVisibility="All"
+                                  GridLinesVisibility="All"
+                                  IsReadOnly="False"
+                                  ItemsSource="{Binding ReportItems}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" CanUserResize="True"/>
+                                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="100" CanUserResize="True"/>
+                                <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="100" CanUserResize="True"/>
+                                <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="100" CanUserResize="True"/>
+                            </DataGrid.Columns>
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#FFE6E6"/>
+                                    <Setter Property="BorderBrush" Value="#333333"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Padding" Value="8"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="#333333"/>
+                                    <Setter Property="FontFamily" Value="Calibri"/>
+                                    <Setter Property="Cursor" Value="SizeWE"/>
+                                </Style>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Padding" Value="8"/>
+                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                    <Setter Property="FontFamily" Value="Calibri"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#E0E0E0"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="MinHeight" Value="35"/>
+                                    <Setter Property="Cursor" Value="SizeNS"/>
+                                </Style>
+                            </DataGrid.Resources>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+                <!-- Footer Section -->
+                <Border x:Name="footerBorder" BorderBrush="#CCCCCC" BorderThickness="1,0,0,0" Background="White" Margin="0,20,0,0"
+                        PreviewMouseLeftButtonDown="Element_PreviewMouseLeftButtonDown">
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
+                            <TextBlock FontStyle="Italic" Text="Thank you for your business!" FontSize="12" Foreground="#666666" FontFamily="Calibri"/>
+                            <TextBlock FontStyle="Italic" Text="Please let us know if there are any issues or concerns." FontSize="12" Foreground="#666666" FontFamily="Calibri"/>
+                            <TextBlock FontStyle="Italic" Text="Email: kr_bakers@krbakery.com" FontSize="12" Foreground="#666666" FontFamily="Calibri" Margin="0,5,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right">
+                            <TextBlock Text="KR BAKERS" FontSize="14" FontWeight="Bold" Foreground="#333333" FontFamily="Arial"/>
+                            <TextBlock Text="123 Angamaly St., Apt 123, 45678" FontSize="12" Foreground="#666666" FontFamily="Calibri"/>
+                            <TextBlock Text="(123) 456-7890 | krbakery.com" FontSize="12" Foreground="#666666" FontFamily="Calibri"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>

@@ -70,16 +70,17 @@
                             </ribbon:RibbonGalleryCategory>
                         </ribbon:RibbonGallery>
                     </ribbon:RibbonComboBox>
-<!--**********************************************************************************************************-->
+                    
+<!--***************************************************************************************************************************************************-->
 
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Paragraph">
-                    <ribbon:RibbonButton Label="Align Left" SmallImageSource="/Images/align-left.png" Click="AlignTextRecursive"/>
-                    <ribbon:RibbonButton Label="Center" SmallImageSource="/Images/align-center.png"/>
-                    <ribbon:RibbonButton Label="Align Right" SmallImageSource="/Images/align-right.png"/>
+                    <ribbon:RibbonButton Label="Align Left" SmallImageSource="/Images/align-left.png" Click="BtnAlignLeft_Click"/>
+                    <ribbon:RibbonButton Label="Center" SmallImageSource="/Images/align-center.png" Click="btnAlignCenter_Click"/>
+                    <ribbon:RibbonButton Label="Align Right" SmallImageSource="/Images/align-right.png" Click="btnAlignRight_Click"/>
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Editing">
-                    <ribbon:RibbonButton Label="Undo" SmallImageSource="/Images/undo.png"/>
+                    <ribbon:RibbonButton Label="Undo" SmallImageSource="/Images/undo.png" />
                     <ribbon:RibbonButton Label="Redo" SmallImageSource="/Images/redo.png"/>
                     <ribbon:RibbonButton Label="Cut" SmallImageSource="/Images/cut.png"/>
                     <ribbon:RibbonButton Label="Copy" SmallImageSource="/Images/copy.png"/>
