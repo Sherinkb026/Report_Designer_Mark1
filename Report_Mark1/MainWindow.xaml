@@ -167,7 +167,8 @@
         <Border Grid.Row="1" Grid.Column="1" Background="#dddddd" Margin="10" CornerRadius="6" BorderBrush="#aaa" BorderThickness="1">
             <Grid>
                 <ScrollViewer x:Name="scrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <Canvas x:Name="designSurface" Background="LightGray" Width="1200" Height="1600">
+                    <Canvas x:Name="designSurface" Background="LightGray" Width="1200" Height="1600"
+                            AllowDrop="True" Drop="DesignSurface_Drop" DragEnter="DesignSurface_DragEnter" DragOver="DesignSurface_DragOver">
                         <Canvas.LayoutTransform>
                             <ScaleTransform x:Name="canvasScaleTransform" ScaleX="1" ScaleY="1"/>
                         </Canvas.LayoutTransform>

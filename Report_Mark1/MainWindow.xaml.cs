@@ -1,5 +1,5 @@
 ﻿using DevExpress.XtraReports.UI;
-using DevExpress.Xpf.Printing;
+//using DevExpress.Xpf.Printing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,16 +14,19 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using Microsoft.Win32;
 using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
+//using PdfSharpCore.Pdf;
 using System.IO;
 using System.Linq;
-using Forms = System.Windows.Forms;
-using Input = System.Windows.Input;
+//using DevExpressPdf = DevExpress.XtraPrinting.Export.Pdf;
+//using SharpPdf = PdfSharpCore.Pdf;
+//using Forms = System.Windows.Forms;
+//using Input = System.Windows.Input;
 using System.Windows.Shapes;
-using System.Drawing;
-
-
+//using System.Drawing;
 using MessageBox = System.Windows.MessageBox;
+//using DevExpress.XtraPrinting.Export.Pdf;
+using PdfDocument = PdfSharpCore.Pdf.PdfDocument;
+using PdfPage = PdfSharpCore.Pdf.PdfPage;
 
 
 namespace Report_Mark1
@@ -89,7 +92,7 @@ namespace Report_Mark1
         }
         #endregion
 
-        #region LeftSide Controls
+        #region Insertion Controls
 
         private void AddLabel_Click(object sender, RoutedEventArgs e)
         {
@@ -214,7 +217,18 @@ namespace Report_Mark1
             chartBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
             chartBorder.PreviewMouseMove += Element_MouseMove;
             chartBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
-            chartBorder.PreviewMouseLeftButtonDown += (s, args) => SelectElement(chartBorder);
+            //chartBorder.PreviewMouseLeftButtonDown += (s, args) => SelectElement(chartBorder);
+            chartBorder.PreviewMouseLeftButtonDown += (s, args) =>
+            {
+                if (!IsMouseOverResizeHandle(args, chartBorder))
+                {
+                    // Delay selection to prevent layout conflict
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        SelectElement(chartBorder);
+                    }), System.Windows.Threading.DispatcherPriority.Input);
+                }
+            };
 
             Canvas.SetLeft(chartBorder, 100);
             Canvas.SetTop(chartBorder, 100);
@@ -326,7 +340,7 @@ namespace Report_Mark1
                     {
                         if (IsMouseOverResizeHandle(args, imageBorder))
                         {
-                            imageBorder.Cursor =System.Windows.Input.Cursors.SizeNWSE;
+                            imageBorder.Cursor = System.Windows.Input.Cursors.SizeNWSE;
                         }
                         else
                         {
@@ -794,6 +808,132 @@ namespace Report_Mark1
                 DragDrop.DoDragDrop(border, toolType, System.Windows.DragDropEffects.Copy);
             }
         }
+       
+        /// /DRag
+        
+        private void DesignSurface_DragEnter(object sender, DragEventArgs e)
+        {
+            // Optional: Provide visual feedback or restrict drop
+            if (e.Data.GetDataPresent(DataFormats.StringFormat))
+            {
+                e.Effects = DragDropEffects.Copy; // Show copy cursor
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None; // Show no-drop cursor
+            }
+            e.Handled = true;
+        }
+
+        private void DesignSurface_DragOver(object sender, DragEventArgs e)
+        {
+            // Optional: Maintain visual feedback during drag
+            if (e.Data.GetDataPresent(DataFormats.StringFormat))
+            {
+                e.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+            e.Handled = true;
+        }
+
+        private void DesignSurface_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.StringFormat))
+            {
+                string toolType = e.Data.GetData(DataFormats.StringFormat) as string;
+                Point dropPosition = e.GetPosition(designSurface); // Get drop position relative to canvas
+
+                // Adjust for canvas zoom
+                double zoom = canvasScaleTransform.ScaleX; // Assuming uniform scaling
+                dropPosition.X /= zoom;
+                dropPosition.Y /= zoom;
+
+                // Create the appropriate UI element based on toolType
+                FrameworkElement element = null;
+                switch (toolType)
+                {
+                    case "Title":
+                        element = new TextBlock
+                        {
+                            Text = "New Title",
+                            FontSize = 24,
+                            FontWeight = FontWeights.Bold,
+                            Foreground = Brushes.Black,
+                            IsHitTestVisible = true
+                        };
+                        break;
+                    case "TextBlock":
+                        element = new TextBlock
+                        {
+                            Text = "New Text Block",
+                            FontSize = 12,
+                            Foreground = Brushes.Black,
+                            IsHitTestVisible = true,
+                            TextWrapping = TextWrapping.Wrap
+                        };
+                        break;
+                    case "Image":
+                        element = new Image
+                        {
+                            Width = 100,
+                            Height = 100,
+                            Source = new BitmapImage(new Uri("/Images/placeholder.png", UriKind.RelativeOrAbsolute)), // Replace with actual image path
+                            IsHitTestVisible = true
+                        };
+                        break;
+                    case "Table":
+                        // Simplified example: Create a basic grid as a table
+                        element = new Border
+                        {
+                            BorderBrush = Brushes.Black,
+                            BorderThickness = new Thickness(1),
+                            Background = Brushes.White,
+                            Child = new Grid
+                            {
+                                Width = 200,
+                                Height = 100,
+                                Background = Brushes.White
+                                // Add logic to define rows/columns if needed
+                            },
+                            IsHitTestVisible = true
+                        };
+                        break;
+                    case "Divider":
+                        element = new Rectangle
+                        {
+                            Width = 100,
+                            Height = 2,
+                            Fill = Brushes.Black,
+                            IsHitTestVisible = true
+                        };
+                        break;
+                    default:
+                        return; // Unknown tool type
+                }
+
+                // Position the element on the canvas
+                if (element != null)
+                {
+                    // Wrap element in a Border for resize/move functionality
+                    Border elementBorder = new Border
+                    {
+                        Child = element,
+                        BorderBrush = Brushes.Transparent,
+                        BorderThickness = new Thickness(1),
+                        Style = (Style)FindResource("SelectableBorderStyle") // Apply your focus style
+                    };
+
+                    Canvas.SetLeft(elementBorder, dropPosition.X);
+                    Canvas.SetTop(elementBorder, dropPosition.Y);
+                    designSurface.Children.Add(elementBorder);
+                }
+            }
+            e.Handled = true;
+        }
+
         #endregion
 
         #region Zoom Functionality
