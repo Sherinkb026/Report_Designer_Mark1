@@ -480,7 +480,7 @@ namespace Report_Mark1
         #endregion
 
         #region Deletion section
-        private void DeleteElement()
+        public void DeleteElement()
         {
             if (selectedElement == null)
             {
@@ -507,6 +507,8 @@ namespace Report_Mark1
             selectedElement = null;
 
         }
+
+
         #endregion
 
         #region Dataside

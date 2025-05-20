@@ -117,62 +117,7 @@ namespace Report_Mark1
 
 
 
-        //private void Element_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    DependencyObject clickedElement = e.OriginalSource as DependencyObject;
 
-        //    var textBlock = FindParent<TextBlock>(clickedElement);
-        //    var textBox = FindParent<TextBox>(clickedElement);
-        //    var richTextBox = FindParent<RichTextBox>(clickedElement);
-        //    var parentWindow = Window.GetWindow(this) as MainWindow;
-
-        //    bool selectionMade = false;
-
-        //    if (textBlock != null)
-        //    {
-        //        parentWindow?.SelectElement(textBlock);
-        //        SelectElement(textBlock);
-        //        selectionMade = true;
-        //    }
-        //    else if (textBox != null)
-        //    {
-        //        parentWindow?.SelectElement(textBox);
-        //        SelectElement(textBox);
-        //        selectionMade = true;
-        //    }
-        //    else if (richTextBox != null)
-        //    {
-        //        parentWindow?.SelectElement(richTextBox);
-        //        SelectElement(richTextBox);
-        //        selectionMade = true;
-        //    }
-        //    else if (sender is Border border)
-        //    {
-        //        parentWindow?.SelectElement(border);
-        //        SelectElement(border);
-        //        selectionMade = true;
-        //    }
-
-        //    e.Handled = selectionMade; // ✅ only stop bubbling if something was selected
-        //}
-
-
-        //private void MainGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    // Get the clicked element
-        //    var clickedElement = e.OriginalSource as DependencyObject;
-        //    var border = FindParent<Border>(clickedElement);
-        //    var textBlock = FindParent<TextBlock>(clickedElement);
-
-        //    // If the clicked element is not a Border or TextBlock, deselect the current element
-        //    if (border == null && textBlock == null)
-        //    {
-        //        var parentWindow = Window.GetWindow(this) as MainWindow;
-        //        parentWindow?.SelectElement(null); // Deselect in MainWindow
-        //        SelectElement(null); // Deselect in ReportTemplate
-        //        e.Handled = true; // Mark the event as handled
-        //    }
-        //}
 
 
 
@@ -206,7 +151,7 @@ namespace Report_Mark1
             }
             return null;
         }
-  
+
 
 
 
@@ -251,18 +196,23 @@ namespace Report_Mark1
             }
             return false;
         }
-      
+
+        private bool IsInsideDataGridResizer(DependencyObject source)
+        {
+            while (source != null)
+            {
+                if (source is System.Windows.Controls.Primitives.Thumb thumb)
+                {
+                    return true;
+                }
+                source = VisualTreeHelper.GetParent(source);
+            }
+            return false;
+        }
 
 
 
-        // ✅ Helper to filter only those borders you marked selectable (not layout/outer borders)
-        //private bool IsSelectableBorder(Border border)
-        //{
-        //    if (border == null) return false;
 
-        //    // Check by name or some other logic if it's a selectable border
-        //    return border.Name == "headerBorder" || border.Name == "tableBorder" || border.Name == "footerBorder";
-        //}
 
 
         public void SelectElement(UIElement element)
@@ -298,6 +248,13 @@ namespace Report_Mark1
                 selectedElementBorder = border;
             }
         }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var mainWindow = Application.Current.MainWindow as MainWindow;
+            mainWindow?.DeleteElement();
+        }
+
 
         // Utility method to walk up the visual tree
         private T FindParent<T>(DependencyObject child) where T : DependencyObject
