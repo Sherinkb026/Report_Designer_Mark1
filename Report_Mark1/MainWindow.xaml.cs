@@ -17,6 +17,14 @@ using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using System.IO;
 using System.Linq;
+using Forms = System.Windows.Forms;
+using Input = System.Windows.Input;
+using System.Windows.Shapes;
+using System.Drawing;
+
+
+using MessageBox = System.Windows.MessageBox;
+
 
 namespace Report_Mark1
 {
@@ -64,6 +72,19 @@ namespace Report_Mark1
 
             fontSizeComboBox.AddHandler(RibbonGalleryItem.PreviewMouseLeftButtonDownEvent,
     new MouseButtonEventHandler(FontSizeComboBox_ItemSelected), true);
+            // Set default Font
+            var defaultFontItem = fontGallery.Items.OfType<RibbonGalleryItem>().FirstOrDefault(i => i.Content.ToString() == "Calibri");
+            if (defaultFontItem != null)
+                fontGallery.SelectedItem = defaultFontItem;
+
+            // Set default Font Size
+            var defaultSizeItem = fontSizeGallery.Items.OfType<RibbonGalleryItem>().FirstOrDefault(i => i.Content.ToString() == "12");
+            if (defaultSizeItem != null)
+                fontSizeGallery.SelectedItem = defaultSizeItem;
+
+
+
+
 
         }
         #endregion
@@ -77,8 +98,8 @@ namespace Report_Mark1
                 Content = "New Label",
                 FontSize = 16,
                 Margin = new Thickness(10),
-                Background = Brushes.Transparent,
-                BorderBrush = Brushes.Transparent,
+                Background = System.Windows.Media.Brushes.Transparent,
+                BorderBrush = System.Windows.Media.Brushes.Transparent,
                 BorderThickness = new Thickness(1)
             };
 
@@ -95,7 +116,7 @@ namespace Report_Mark1
 
         private void AddTextbox_Click(object sender, RoutedEventArgs e)
         {
-            TextBox textbox = new TextBox
+            TextBox textbox = new System.Windows.Controls.TextBox
             {
                 Text = "Editable Textbox",
                 FontSize = 14,
@@ -103,8 +124,8 @@ namespace Report_Mark1
                 Height = 60,
                 AcceptsReturn = true,
                 TextWrapping = TextWrapping.Wrap,
-                Background = Brushes.White,
-                BorderBrush = Brushes.Gray,
+                Background = System.Windows.Media.Brushes.White,
+                BorderBrush = System.Windows.Media.Brushes.Gray,
                 BorderThickness = new Thickness(1)
             };
 
@@ -126,7 +147,7 @@ namespace Report_Mark1
             Grid tableGrid = new Grid
             {
                 ShowGridLines = true,
-                Background = Brushes.White,
+                Background = System.Windows.Media.Brushes.White,
                 Margin = new Thickness(5)
             };
 
@@ -137,11 +158,11 @@ namespace Report_Mark1
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    TextBox cell = new TextBox
+                    System.Windows.Controls.TextBox cell = new System.Windows.Controls.TextBox
                     {
                         Text = $"R{i}C{j}",
                         Padding = new Thickness(5),
-                        BorderBrush = Brushes.Black,
+                        BorderBrush = System.Windows.Media.Brushes.Black,
                         BorderThickness = new Thickness(0.5)
                     };
                     Grid.SetRow(cell, i);
@@ -152,7 +173,7 @@ namespace Report_Mark1
 
             Border wrapper = new Border
             {
-                BorderBrush = Brushes.Black,
+                BorderBrush = System.Windows.Media.Brushes.Black,
                 BorderThickness = new Thickness(1),
                 Child = tableGrid
             };
@@ -176,9 +197,9 @@ namespace Report_Mark1
             {
                 Width = 400,
                 Height = 300,
-                BorderBrush = Brushes.Black,
+                BorderBrush = System.Windows.Media.Brushes.Black,
                 BorderThickness = new Thickness(1),
-                Background = Brushes.LightYellow,
+                Background = System.Windows.Media.Brushes.LightYellow,
                 Child = new TextBlock
                 {
                     Text = "Chart Placeholder",
@@ -186,7 +207,7 @@ namespace Report_Mark1
                     VerticalAlignment = VerticalAlignment.Center,
                     FontSize = 18,
                     FontWeight = FontWeights.Bold,
-                    Foreground = Brushes.DarkSlateGray
+                    Foreground = System.Windows.Media.Brushes.DarkSlateGray
                 }
             };
 
@@ -226,9 +247,9 @@ namespace Report_Mark1
             {
                 Width = 200,
                 Height = 50,
-                BorderBrush = Brushes.Black,
+                BorderBrush = System.Windows.Media.Brushes.Black,
                 BorderThickness = new Thickness(1),
-                Background = Brushes.LightGray,
+                Background = System.Windows.Media.Brushes.LightGray,
                 Child = new TextBlock
                 {
                     Text = "Barcode: 123456789",
@@ -236,7 +257,7 @@ namespace Report_Mark1
                     VerticalAlignment = VerticalAlignment.Center,
                     FontSize = 14,
                     FontWeight = FontWeights.Bold,
-                    Foreground = Brushes.DarkBlue
+                    Foreground = System.Windows.Media.Brushes.DarkBlue
                 }
             };
 
@@ -285,7 +306,7 @@ namespace Report_Mark1
                 {
                     Width = 150,
                     Height = 150,
-                    BorderBrush = Brushes.Gray,
+                    BorderBrush = System.Windows.Media.Brushes.Gray,
                     BorderThickness = new Thickness(1),
                     Child = imageControl
                 };
@@ -305,18 +326,18 @@ namespace Report_Mark1
                     {
                         if (IsMouseOverResizeHandle(args, imageBorder))
                         {
-                            imageBorder.Cursor = Cursors.SizeNWSE;
+                            imageBorder.Cursor =System.Windows.Input.Cursors.SizeNWSE;
                         }
                         else
                         {
-                            imageBorder.Cursor = Cursors.Arrow;
+                            imageBorder.Cursor = System.Windows.Input.Cursors.Arrow;
                         }
                     }
                 };
 
                 imageBorder.MouseLeave += (s, args) =>
                 {
-                    imageBorder.Cursor = Cursors.Arrow;
+                    imageBorder.Cursor = System.Windows.Input.Cursors.Arrow;
                 };
 
                 imageBorder.MouseLeftButtonDown += (s, args) =>
@@ -353,7 +374,7 @@ namespace Report_Mark1
                     if (imageBorder.IsMouseCaptured)
                     {
                         imageBorder.ReleaseMouseCapture();
-                        imageBorder.Cursor = Cursors.Arrow;
+                        imageBorder.Cursor = System.Windows.Input.Cursors.Arrow;
                         isResizing = false;
                     }
                 };
@@ -409,7 +430,7 @@ namespace Report_Mark1
                                 PixelFormats.Pbgra32);
 
                             // Ensure the Canvas is measured and arranged
-                            designSurface.Measure(new Size(designSurface.Width, designSurface.Height));
+                            designSurface.Measure(new System.Windows.Size(designSurface.Width, designSurface.Height));
                             designSurface.Arrange(new Rect(0, 0, designSurface.Width, designSurface.Height));
                             renderBitmap.Render(designSurface);
 
@@ -612,15 +633,15 @@ namespace Report_Mark1
             {
                 if (!border.IsMouseCaptured && IsMouseOverResizeHandle(args, border))
                 {
-                    border.Cursor = Cursors.SizeNWSE;
+                    border.Cursor = System.Windows.Input.Cursors.SizeNWSE;
                 }
                 else if (!border.IsMouseCaptured)
                 {
-                    border.Cursor = Cursors.Arrow;
+                    border.Cursor = System.Windows.Input.Cursors.Arrow;
                 }
             };
 
-            border.MouseLeave += (s, args) => border.Cursor = Cursors.Arrow;
+            border.MouseLeave += (s, args) => border.Cursor = System.Windows.Input.Cursors.Arrow;
         }
 
 
@@ -631,7 +652,7 @@ namespace Report_Mark1
             {
                 DependencyObject child = VisualTreeHelper.GetChild(parent, i);
 
-                if (child is TextBlock || child is TextBox || child is Label || child is Border || child is Grid)
+                if (child is TextBlock || child is System.Windows.Controls.TextBox || child is System.Windows.Controls.Label || child is Border || child is Grid)
                 {
                     if (child is UIElement uiElement)
                     {
@@ -653,7 +674,7 @@ namespace Report_Mark1
             Border selected = sender as Border;
             if (selected != null)
             {
-                selected.BorderBrush = Brushes.Cyan;
+                selected.BorderBrush = System.Windows.Media.Brushes.Cyan;
             }
 
             e.Handled = true;
@@ -663,13 +684,13 @@ namespace Report_Mark1
         {
             foreach (UIElement child in designSurface.Children)
             {
-                if (child is Control ctrl)
+                if (child is System.Windows.Controls.Control ctrl)
                 {
-                    ctrl.BorderBrush = Brushes.Transparent;
+                    ctrl.BorderBrush = System.Windows.Media.Brushes.Transparent;
                 }
                 else if (child is Border border)
                 {
-                    border.BorderBrush = border.Tag != null ? (Brush)border.Tag : Brushes.Transparent;
+                    border.BorderBrush = border.Tag != null ? (System.Windows.Media.Brush)border.Tag : System.Windows.Media.Brushes.Transparent;
                     border.BorderThickness = new Thickness(1);
                 }
                 else if (child is ReportTemplate reportTemplate)
@@ -680,17 +701,17 @@ namespace Report_Mark1
 
                     if (headerBorder != null)
                     {
-                        headerBorder.BorderBrush = headerBorder.Tag != null ? (Brush)headerBorder.Tag : Brushes.Transparent;
+                        headerBorder.BorderBrush = headerBorder.Tag != null ? ((System.Windows.Media.Brush)headerBorder.Tag ):System.Windows.Media.Brushes.Transparent;
                         headerBorder.BorderThickness = new Thickness(1);
                     }
                     if (tableBorder != null)
                     {
-                        tableBorder.BorderBrush = tableBorder.Tag != null ? (Brush)tableBorder.Tag : Brushes.Transparent;
+                        tableBorder.BorderBrush = tableBorder.Tag != null ? ((System.Windows.Media.Brush)tableBorder.Tag ): System.Windows.Media.Brushes.Transparent;
                         tableBorder.BorderThickness = new Thickness(1);
                     }
                     if (footerBorder != null)
                     {
-                        footerBorder.BorderBrush = footerBorder.Tag != null ? (Brush)footerBorder.Tag : Brushes.Transparent;
+                        footerBorder.BorderBrush = footerBorder.Tag != null ? ((System.Windows.Media.Brush)footerBorder.Tag ): System.Windows.Media.Brushes.Transparent;
                         footerBorder.BorderThickness = new Thickness(1);
                     }
                 }
@@ -698,9 +719,9 @@ namespace Report_Mark1
 
             selectedElement = element;
 
-            if (selectedElement is Control selectedCtrl)
+            if (selectedElement is System.Windows.Controls.Control selectedCtrl)
             {
-                selectedCtrl.BorderBrush = Brushes.Cyan;
+                selectedCtrl.BorderBrush = System.Windows.Media.Brushes.Cyan;
             }
             else if (selectedElement is Border selectedBorder)
             {
@@ -708,7 +729,7 @@ namespace Report_Mark1
                 {
                     selectedBorder.Tag = selectedBorder.BorderBrush;
                 }
-                selectedBorder.BorderBrush = Brushes.Cyan;
+                selectedBorder.BorderBrush = System.Windows.Media.Brushes.Cyan;
                 selectedBorder.BorderThickness = new Thickness(1);
             }
         }
@@ -719,7 +740,7 @@ namespace Report_Mark1
             {
                 if (child is Border border)
                 {
-                    border.BorderBrush = Brushes.Transparent;
+                    border.BorderBrush = System.Windows.Media.Brushes.Transparent;
                 }
             }
         }
@@ -747,7 +768,7 @@ namespace Report_Mark1
         #region Left side
 
 
-        private bool IsMouseOverResizeHandle(MouseEventArgs args, Border border)
+        private bool IsMouseOverResizeHandle(System.Windows.Input.MouseEventArgs args, Border border)
         {
             System.Windows.Point position = args.GetPosition(border);
             double borderWidth = border.ActualWidth;
@@ -765,12 +786,12 @@ namespace Report_Mark1
 
 
 
-        private void Tool_MouseMove(object sender, MouseEventArgs e)
+        private void Tool_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed && sender is Border border)
             {
                 string toolType = border.Tag as string;
-                DragDrop.DoDragDrop(border, toolType, DragDropEffects.Copy);
+                DragDrop.DoDragDrop(border, toolType, System.Windows.DragDropEffects.Copy);
             }
         }
         #endregion
@@ -817,7 +838,7 @@ namespace Report_Mark1
                     DependencyObject parent = source;
                     while (parent != null)
                     {
-                        if (parent is DataGrid || parent is DataGridColumnHeader || parent is DataGridRow)
+                        if (parent is System.Windows.Controls.DataGrid || parent is DataGridColumnHeader || parent is DataGridRow)
                         {
                             e.Handled = false; // Let DataGrid handle resizing
                             return;
@@ -857,7 +878,7 @@ namespace Report_Mark1
             }
         }
 
-        private void Element_MouseMove(object sender, MouseEventArgs e)
+        private void Element_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             if (isDragging && draggedElement != null)
             {
@@ -878,7 +899,7 @@ namespace Report_Mark1
 
                 if (border.Name == "tableBorder")
                 {
-                    var dataGrid = FindVisualChild<DataGrid>(border);
+                    var dataGrid = FindVisualChild<System.Windows.Controls.DataGrid>(border);
                     if (dataGrid != null)
                     {
                         dataGrid.Width = newWidth - 20;
@@ -951,7 +972,7 @@ namespace Report_Mark1
 
             // If a specific TextBlock or TextBox is selected, only toggle that
             var selectedTextBlock = selectedElement as TextBlock;
-            var selectedTextBox = selectedElement as TextBox;
+            var selectedTextBox = selectedElement as System.Windows.Controls.TextBox;
             var selectedRichTextBox = selectedElement as RichTextBox;
 
             if (selectedTextBlock != null)
@@ -992,7 +1013,7 @@ namespace Report_Mark1
                     tb.FontWeight = tb.FontWeight == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold;
                 }
 
-                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                var textBoxes = FindChildrenOfType<System.Windows.Controls.TextBox>(selectedElement);
                 foreach (var tb in textBoxes)
                 {
                     tb.FontWeight = tb.FontWeight == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold;
@@ -1028,7 +1049,7 @@ namespace Report_Mark1
 
             // Try direct casting
             var selectedTextBlock = selectedElement as TextBlock;
-            var selectedTextBox = selectedElement as TextBox;
+            var selectedTextBox = selectedElement as System.Windows.Controls.TextBox;
             var selectedRichTextBox = selectedElement as RichTextBox;
 
             // If none found, try to find a single child of each type
@@ -1041,7 +1062,7 @@ namespace Report_Mark1
 
             if (selectedTextBox == null)
             {
-                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                var textBoxes = FindChildrenOfType<System.Windows.Controls.TextBox>(selectedElement);
                 if (textBoxes.Count() == 1)
                     selectedTextBox = textBoxes.First();
             }
@@ -1070,7 +1091,7 @@ namespace Report_Mark1
                     : new TextRange(selection.Start, selection.End);
 
                 var currentFontStyle = range.GetPropertyValue(TextElement.FontStyleProperty);
-                if (currentFontStyle != DependencyProperty.UnsetValue && currentFontStyle is FontStyle fs)
+                if (currentFontStyle != DependencyProperty.UnsetValue && currentFontStyle is System.Windows.FontStyle fs)
                 {
                     range.ApplyPropertyValue(TextElement.FontStyleProperty,
                         fs == FontStyles.Italic ? FontStyles.Normal : FontStyles.Italic);
@@ -1089,7 +1110,7 @@ namespace Report_Mark1
                     tb.FontStyle = tb.FontStyle == FontStyles.Italic ? FontStyles.Normal : FontStyles.Italic;
                 }
 
-                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                var textBoxes = FindChildrenOfType<System.Windows.Controls.TextBox>(selectedElement);
                 foreach (var tb in textBoxes)
                 {
                     tb.FontStyle = tb.FontStyle == FontStyles.Italic ? FontStyles.Normal : FontStyles.Italic;
@@ -1100,7 +1121,7 @@ namespace Report_Mark1
                 {
                     var range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
                     var currentFontStyle = range.GetPropertyValue(TextElement.FontStyleProperty);
-                    if (currentFontStyle != DependencyProperty.UnsetValue && currentFontStyle is FontStyle fs)
+                    if (currentFontStyle != DependencyProperty.UnsetValue && currentFontStyle is System.Windows.FontStyle fs)
                     {
                         range.ApplyPropertyValue(TextElement.FontStyleProperty,
                             fs == FontStyles.Italic ? FontStyles.Normal : FontStyles.Italic);
@@ -1124,7 +1145,7 @@ namespace Report_Mark1
             }
 
             var selectedTextBlock = selectedElement as TextBlock;
-            var selectedTextBox = selectedElement as TextBox;
+            var selectedTextBox = selectedElement as System.Windows.Controls.TextBox;
             var selectedRichTextBox = selectedElement as RichTextBox;
 
             // Try to find single children if needed
@@ -1137,7 +1158,7 @@ namespace Report_Mark1
 
             if (selectedTextBox == null)
             {
-                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                var textBoxes = FindChildrenOfType<System.Windows.Controls.TextBox>(selectedElement);
                 if (textBoxes.Count() == 1)
                     selectedTextBox = textBoxes.First();
             }
@@ -1186,7 +1207,7 @@ namespace Report_Mark1
                     tb.TextDecorations = tb.TextDecorations == TextDecorations.Underline ? null : TextDecorations.Underline;
                 }
 
-                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                var textBoxes = FindChildrenOfType<System.Windows.Controls.TextBox>(selectedElement);
                 foreach (var tb in textBoxes)
                 {
                     tb.TextDecorations = tb.TextDecorations == TextDecorations.Underline ? null : TextDecorations.Underline;
@@ -1214,27 +1235,33 @@ namespace Report_Mark1
 
 
 
-        //FONT FAMILY
+        // FONT FAMILY
         private void FontGalleryItem_Selected(object sender, RoutedEventArgs e)
         {
-            if (selectedElement == null)
+            var item = sender as RibbonGalleryItem;
+            if (item == null)
                 return;
 
-            if (sender is RibbonGalleryItem item && item.Content is string fontName)
-            {
-                var fontFamily = new FontFamily(fontName);
-                ApplyFontFamilyToSelectedElement(fontFamily);
-            }
+
+            string fontName = item.Content.ToString();
+            ApplyFontFamilyToSelectedElement(new System.Windows.Media.FontFamily(fontName));
+
+            // Update selected item manually
+            fontGallery.SelectedItem = item;
         }
 
+
+
         //FONT FAMILY
-        private void ApplyFontFamilyToSelectedElement(FontFamily fontFamily)
+        private void ApplyFontFamilyToSelectedElement(System.Windows.Media.FontFamily fontFamily)
         {
+
+            
             if (selectedElement is TextBlock textBlock)
             {
                 textBlock.FontFamily = fontFamily;
             }
-            else if (selectedElement is TextBox textBox)
+            else if (selectedElement is System.Windows.Controls.TextBox textBox)
             {
                 textBox.FontFamily = fontFamily;
             }
@@ -1245,7 +1272,14 @@ namespace Report_Mark1
                     ? new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd)
                     : new TextRange(selection.Start, selection.End);
 
-                range.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
+                try
+                {
+                    range.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to apply font: " + ex.Message);
+                }
             }
             else
             {
@@ -1254,7 +1288,7 @@ namespace Report_Mark1
                 {
                     tb.FontFamily = fontFamily;
                 }
-                foreach (var tb in FindChildrenOfType<TextBox>(selectedElement))
+                foreach (var tb in FindChildrenOfType<System.Windows.Controls.TextBox>(selectedElement))
                 {
                     tb.FontFamily = fontFamily;
                 }
@@ -1272,17 +1306,25 @@ namespace Report_Mark1
 
 
         //FONT SIZE
-        private void FontSizeComboBox_ItemSelected(object sender, MouseButtonEventArgs e)
+        private void FontSizeComboBox_ItemSelected(object sender, RoutedEventArgs e)
         {
-            var item = FindAncestor<RibbonGalleryItem>(e.OriginalSource as DependencyObject);
-            if (item == null || selectedElement == null)
+            var item = sender as RibbonGalleryItem;
+            if (item == null)
                 return;
+
 
             if (double.TryParse(item.Content.ToString(), out double fontSize))
             {
                 ApplyFontSizeToSelectedElement(fontSize);
+
+                // Update selected item manually
+                fontSizeGallery.SelectedItem = item;
             }
         }
+
+
+
+
 
         //FONT SIZE
         private T FindAncestor<T>(DependencyObject current) where T : DependencyObject
@@ -1301,7 +1343,7 @@ namespace Report_Mark1
             {
                 textBlock.FontSize = fontSize;
             }
-            else if (selectedElement is TextBox textBox)
+            else if (selectedElement is System.Windows.Controls.TextBox textBox)
             {
                 textBox.FontSize = fontSize;
             }
@@ -1321,7 +1363,7 @@ namespace Report_Mark1
                 foreach (var tb in textBlocks)
                     tb.FontSize = fontSize;
 
-                var textBoxes = FindChildrenOfType<TextBox>(selectedElement);
+                var textBoxes = FindChildrenOfType<System.Windows.Controls.TextBox>(selectedElement);
                 foreach (var tb in textBoxes)
                     tb.FontSize = fontSize;
 
@@ -1360,7 +1402,7 @@ namespace Report_Mark1
             if (parent is TextBlock tb)
                 tb.TextAlignment = TextAlignment.Left;
 
-            else if (parent is TextBox tx)
+            else if (parent is System.Windows.Controls.TextBox tx)
                 tx.TextAlignment = TextAlignment.Left;
 
             else if (parent is RichTextBox rtb)
@@ -1396,7 +1438,7 @@ namespace Report_Mark1
             if (parent is TextBlock tb)
                 tb.TextAlignment = TextAlignment.Center;
 
-            else if (parent is TextBox tx)
+            else if (parent is System.Windows.Controls.TextBox tx)
                 tx.TextAlignment = TextAlignment.Center;
 
             else if (parent is RichTextBox rtb)
@@ -1438,7 +1480,7 @@ namespace Report_Mark1
             if (parent is TextBlock tb)
                 tb.TextAlignment = TextAlignment.Right;
 
-            else if (parent is TextBox tx)
+            else if (parent is System.Windows.Controls.TextBox tx)
                 tx.TextAlignment = TextAlignment.Right;
 
             else if (parent is RichTextBox rtb)
@@ -1479,21 +1521,21 @@ namespace Report_Mark1
         {
             var focusedElement = Keyboard.FocusedElement;
 
-            if (focusedElement is TextBox textBox)
+            if (focusedElement is System.Windows.Controls.TextBox textBox)
             {
                 if (!string.IsNullOrEmpty(textBox.SelectedText))
                 {
-                    Clipboard.SetText(textBox.SelectedText);
+                    System.Windows.Clipboard.SetText(textBox.SelectedText);
                     textBox.SelectedText = string.Empty;
-                    
                 }
+
             }
             else if (focusedElement is RichTextBox richTextBox)
             {
                 var selection = richTextBox.Selection;
                 if (!selection.IsEmpty)
                 {
-                    Clipboard.SetText(selection.Text);
+                    System.Windows.Clipboard.SetText(selection.Text);
                     selection.Text = string.Empty;
                     
                 }
@@ -1520,11 +1562,11 @@ namespace Report_Mark1
         {
             var focusedElement = Keyboard.FocusedElement;
 
-            if (focusedElement is TextBox textBox)
+            if (focusedElement is System.Windows.Controls.TextBox textBox)
             {
                 if (!string.IsNullOrEmpty(textBox.SelectedText))
                 {
-                    Clipboard.SetText(textBox.SelectedText);
+                    System.Windows.Clipboard.SetText(textBox.SelectedText);
                     return true;
                 }
             }
@@ -1533,7 +1575,7 @@ namespace Report_Mark1
                 var selection = richTextBox.Selection;
                 if (!selection.IsEmpty)
                 {
-                    Clipboard.SetText(selection.Text);
+                    System.Windows.Clipboard.SetText(selection.Text);
                     return true;
                 }
             }
@@ -1560,12 +1602,12 @@ namespace Report_Mark1
         {
             var focusedElement = Keyboard.FocusedElement;
 
-            if (!Clipboard.ContainsText())
+            if (!System.Windows.Clipboard.ContainsText())
                 return false;
 
-            string clipboardText = Clipboard.GetText();
+            string clipboardText = System.Windows.Clipboard.GetText();
 
-            if (focusedElement is TextBox textBox && !textBox.IsReadOnly)
+            if (focusedElement is System.Windows.Controls.TextBox textBox && !textBox.IsReadOnly)
             {
                 if (textBox.SelectionLength > 0)
                     textBox.SelectedText = clipboardText; // Replace selected text
@@ -1584,6 +1626,47 @@ namespace Report_Mark1
         }
 
 
+
+        private void Color_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is System.Windows.Shapes.Rectangle rect && rect.Fill is SolidColorBrush brush)
+            {
+                var color = brush.Color;
+                ApplyTextColorToSelectedElement(color);
+            }
+        }
+
+        private void ApplyTextColorToSelectedElement(System.Windows.Media.Color color)
+        {
+            if (selectedElement is TextBlock textBlock)
+            {
+                textBlock.Foreground = new SolidColorBrush(color);
+            }
+            else if (selectedElement is System.Windows.Controls.TextBox textBox)
+            {
+                textBox.Foreground = new SolidColorBrush(color);
+            }
+            else if (selectedElement is RichTextBox richTextBox)
+            {
+                var range = new TextRange(richTextBox.Selection.Start, richTextBox.Selection.End);
+                range.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(color));
+            }
+        }
+
+
+        private void MoreColors_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.ColorDialog();
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var selectedColor = dialog.Color;
+                var mediaColor = System.Windows.Media.Color.FromArgb(
+                    selectedColor.A, selectedColor.R, selectedColor.G, selectedColor.B);
+
+                ApplyTextColorToSelectedElement(mediaColor);
+            }
+        }
 
 
 

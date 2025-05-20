@@ -36,42 +36,91 @@
                     <ribbon:RibbonButton Label="Bold" SmallImageSource="/Images/bold.png" Name="btnBold" Click="btnBold_Click"/>
                     <ribbon:RibbonButton Label="Italic" SmallImageSource="/Images/italic.png" Click="btnItalic_Click"/>
                     <ribbon:RibbonButton Label="Underline" SmallImageSource="/Images/underline.png" Click="btnUnderline_Click"/>
-                    <ribbon:RibbonComboBox Label="Font" x:Name="fontComboBox">
-                        <ribbon:RibbonGallery x:Name="fontGallery">
-                            <ribbon:RibbonGalleryCategory>
-                                <ribbon:RibbonGalleryItem Content="Arial" Selected="FontGalleryItem_Selected"/>
-                                <ribbon:RibbonGalleryItem Content="Calibri" Selected="FontGalleryItem_Selected"/>
-                                <ribbon:RibbonGalleryItem Content="Segoe UI" Selected="FontGalleryItem_Selected"/>
-                                <ribbon:RibbonGalleryItem Content="Verdana" Selected="FontGalleryItem_Selected"/>
-                                <ribbon:RibbonGalleryItem Content="Tahoma" Selected="FontGalleryItem_Selected"/>
-                                <ribbon:RibbonGalleryItem Content="Georgia" Selected="FontGalleryItem_Selected"/>
-                                <ribbon:RibbonGalleryItem Content="Courier New" Selected="FontGalleryItem_Selected"/>
-                                <ribbon:RibbonGalleryItem Content="Lucida Console" Selected="FontGalleryItem_Selected"/>
-                                <ribbon:RibbonGalleryItem Content="Impact" Selected="FontGalleryItem_Selected"/>
-
-                            </ribbon:RibbonGalleryCategory>
-                        </ribbon:RibbonGallery>
-                    </ribbon:RibbonComboBox>
-                    <ribbon:RibbonComboBox Label="Font Size" Name="fontSizeComboBox" SelectionBoxWidth="60">
-                        <ribbon:RibbonGallery>
-                            <ribbon:RibbonGalleryCategory>
-                                <ribbon:RibbonGalleryItem Content="8"/>
-                                <ribbon:RibbonGalleryItem Content="10"/>
-                                <ribbon:RibbonGalleryItem Content="12"/>
-                                <ribbon:RibbonGalleryItem Content="14"/>
-                                <ribbon:RibbonGalleryItem Content="16"/>
-                                <ribbon:RibbonGalleryItem Content="18"/>
-                                <ribbon:RibbonGalleryItem Content="20"/>
-                                <ribbon:RibbonGalleryItem Content="24"/>
-                                <ribbon:RibbonGalleryItem Content="28"/>
-                                <ribbon:RibbonGalleryItem Content="36"/>
-                                <ribbon:RibbonGalleryItem Content="48"/>
-                                <ribbon:RibbonGalleryItem Content="72"/>
-                            </ribbon:RibbonGalleryCategory>
-                        </ribbon:RibbonGallery>
-                    </ribbon:RibbonComboBox>
+                    <ribbon:RibbonGroup Header="Font Formatting">
+                        <StackPanel Orientation="Horizontal">
+                            <!-- Font Family ComboBox -->
+                            <ribbon:RibbonComboBox x:Name="fontComboBox" Label="" Width="140">
+                                <ribbon:RibbonGallery x:Name="fontGallery" >
+                                    <ribbon:RibbonGalleryCategory MaxColumnCount="1">
+                                        <ribbon:RibbonGalleryItem Content="Arial" Selected="FontGalleryItem_Selected" />
+                                        <ribbon:RibbonGalleryItem Content="Calibri" IsSelected="True" Selected="FontGalleryItem_Selected"/>
+                                        <ribbon:RibbonGalleryItem Content="Segoe UI" Selected="FontGalleryItem_Selected" />
+                                        <ribbon:RibbonGalleryItem Content="Verdana" Selected="FontGalleryItem_Selected" />
+                                        <ribbon:RibbonGalleryItem Content="Tahoma" Selected="FontGalleryItem_Selected"/>
+                                        <ribbon:RibbonGalleryItem Content="Georgia" Selected="FontGalleryItem_Selected" />
+                                        <ribbon:RibbonGalleryItem Content="Courier New" Selected="FontGalleryItem_Selected"/>
+                                        <ribbon:RibbonGalleryItem Content="Lucida Console" Selected="FontGalleryItem_Selected"/>
+                                        <ribbon:RibbonGalleryItem Content="Impact" Selected="FontGalleryItem_Selected"/>
+                                    </ribbon:RibbonGalleryCategory>
+                                </ribbon:RibbonGallery>
+                            </ribbon:RibbonComboBox>
 
 
+                            <!-- Font Size ComboBox -->
+                            <ribbon:RibbonComboBox x:Name="fontSizeComboBox" Width="60" Label="" Margin="-45,0,10,0" >
+                                <ribbon:RibbonGallery x:Name="fontSizeGallery" >
+                                    <ribbon:RibbonGalleryCategory MaxColumnCount="1">
+                                        <ribbon:RibbonGalleryItem Content="8"  Selected="FontSizeComboBox_ItemSelected"/>
+                                        <ribbon:RibbonGalleryItem Content="10"  Selected="FontSizeComboBox_ItemSelected"/>
+                                        <ribbon:RibbonGalleryItem Content="12" IsSelected="True"  Selected="FontSizeComboBox_ItemSelected"/>
+                                        <ribbon:RibbonGalleryItem Content="14"  Selected="FontSizeComboBox_ItemSelected" />
+                                        <ribbon:RibbonGalleryItem Content="16"  Selected="FontSizeComboBox_ItemSelected"/>
+                                        <ribbon:RibbonGalleryItem Content="18"  Selected="FontSizeComboBox_ItemSelected"/>
+                                        <ribbon:RibbonGalleryItem Content="20"  Selected="FontSizeComboBox_ItemSelected"/>
+                                        <ribbon:RibbonGalleryItem Content="24"  Selected="FontSizeComboBox_ItemSelected"/>
+                                        <ribbon:RibbonGalleryItem Content="28"  Selected="FontSizeComboBox_ItemSelected"/>
+                                        <ribbon:RibbonGalleryItem Content="36"  Selected="FontSizeComboBox_ItemSelected"/>
+                                        <ribbon:RibbonGalleryItem Content="48"  Selected="FontSizeComboBox_ItemSelected"/>
+                                        <ribbon:RibbonGalleryItem Content="72"  Selected="FontSizeComboBox_ItemSelected"/>
+                                    </ribbon:RibbonGalleryCategory>
+                                </ribbon:RibbonGallery>                                                                                                         
+                            </ribbon:RibbonComboBox>
+
+                        </StackPanel>
+                    </ribbon:RibbonGroup>
+                    <ribbon:RibbonSplitButton Label="Font Color" SmallImageSource="Images/paint.png">
+               
+                        <ribbon:RibbonSplitButton.Items>
+                            <ribbon:RibbonMenuItem Header="Theme Colors" IsEnabled="False"/>
+                            <ribbon:RibbonMenuItem>
+                                <StackPanel Orientation="Vertical">
+                                    <UniformGrid Rows="2" Columns="10" Margin="5">
+                                        <!-- Theme colors -->
+                                        <Rectangle Fill="Black" Width="16" Height="16" Margin="2"
+                               MouseLeftButtonDown="Color_Click"/>
+                                        <Rectangle Fill="Gray" Width="16" Height="16" Margin="2"
+                               MouseLeftButtonDown="Color_Click"/>
+                                        <Rectangle Fill="DarkRed" Width="16" Height="16" Margin="2"
+                               MouseLeftButtonDown="Color_Click"/>
+                                        <!-- Add more colors as needed -->
+                                    </UniformGrid>
+                                </StackPanel>
+                            </ribbon:RibbonMenuItem>
+
+                            <ribbon:RibbonMenuItem Header="Standard Colors" IsEnabled="False"/>
+                            <ribbon:RibbonMenuItem>
+                                <StackPanel Orientation="Vertical">
+                                    <UniformGrid Rows="2" Columns="10" Margin="5">
+                                        <!-- Standard colors -->
+                                        <Rectangle Fill="Red" Width="16" Height="16" Margin="2"
+                               MouseLeftButtonDown="Color_Click"/>
+                                        <Rectangle Fill="Orange" Width="16" Height="16" Margin="2"
+                               MouseLeftButtonDown="Color_Click"/>
+                                        <Rectangle Fill="Yellow" Width="16" Height="16" Margin="2"
+                               MouseLeftButtonDown="Color_Click"/>
+                                        <Rectangle Fill="Green" Width="16" Height="16" Margin="2"
+                               MouseLeftButtonDown="Color_Click"/>
+                                        <!-- Add more as needed -->
+                                    </UniformGrid>
+                                </StackPanel>
+                            </ribbon:RibbonMenuItem>
+
+                            <ribbon:RibbonMenuItem Header="More Colors..." Click="MoreColors_Click"/>
+                        </ribbon:RibbonSplitButton.Items>
+                    </ribbon:RibbonSplitButton>
+
+            
+                    
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup Header="Paragraph">
                     <ribbon:RibbonButton Label="Align Left" SmallImageSource="/Images/align-left.png" Click="BtnAlignLeft_Click"/>
