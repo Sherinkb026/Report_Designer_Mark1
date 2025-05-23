@@ -73,22 +73,26 @@ namespace Report_Mark1
             reportData.Columns.Add("Price", typeof(string));
             reportData.Columns.Add("Total", typeof(string));
 
-            int index = 0;
+            decimal grandTotal = 0;
+
             foreach (var row in dataRows)
             {
-                if (index >= 5) break;
-                string description = $"Description of item or service goes here.";
-                string quantity = (index % 2 == 0) ? "5" : "1";
-                string price = (index % 2 == 0) ? "$100" : "$150";
-                string total = (index % 2 == 0) ? "$500" : "$150";
-                reportData.Rows.Add(description, quantity, price, total);
-                index++;
+                string productName = row["Name"].ToString();
+                string priceStr = row["Price"].ToString();
+
+                int quantity = 1; // or whatever logic you want
+                decimal price = decimal.TryParse(priceStr, out var p) ? p : 0;
+                decimal total = price * quantity;
+
+                reportData.Rows.Add(productName, quantity.ToString(), $"${price}", $"${total}");
+                grandTotal += total;
             }
 
-            reportData.Rows.Add("TOTAL", "", "", "$5000");
+            reportData.Rows.Add("TOTAL", "", "", $"${grandTotal}");
             reportDataGrid.ItemsSource = reportData.DefaultView;
             SourceDataTable = reportData;
         }
+
 
         public string CurrentDate => DateTime.Now.ToString("yyyy-MM-dd");
 
