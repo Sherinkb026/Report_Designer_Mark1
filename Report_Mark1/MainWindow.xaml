@@ -39,7 +39,7 @@
                     <ribbon:RibbonGroup Header="Font Formatting">
                         <StackPanel Orientation="Horizontal">
                             <!-- Font Family ComboBox -->
-                            <ribbon:RibbonComboBox x:Name="fontComboBox" Label="" Width="140">
+                            <ribbon:RibbonComboBox x:Name="fontComboBox"  Width="130">
                                 <ribbon:RibbonGallery x:Name="fontGallery" >
                                     <ribbon:RibbonGalleryCategory MaxColumnCount="1">
                                         <ribbon:RibbonGalleryItem Content="Arial" Selected="FontGalleryItem_Selected" />
@@ -57,7 +57,7 @@
 
 
                             <!-- Font Size ComboBox -->
-                            <ribbon:RibbonComboBox x:Name="fontSizeComboBox" Width="60" Label="" Margin="-45,0,10,0" >
+                            <ribbon:RibbonComboBox x:Name="fontSizeComboBox" Width="50"  Margin="-45,0,10,0" >
                                 <ribbon:RibbonGallery x:Name="fontSizeGallery" >
                                     <ribbon:RibbonGalleryCategory MaxColumnCount="1">
                                         <ribbon:RibbonGalleryItem Content="8"  Selected="FontSizeComboBox_ItemSelected"/>

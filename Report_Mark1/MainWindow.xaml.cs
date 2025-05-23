@@ -27,6 +27,7 @@ using MessageBox = System.Windows.MessageBox;
 //using DevExpress.XtraPrinting.Export.Pdf;
 using PdfDocument = PdfSharpCore.Pdf.PdfDocument;
 using PdfPage = PdfSharpCore.Pdf.PdfPage;
+using System.Windows.Threading;
 
 
 namespace Report_Mark1
@@ -848,14 +849,12 @@ namespace Report_Mark1
             if (e.Data.GetDataPresent(DataFormats.StringFormat))
             {
                 string toolType = e.Data.GetData(DataFormats.StringFormat) as string;
-                Point dropPosition = e.GetPosition(designSurface); // Get drop position relative to canvas
+                Point dropPosition = e.GetPosition(designSurface);
 
-                // Adjust for canvas zoom
-                double zoom = canvasScaleTransform.ScaleX; // Assuming uniform scaling
+                double zoom = canvasScaleTransform.ScaleX;
                 dropPosition.X /= zoom;
                 dropPosition.Y /= zoom;
 
-                // Create the appropriate UI element based on toolType
                 FrameworkElement element = null;
                 switch (toolType)
                 {
@@ -884,12 +883,11 @@ namespace Report_Mark1
                         {
                             Width = 100,
                             Height = 100,
-                            Source = new BitmapImage(new Uri("/Images/placeholder.png", UriKind.RelativeOrAbsolute)), // Replace with actual image path
+                            Source = new BitmapImage(new Uri("/Images/placeholder.png", UriKind.RelativeOrAbsolute)),
                             IsHitTestVisible = true
                         };
                         break;
                     case "Table":
-                        // Simplified example: Create a basic grid as a table
                         element = new Border
                         {
                             BorderBrush = Brushes.Black,
@@ -900,7 +898,6 @@ namespace Report_Mark1
                                 Width = 200,
                                 Height = 100,
                                 Background = Brushes.White
-                                // Add logic to define rows/columns if needed
                             },
                             IsHitTestVisible = true
                         };
@@ -915,28 +912,47 @@ namespace Report_Mark1
                         };
                         break;
                     default:
-                        return; // Unknown tool type
+                        return;
                 }
 
-                // Position the element on the canvas
                 if (element != null)
                 {
-                    // Wrap element in a Border for resize/move functionality
                     Border elementBorder = new Border
                     {
                         Child = element,
                         BorderBrush = Brushes.Transparent,
                         BorderThickness = new Thickness(1),
-                        Style = (Style)FindResource("SelectableBorderStyle") // Apply your focus style
+                        Style = (Style)FindResource("SelectableBorderStyle")
+                    };
+
+                    // Attach selection and drag logic
+                    elementBorder.PreviewMouseLeftButtonDown += Element_MouseLeftButtonDown;
+                    elementBorder.PreviewMouseMove += Element_MouseMove;
+                    elementBorder.PreviewMouseLeftButtonUp += Element_MouseLeftButtonUp;
+
+                    // Also hook selection visual behavior
+                    elementBorder.PreviewMouseLeftButtonDown += (s, args) =>
+                    {
+                        if (!IsMouseOverResizeHandle(args, elementBorder))
+                        {
+                            Dispatcher.BeginInvoke(new Action(() =>
+                            {
+                                SelectElement(elementBorder);
+                            }), DispatcherPriority.Input);
+                        }
                     };
 
                     Canvas.SetLeft(elementBorder, dropPosition.X);
                     Canvas.SetTop(elementBorder, dropPosition.Y);
                     designSurface.Children.Add(elementBorder);
+
+                    // Optional: auto-select dropped element
+                    SelectElement(elementBorder);
                 }
             }
             e.Handled = true;
         }
+
 
         #endregion
 
