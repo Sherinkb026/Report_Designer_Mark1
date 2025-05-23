@@ -1011,12 +1011,13 @@ namespace Report_Mark1
 
                 draggedElement = clickedElement;
 
+
+
                 if (clickedElement is Border border)
                 {
                     if (IsMouseOverResizeHandle(e, border))
                     {
                         border.CaptureMouse();
-                        mouseOffset = e.GetPosition(designSurface);
                         originalWidth = border.ActualWidth;
                         originalHeight = border.ActualHeight;
                         isResizing = true;
@@ -1024,15 +1025,16 @@ namespace Report_Mark1
                     }
 
                     isDragging = true;
-                    mouseOffset = e.GetPosition(designSurface);
+                    mouseOffset = GetMouseOffset(border, e.GetPosition(designSurface));
                     border.CaptureMouse();
                 }
                 else
                 {
                     isDragging = true;
-                    mouseOffset = e.GetPosition(designSurface);
+                    mouseOffset = GetMouseOffset(clickedElement, e.GetPosition(designSurface));
                     clickedElement.CaptureMouse();
                 }
+
 
                 e.Handled = true;
             }
@@ -1099,6 +1101,16 @@ namespace Report_Mark1
             }
             return null;
         }
+        #endregion
+
+        #region Helper method
+        private Point GetMouseOffset(UIElement element, Point mousePosition)
+        {
+            double left = Canvas.GetLeft(element);
+            double top = Canvas.GetTop(element);
+            return new Point(mousePosition.X - left, mousePosition.Y - top);
+        }
+
         #endregion
 
         #region Ribbon
