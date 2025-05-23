@@ -68,6 +68,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\DevExpress.Xpf.Ribbon.v20.1.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraCharts.v20.1, Version=20.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\AppData\Local\Microsoft\VisualStudio\17.0_544b6eed\Designer\Cache\22147062493x86DD\DevExpress.XtraCharts.v20.1.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.XtraPrinting.v20.1, Version=20.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\DevExpress.XtraPrinting.v20.1.dll</HintPath>

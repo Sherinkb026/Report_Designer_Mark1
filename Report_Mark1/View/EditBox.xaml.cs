@@ -3,6 +3,7 @@ using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 using DevExpress.XtraReports.UI;
+using DevExpress.XtraCharts;
 
 namespace Report_Mark1
 {
@@ -36,6 +37,11 @@ namespace Report_Mark1
             Tag = chart; // Store XRChart reference
         }
 
+        public void SetChartBorder(Border border)
+        {
+            chartBorderTag = border;
+        }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             CloseRequested?.Invoke(this, EventArgs.Empty);
@@ -43,17 +49,63 @@ namespace Report_Mark1
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Tag is XRChart chart && chartBorderTag is Border chartBorder)
+            XRChart chart = Tag as XRChart;
+            Border chartBorder = chartBorderTag as Border;
+
+            if (chart != null && chartBorder != null)
             {
-                // Example: Update chart placeholder (extend for actual chart config)
-                var textBlock = chartBorder.Child as TextBlock;
-                if (textBlock != null)
+                if (XAxisComboBox.SelectedItem == null || YAxisComboBox.SelectedItem == null)
+                    return;
+
+                string xField = XAxisComboBox.SelectedItem.ToString();
+                string yField = YAxisComboBox.SelectedItem.ToString();
+                string chartTitle = ChartTitleTextBox.Text;
+                string chartType = ChartTypeComboBox.SelectedItem != null ? ChartTypeComboBox.SelectedItem.ToString() : "";
+
+                // Set chart view type
+                ViewType viewType;
+                switch (chartType)
                 {
-                    textBlock.Text = $"Chart: {ChartTypeComboBox.SelectedItem?.ToString()} - {ChartTitleTextBox.Text}";
+                    case "Bar":
+                        viewType = ViewType.Bar;
+                        break;
+                    case "Line":
+                        viewType = ViewType.Line;
+                        break;
+                    case "Pie":
+                        viewType = ViewType.Pie;
+                        break;
+                    default:
+                        viewType = ViewType.Bar;
+                        break;
                 }
-                // TODO: Configure XRChart properties (e.g., series, data source)
+
+                // Configure the chart
+                chart.Series.Clear();
+
+                Series series = new Series(chartTitle, viewType);
+                series.ArgumentDataMember = xField;
+                series.ValueDataMembers.AddRange(yField);
+                chart.Series.Add(series);
+
+                // Set data source
+                if (!(chart.DataSource is DataTable))
+                {
+                    chart.DataSource = (chartBorder.Tag as DataTable) ?? new DataTable();
+                }
+
+                chart.Titles.Clear();
+                chart.Titles.Add(new ChartTitle() { Text = chartTitle });
+
+                // Update placeholder
+                if (chartBorder.Child is TextBlock textBlock)
+                {
+                    textBlock.Text = $"Chart: {chartType} - {chartTitle}";
+                }
             }
+
             CloseRequested?.Invoke(this, EventArgs.Empty);
         }
+
     }
 }
