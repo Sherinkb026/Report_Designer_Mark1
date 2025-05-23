@@ -506,7 +506,11 @@ namespace Report_Mark1
                 }
                 elementMapping.Remove(selectedElement);
             }
-
+            // ✅ Close edit box if it is editing the deleted chart
+            if (editBox.Visibility == Visibility.Visible && editBox.Tag == selectedElement)
+            {
+                editBox.ForceClose();
+            }
             selectedElement = null;
 
         }
@@ -1499,14 +1503,14 @@ namespace Report_Mark1
 
 
         //FONT SIZE
-        private T FindAncestor<T>(DependencyObject current) where T : DependencyObject
-        {
-            while (current != null && !(current is T))
-            {
-                current = VisualTreeHelper.GetParent(current);
-            }
-            return current as T;
-        }
+        //private T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        //{
+        //    while (current != null && !(current is T))
+        //    {
+        //        current = VisualTreeHelper.GetParent(current);
+        //    }
+        //    return current as T;
+        //}
 
         //FONT SIZE
         private void ApplyFontSizeToSelectedElement(double fontSize)
@@ -1798,7 +1802,7 @@ namespace Report_Mark1
         }
 
 
-
+        // color
         private void Color_Click(object sender, MouseButtonEventArgs e)
         {
             if (sender is System.Windows.Shapes.Rectangle rect && rect.Fill is SolidColorBrush brush)

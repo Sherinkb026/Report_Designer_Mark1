@@ -107,5 +107,13 @@ namespace Report_Mark1
             CloseRequested?.Invoke(this, EventArgs.Empty);
         }
 
+        public void ForceClose()
+        {
+            CloseRequested?.Invoke(this, EventArgs.Empty);
+            this.Visibility = Visibility.Collapsed;
+            this.Tag = null;
+            this.chartBorderTag = null;
+        }
+
     }
 }
