@@ -85,6 +85,8 @@ namespace Report_Mark1
             if (defaultSizeItem != null)
                 fontSizeGallery.SelectedItem = defaultSizeItem;
 
+          
+
 
 
 
@@ -1810,7 +1812,11 @@ namespace Report_Mark1
             }
         }
 
+   
 
+
+
+      
 
 
 

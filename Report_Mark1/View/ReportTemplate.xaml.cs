@@ -268,5 +268,14 @@ namespace Report_Mark1
             return null;
         }
 
+
+
+        private CommandManager _commandManager;
+
+        public void SetCommandManager(CommandManager manager)
+        {
+            _commandManager = manager;
+        }
+
     }
 }
