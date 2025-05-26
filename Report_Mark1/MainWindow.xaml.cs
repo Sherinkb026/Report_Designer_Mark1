@@ -496,6 +496,26 @@ namespace Report_Mark1
             {
                 designSurface.Children.Remove(selectedElement);
             }
+            else if (selectedElement is FrameworkElement fe)
+            {
+                // Check if it's inside a ReportTemplate
+                var reportTemplate = FindParent<ReportTemplate>(fe);
+                if (reportTemplate != null)
+                {
+                    // Remove the selected element from the header/footer/table if it's one of those
+                    if (fe.Name == "headerBorder" || fe.Name == "footerBorder" || fe.Name == "tableBorder")
+                    {
+                        // Optional: clear the contents
+                        if (fe is Border border)
+                        {
+                            border.Child = null;
+                            border.Visibility = Visibility.Collapsed; // or remove it entirely if needed
+                        }
+
+                        reportTemplate.SelectElement(null); // deselect after delete
+                    }
+                }
+            }
 
             if (elementMapping.ContainsKey(selectedElement))
             {
@@ -1114,6 +1134,18 @@ namespace Report_Mark1
             double top = Canvas.GetTop(element);
             return new Point(mousePosition.X - left, mousePosition.Y - top);
         }
+
+        private T FindParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            while (child != null)
+            {
+                if (child is T parent)
+                    return parent;
+                child = VisualTreeHelper.GetParent(child);
+            }
+            return null;
+        }
+
 
         #endregion
 
